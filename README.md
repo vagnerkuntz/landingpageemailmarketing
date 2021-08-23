@@ -8,6 +8,8 @@
  - Oportunidade para e-commerce ter uma pagina unica para captura de leads com um e-mail agradável
  - Página de Leads com grande parte customizavel pelo cliente e com facilidade, exemplo: cores, textos e imagens
  
+# TRELLO
+:link: https://trello.com/invite/b/Z6UrZAE8/8da644f59725eec72baf9e584a7c8c3f/lpem
 
 # A fazer:
  * Documentação
@@ -18,7 +20,7 @@
  * Casos de Teste - Testes de usabilidadade
  
  * Manual
- * o que precisamos fazer até o dia 16/09 (https://sagres.fag.edu.br/MaterialApoio/Diario/Aula/5003696525/Demandas%206P.txt)
+ * o que precisamos fazer até o dia 16/09 :link: (https://sagres.fag.edu.br/MaterialApoio/Diario/Aula/5003696525/Demandas%206P.txt)
 
 
 
