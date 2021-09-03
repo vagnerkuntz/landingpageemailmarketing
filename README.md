@@ -23,5 +23,6 @@
  * o que precisamos fazer até o dia 16/09 :link: (https://sagres.fag.edu.br/MaterialApoio/Diario/Aula/5003696525/Demandas%206P.txt)
 
 
-
-
+# PACOTES
+helmet = para corrigir algumas falhas que são bastante comuns nas paginas web
+artillery.io = para fazer testes de stress e verificar quantos usuários ou acessos a pagina / API aguenta "considerando a hospedagem"
