@@ -32,6 +32,12 @@
   * JSON
   * JWT (parte de segurança)
 
+  ## Gerar as chaves publicas e privadas
+  * Em produção deve ser geradas utilizando o OpenSSL
+  * em Dev: https://www.csfieldguide.org.nz/en/interactives/rsa-key-generator/
+  * em produção remover o envio das chaves para o git
+
+  
 # TRELLO
 :link: https://trello.com/invite/b/Z6UrZAE8/8da644f59725eec72baf9e584a7c8c3f/lpem
 
@@ -73,3 +79,9 @@
 - react-axe para ver erros de acessibilidade no console (IDE)
 - stylelint caso também se preocupe com semântica no CSS (IDE).
 - https://www.npmjs.com/package/@djpfs/react-vlibras-typescript (Pacote de tradução para libras)
+
+## Validações que ainda podemos fazer para melhorar a segurança
+* adicionar captcha
+* limitar a quantidade de tentativas de login (ou de passar tokens)
+* WAF (web application firewall)
+* 
