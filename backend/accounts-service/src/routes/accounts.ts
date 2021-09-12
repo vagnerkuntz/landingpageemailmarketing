@@ -1,15 +1,24 @@
 import { Router } from 'express';
 import accountsController from '../controllers/accounts'
 
-import { validateAccount, validateLogin } from './midlewares';
+import { validateAccount, validateUpdateAccount, validateLogin, validateAuth } from './midlewares';
 
 const router = Router();
 
-router.get('/accounts/', accountsController.getAccounts);
-router.get('/accounts/:id', accountsController.getAccount);
-router.patch('/accounts/:id', validateAccount, accountsController.setAccount);
+router.get('/accounts/', validateAuth, accountsController.getAccounts);
+
+router.get('/accounts/:id', validateAuth, accountsController.getAccount);
+
+// path para seguir os padrões de restful
+// update parcial
+router.patch('/accounts/:id', validateAuth, validateUpdateAccount, accountsController.setAccount);
+
+// não tem validação de autenticação porque ele não tem registro
 router.post('/accounts/', validateAccount, accountsController.addAccount);
+
 router.post('/accounts/login', validateLogin, accountsController.loginAccount);
-router.post('/accounts/logout', accountsController.logoutAccount);
+
+// valida se é autenticado
+router.post('/accounts/logout', validateAuth, accountsController.logoutAccount);
 
 export default router;
