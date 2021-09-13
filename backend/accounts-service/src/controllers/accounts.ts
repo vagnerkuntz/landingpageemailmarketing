@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express'
 import { IAccount } from '../models/account'
-import repository from '../models/accountModel'
+import repository from '../models/accountRepository'
 
 import auth from '../auth'
 
@@ -16,7 +16,7 @@ async function getAccount(req: Request, res: Response, next: NextFunction) {
   try {
     const id = parseInt(req.params.id)
     if (!id) {
-      throw new Error('ID is invalid format')
+      return res.status(400).end()
     }
 
     const account = await repository.findById(id)
@@ -52,16 +52,22 @@ async function setAccount(req: Request, res: Response, next: NextFunction) {
   try {
     const accountId = parseInt(req.params.id)
     if (!accountId) {
-      throw new Error('ID is invalid format')
+      return res.status(400).end()
     }
 
     const accountParams = req.body as IAccount
-
-    accountParams.password = auth.hashPassword(accountParams.password)
-    const updateAccount = await repository.set(accountId, accountParams)
     
-    updateAccount.password = ''
-    res.status(200).json(updateAccount)
+    if (accountParams.password) {
+      accountParams.password = auth.hashPassword(accountParams.password)
+    }
+
+    const updateAccount = await repository.set(accountId, accountParams)
+    if (updateAccount !== null) {
+      updateAccount.password = ''
+      res.status(200).json(updateAccount)
+    }
+
+    res.status(404).end()
   } catch (error) {
     console.error(error)
     res.status(400).end()
