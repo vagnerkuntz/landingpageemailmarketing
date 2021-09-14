@@ -1,52 +1,46 @@
 import { Request, Response, NextFunction } from 'express'
-import Joi, { ValidationError } from 'joi'
-import auth from '../auth'
+import commonsMidleware from 'commons/api/routes/midlewares'
+import controllerCommons from 'commons/api/controllers/controller'
+import { TokenProps } from 'commons/api/auth'
 
 import { accountSchema, accountUpdateSchema, loginSchema } from '../models/accountSchemas'
 
-function validateSchema(schema: Joi.ObjectSchema, req: Request, res: Response, next: NextFunction) {
-	const { error } = schema.validate(req.body)
-	if (error == null) {
-		return next()
-	}
-
-	const { details } = error as ValidationError
-	const message = details.map((item) => item.message).join(',')
-
-	console.log(`validateSchema: ${message}`)
-	res.status(422).end()
-}
-
 function validateAccountSchema(req: Request, res: Response, next: NextFunction) {
-  return validateSchema(accountSchema, req, res, next)
+  return commonsMidleware.validateSchema(accountSchema, req, res, next)
 }
 
 function validateUpdateAccountSchema(req: Request, res: Response, next: NextFunction) {
-  return validateSchema(accountUpdateSchema, req, res, next)
+  return commonsMidleware.validateSchema(accountUpdateSchema, req, res, next)
 }
 
 function validateLoginSchema(req: Request, res: Response, next: NextFunction) {
-  return validateSchema(loginSchema, req, res, next)
+  return commonsMidleware.validateSchema(loginSchema, req, res, next)
 }
 
-async function validateAuth(req: Request, res: Response, next: NextFunction) {
-  try {
-    const token = req.headers['x-access-token'] as string
-    if (!token) {
-      return res.status(401).end()
-    }
+async function validateAuthentication(req: Request, res: Response, next: NextFunction) {
+  return commonsMidleware.validateAuth(req, res, next)
+}
 
-    const payload = await auth.verifyToken(token)
-    if (!payload) {
-      return res.status(401).end()
-    }
-
-    res.locals.payload = payload
-    next()
-  } catch (error) {
-    console.log(`validateAuth: ${error}`)
-    res.status(400).end()
+function validateAuthorization(req: Request, res: Response, next: NextFunction) {
+  const accountId = parseInt(req.params.id)
+  if (!accountId) {
+    return res.status(400).end()
   }
+
+  const token = controllerCommons.getToken(res) as TokenProps
+
+  // autenticado mas não tem permissão
+  if (accountId !== token.accountId) {
+    return res.status(403).end()
+  }
+
+  next()
 }
 
-export { validateAccountSchema, validateLoginSchema, validateUpdateAccountSchema, validateAuth }
+export {
+  validateAccountSchema,
+  validateLoginSchema,
+  validateUpdateAccountSchema,
+  validateAuthentication,
+  validateAuthorization
+}

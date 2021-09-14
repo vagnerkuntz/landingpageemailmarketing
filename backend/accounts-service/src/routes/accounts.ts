@@ -1,19 +1,23 @@
 import { Router } from 'express';
 import accountsController from '../controllers/accounts'
 
-import { validateAccountSchema, validateUpdateAccountSchema, validateLoginSchema, validateAuth } from './midlewares';
-
-import calc from 'commons/calc'
+import {
+  validateAccountSchema,
+  validateUpdateAccountSchema,
+  validateLoginSchema,
+  validateAuthentication,
+  validateAuthorization
+} from './midlewares';
 
 const router = Router();
 
-router.get('/accounts/', validateAuth, accountsController.getAccounts);
+router.get('/accounts/', validateAuthentication, accountsController.getAccounts);
 
-router.get('/accounts/:id', validateAuth, accountsController.getAccount);
+router.get('/accounts/:id', validateAuthentication, validateAuthorization, accountsController.getAccount);
 
 // path para seguir os padrões de restful
 // update parcial
-router.patch('/accounts/:id', validateAuth, validateUpdateAccountSchema, accountsController.setAccount);
+router.patch('/accounts/:id', validateAuthentication, validateAuthorization, validateUpdateAccountSchema, accountsController.setAccount);
 
 // não tem validação de autenticação porque ele não tem registro
 router.post('/accounts/', validateAccountSchema, accountsController.addAccount);
@@ -22,11 +26,6 @@ router.post('/accounts/login', validateLoginSchema, accountsController.loginAcco
 
 router.post('/accounts/logout', accountsController.logoutAccount);
 
-router.get('/somar/:val1/:val2', (req, res, next) => {
-  const val1 = parseInt(req.params.val1);
-  const val2 = parseInt(req.params.val2);
-  const resultado = calc(val1, val2);
-  res.json({resultado})
-})
+router.delete('/accounts/:id', validateAuthentication, validateAuthorization, accountsController.deleteAccount);
 
 export default router;

@@ -18,7 +18,7 @@ module.exports = {
   collectCoverage: true,
 
   // An array of glob patterns indicating a set of files for which coverage information should be collected
-  collectCoverageFrom: ['<rootDir>/src/**/*.ts'],
+  collectCoverageFrom: ["<rootDir>/src/**/*.ts"],
 
   // The directory where Jest should output its coverage files
   coverageDirectory: "coverage",
@@ -32,10 +32,7 @@ module.exports = {
   coverageProvider: "v8",
 
   // A list of reporter names that Jest uses when writing coverage reports
-  coverageReporters: [
-    "text-summary",
-    "lcov",
-  ],
+  coverageReporters: ["text-summary", "lcov"],
 
   // An object that configures minimum threshold enforcement for coverage results
   // coverageThreshold: undefined,
@@ -89,7 +86,7 @@ module.exports = {
   // notifyMode: "failure-change",
 
   // A preset that is used as a base for Jest's configuration
-  preset: 'ts-jest',
+  preset: "ts-jest",
 
   // Run tests from one or more projects
   // projects: undefined,
@@ -121,7 +118,7 @@ module.exports = {
   // runner: "jest-runner",
 
   // The paths to modules that run some code to configure or set up the testing environment before each test
-  // setupFiles: [],
+  setupFiles: [],
 
   // A list of paths to modules that run some code to configure or set up the testing framework before each test
   // setupFilesAfterEnv: [],
@@ -142,9 +139,7 @@ module.exports = {
   // testLocationInResults: false,
 
   // The glob patterns Jest uses to detect test files
-  testMatch: [
-    "**/__tests__/**/*.ts",
-  ],
+  testMatch: ["**/__tests__/**/*.ts"],
 
   // An array of regexp pattern strings that are matched against all test paths, matched tests are skipped
   // testPathIgnorePatterns: [

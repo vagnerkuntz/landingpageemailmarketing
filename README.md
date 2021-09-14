@@ -12,6 +12,8 @@
   alguns conceitos de microserviços seram implementados
   accounts-service = crud de contas e autenticação
 
+  ** testes de integração somente autenticado
+
   ## Funcionalidades
   Contas de usuário 
   Lista de contatos 

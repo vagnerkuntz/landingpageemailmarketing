@@ -1,11 +1,10 @@
 import { Request, Response, NextFunction } from 'express'
 import { IAccount } from '../models/account'
 import repository from '../models/accountRepository'
-
 import auth from '../auth'
 
 async function getAccounts(req: Request, res: Response, next: NextFunction) {
-  const accounts = await repository.findAll()
+  const accounts: IAccount[] = await repository.findAll()
   res.json(accounts.map(item => {
     item.password = ''
     return item
@@ -14,12 +13,12 @@ async function getAccounts(req: Request, res: Response, next: NextFunction) {
 
 async function getAccount(req: Request, res: Response, next: NextFunction) {
   try {
-    const id = parseInt(req.params.id)
-    if (!id) {
+    const accountId = parseInt(req.params.id)
+    if (!accountId) {
       return res.status(400).end()
     }
 
-    const account = await repository.findById(id)
+    const account = await repository.findById(accountId)
     if (account === null) {
       return res.status(404).end()
     }
@@ -54,7 +53,7 @@ async function setAccount(req: Request, res: Response, next: NextFunction) {
     if (!accountId) {
       return res.status(400).end()
     }
-
+    
     const accountParams = req.body as IAccount
     
     if (accountParams.password) {
@@ -76,7 +75,8 @@ async function setAccount(req: Request, res: Response, next: NextFunction) {
 
 async function loginAccount(req: Request, res: Response, next: NextFunction) {
   try {
-    const loginParams = req.body as IAccount;
+    const loginParams = req.body as IAccount
+    console.log(loginParams)
 
     const account = await repository.findByEmail(loginParams.email)
     if (account !== null) {
@@ -85,11 +85,13 @@ async function loginAccount(req: Request, res: Response, next: NextFunction) {
         const token = auth.signToken(account.id!)
         return res.json({ auth: true, token })
       }
+      
+      return res.status(401).end();
     }
 
-    return res.status(401).end();
+    return res.status(404).end();
   } catch (error) {
-    console.error(error);
+    console.log(`loginAccount: ${error}`);
     res.status(400).end();
   }
 }
@@ -98,11 +100,27 @@ function logoutAccount(req: Request, res: Response, next: NextFunction) {
   res.json({ auth: false, token: null });
 }
 
+async function deleteAccount(req: Request, res: Response, next: NextFunction) {
+  try {
+    const accountId = parseInt(req.params.id)
+    if (!accountId) {
+      return res.status(400).end()
+    }
+
+    await repository.remove(accountId)
+    res.status(200).end()
+  } catch (error) {
+    console.log(`deleteAccount: ${error}`)
+    res.status(400).end()
+  }
+}
+
 export default {
   getAccounts,
   getAccount,
   addAccount,
   setAccount,
   loginAccount,
-  logoutAccount
+  logoutAccount,
+  deleteAccount
 }

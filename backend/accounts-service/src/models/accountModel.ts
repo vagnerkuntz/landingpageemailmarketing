@@ -1,5 +1,5 @@
 import Sequelize, { Model, Optional } from 'sequelize'
-import database from '../db'
+import database from 'commons/data/db'
 import { IAccount } from './account'
 
 interface IAccountCreationAttributes extends Optional<IAccount, 'id'>{}
@@ -14,16 +14,16 @@ export default database.define<IAccountModel>('account', {
     allowNull: false
   },
   name: {
-    type: Sequelize.STRING(150),
+    type: Sequelize.STRING,
     allowNull: false
   },
   email: {
-    type: Sequelize.STRING(150),
+    type: Sequelize.STRING,
     allowNull: false,
     unique: true
   },
   password: {
-    type: Sequelize.STRING(50),
+    type: Sequelize.STRING,
     allowNull: false
   },
   status: {
@@ -32,7 +32,7 @@ export default database.define<IAccountModel>('account', {
     defaultValue: 100
   },
   domain: {
-    type: Sequelize.STRING(150),
+    type: Sequelize.STRING,
     allowNull: false
   }
 })

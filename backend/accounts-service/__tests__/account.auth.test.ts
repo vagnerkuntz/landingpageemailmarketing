@@ -27,7 +27,7 @@ beforeAll(async () => {
 })
 
 afterAll(async () => {
-  const result = await repository.removeByEmail(testEmail)
+  await repository.removeByEmail(testEmail)
 })
 
 describe('Testando rotas de autenticação', () => {
@@ -37,7 +37,9 @@ describe('Testando rotas de autenticação', () => {
       password: testPassword
     }
 
-    const result = await supertest(app).post('/accounts/login').send(payload);
+    const result = await supertest(app)
+      .post('/accounts/login')
+      .send(payload);
 
     expect(result.status).toEqual(200);
     expect(result.body.auth).toBeTruthy();
@@ -48,7 +50,11 @@ describe('Testando rotas de autenticação', () => {
     const payload = {
       email: testEmail
     }
-    const result = await supertest(app).post('/accounts/login').send(payload);
+
+    const result = await supertest(app)
+      .post('/accounts/login')
+      .send(payload);
+
     expect(result.status).toEqual(422);
   })
 
@@ -58,13 +64,18 @@ describe('Testando rotas de autenticação', () => {
       password: testPassword + '1'
     }
 
-    const result = await supertest(app).post('/accounts/login').send(payload);
+    const result = await supertest(app)
+      .post('/accounts/login')
+      .send(payload);
 
     expect(result.status).toEqual(401);
   })
 
   it('POST /accounts/logout - 200 Logout OK', async () => {
-    const result = await supertest(app).post('/accounts/logout')
+    const result = await supertest(app)
+      .post('/accounts/logout')
+      .set('x-access-token', jwt)
+      
     expect(result.status).toEqual(200);
   })
 })
