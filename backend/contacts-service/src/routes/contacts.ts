@@ -1,12 +1,13 @@
 import { Router } from 'express'
-import midlewareCommons from 'commons/api/routes/midlewares'
+import middlewareCommons from 'commons/api/routes/midlewares'
 import { validateContactSchema, validateUpdateContactSchema } from './middlewares'
 import controller from '../controllers/contacts'
 
 const router = Router()
 
-router.get('/contacts/:id', midlewareCommons.validateAuth, controller.getContact)
-router.get('/contacts/', midlewareCommons.validateAuth, controller.getContacts)
-router.post('/contacts/', midlewareCommons.validateAuth, validateContactSchema, controller.addContact)
+router.get('/contacts/:id', middlewareCommons.validateAuth, controller.getContact)
+router.get('/contacts/', middlewareCommons.validateAuth, controller.getContacts)
+router.post('/contacts/', middlewareCommons.validateAuth, validateContactSchema, controller.addContact)
+router.patch('/contacts/:id', middlewareCommons.validateAuth, validateUpdateContactSchema, controller.setContact)
 
 export default router

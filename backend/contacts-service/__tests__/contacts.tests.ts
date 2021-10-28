@@ -152,4 +152,69 @@ describe('Testando rotas de contacts service', () => {
 
     expect(result.status).toEqual(401)
   })
+
+  it('PATCH /contacts/:id - Deve retornar statusCode 200', async () => {
+    const payload = {
+      name: 'jestTes'
+    }
+
+    const result = await supertest(app)
+      .patch(`/contacts/${testContactId}`)
+      .set('x-access-token', jwt)
+      .send(payload)
+
+    expect(result.status).toEqual(200)
+    expect(result.body.name).toEqual('jestTes')
+  })
+
+  it('PATCH /contacts/:id - Deve retornar statusCode 401', async () => {
+    const payload = {
+      name: 'jest2 patch',
+    }
+
+    const result = await supertest(app)
+      .patch(`/contacts/${testContactId}`)
+      .send(payload)
+
+    expect(result.status).toEqual(401)
+  })
+
+  it('PATCH /contacts/:id - Deve retornar statusCode 422', async () => {
+    const payload = {
+      dasdas: 'jest2 patch',
+    }
+
+    const result = await supertest(app)
+      .patch(`/contacts/${testContactId}`)
+      .set('x-access-token', jwt)
+      .send(payload)
+
+    expect(result.status).toEqual(422)
+  })
+
+  it('PATCH /contacts/:id - Deve retornar statusCode 404', async () => {
+    const payload = {
+      name: 'jest2 patch',
+    }
+
+    const result = await supertest(app)
+      .patch(`/contacts/-1`)
+      .set('x-access-token', jwt)
+      .send(payload)
+
+    expect(result.status).toEqual(404)
+  })
+
+  it('PATCH /contacts/:id - Deve retornar statusCode 400', async () => {
+    const payload = {
+      name: 'jest2 patch',
+    }
+
+    const result = await supertest(app)
+      .patch(`/contacts/abc`)
+      .set('x-access-token', jwt)
+      .send(payload)
+
+    expect(result.status).toEqual(400)
+  })
 })

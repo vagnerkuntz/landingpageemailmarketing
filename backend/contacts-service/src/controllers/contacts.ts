@@ -48,4 +48,26 @@ async function addContact(req: Request, res: Response, next: NextFunction) {
   }
 }
 
-export default { getContacts, getContact, addContact }
+async function setContact(req: Request, res: Response, next: NextFunction){
+  try {
+    const contactId = parseInt(req.params.id)
+    if (!contactId) {
+      res.status(400).end()
+    }
+
+    const token = controllerCommons.getToken(res) as TokenProps
+    const contact = req.body as IContact
+    const result = await repository.set(contactId, contact, token.accountId)
+
+    if (!result) {
+      return res.status(404).end()
+    }
+
+    res.json(result)
+  } catch (error) {
+    console.log(`setContact: ${error}`)
+    res.status(400).end()
+  }
+}
+
+export default { getContacts, getContact, addContact, setContact }
