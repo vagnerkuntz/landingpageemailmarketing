@@ -37,9 +37,9 @@ async function addAccount(req: Request, res: Response, next: NextFunction) {
     newAccount.password = auth.hashPassword(newAccount.password)
 
     const result = await repository.add(newAccount)
+    newAccount.password = ''
     newAccount.id = result.id
 
-    newAccount.password = ''
     res.status(201).json(newAccount)
   } catch (error) {
     console.error(error)
@@ -76,11 +76,10 @@ async function setAccount(req: Request, res: Response, next: NextFunction) {
 async function loginAccount(req: Request, res: Response, next: NextFunction) {
   try {
     const loginParams = req.body as IAccount
-    console.log(loginParams)
-
     const account = await repository.findByEmail(loginParams.email)
     if (account !== null) {
       const isValidPassword = auth.comparePassword(loginParams.password, account.password)
+
       if (isValidPassword) {
         const token = auth.signToken(account.id!)
         return res.json({ auth: true, token })

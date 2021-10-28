@@ -1,9 +1,10 @@
 import { beforeAll, afterAll, describe, it, expect } from "@jest/globals"
 import supertest from 'supertest'
 import app from './../src/app'
-import accountApp from '../../accounts-service/src/app'
+import accountsApp from '../../accounts-service/src/app'
 
-const testEmail = 'jest3434343@accounts.com'
+const testEmail = 'jest@accounts.com'
+const testEmail2 = 'jest2@accounts.com'
 const testPassword = '123456'
 let jwt: string = ''
 let testAccountId: number = 0
@@ -17,13 +18,13 @@ beforeAll(async () => {
     domain: 'jest.com'
   }
   
-  const accountResponse = await supertest(accountApp)
+  const accountResponse = await supertest(accountsApp)
     .post('/accounts/')
     .send(testAccount);
   
   testAccountId = accountResponse.body.id;
 
-  const loginResponse = await supertest(accountApp)
+  const loginResponse = await supertest(accountsApp)
     .post('/accounts/login')
     .send({
       email: testEmail,
@@ -34,15 +35,15 @@ beforeAll(async () => {
 })
 
 afterAll(async () => {
-  await supertest(accountApp)
+  await supertest(accountsApp)
     .post('/accounts/logout')
     .send({})
     
-  await supertest(accountApp)
+  await supertest(accountsApp)
     .delete(`/accounts/${testAccountId}`)
 })
 
-describe('Testando rotas de accounts service', () => {
+describe('Testando rotas de contacts service', () => {
   it('GET /contacts/ - Deve retornar statusCode 200', async () => {
     const result = await supertest(app).get('/contacts/').set('x-access-token', jwt)
     expect(result.status).toEqual(200)

@@ -5,9 +5,9 @@ function getToken(res: Response) {
   const payload = res.locals.payload as TokenProps
   if (!payload || !payload.accountId) {
     return res.status(401).end()
+  } else {
+    return payload
   }
-
-  return payload
 }
 
 export default { getToken }
