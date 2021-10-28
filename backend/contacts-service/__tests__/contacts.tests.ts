@@ -6,6 +6,7 @@ import { IContact } from "../src/models/contact"
 import contactRepository from "../src/models/contactRepository"
 
 const testEmail = 'jest@accounts.com'
+const testEmail2 = 'jest2@accounts.com'
 const testPassword = '123456'
 let jwt: string = ''
 let testAccountId: number = 0
@@ -47,6 +48,7 @@ beforeAll(async () => {
 
 afterAll(async () => {
   await contactRepository.removeByEmail(testEmail, testAccountId)
+  await contactRepository.removeByEmail(testEmail2, testAccountId)
 
   await supertest(accountsApp)
     .delete(`/accounts/${testAccountId}`)
@@ -89,6 +91,65 @@ describe('Testando rotas de contacts service', () => {
 
   it('GET /contacts/:id - Deve retornar statusCode 401', async () => {
     const result = await supertest(app).get(`/contacts/${testContactId}`)
+    expect(result.status).toEqual(401)
+  })
+
+  it('POST /contacts/ - Deve retornar statusCode 201', async () => {
+    const testContact = {
+      name: 'jest2',
+      email: testEmail2,
+      phone: '12345678910',
+    } as IContact
+
+    const result = await supertest(app)
+      .post('/contacts/')
+      .set('x-access-token', jwt)
+      .send(testContact)
+
+    expect(result.status).toEqual(201)
+    expect(result.body.id).toBeTruthy()
+  })
+
+  it('POST /contacts/ - Deve retornar statusCode 400', async () => {
+    const testContact = {
+      name: 'jest3',
+      email: testEmail,
+      phone: '12345678910',
+    } as IContact
+
+    const result = await supertest(app)
+      .post('/contacts/')
+      .set('x-access-token', jwt)
+      .send(testContact)
+
+    expect(result.status).toEqual(400)
+  })
+
+  it('POST /contacts/ - Deve retornar statusCode 422', async () => {
+    const testContact = {
+      rua: 'jest2',
+      phone: '123456789',
+    }
+
+    const result = await supertest(app)
+      .post('/contacts/')
+      .set('x-access-token', jwt)
+      .send(testContact)
+
+    expect(result.status).toEqual(422)
+  })
+
+  it('POST /contacts/ - Deve retornar statusCode 401', async () => {
+    const testContact = {
+      name: 'jest2',
+      email: testEmail2,
+      phone: '12345678910',
+    } as IContact
+
+    const result = await supertest(app)
+      .post('/contacts/')
+      .send(testContact)
+
     expect(result.status).toEqual(401)
   })
 })
