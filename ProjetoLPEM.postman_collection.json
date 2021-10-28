@@ -1,81 +1,150 @@
 {
 	"info": {
-		"_postman_id": "b0b48af9-3234-490f-9383-942b8aff89f6",
+		"_postman_id": "6d90b53c-fe3b-46ad-baa9-83c9728e0377",
 		"name": "ProjetoLPEM",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
 		{
-			"name": "Accounts GET /",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "localhost:4000/accounts/",
-					"host": [
-						"localhost"
-					],
-					"port": "4000",
-					"path": [
-						"accounts",
-						""
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Accounts POST /",
-			"request": {
-				"method": "POST",
-				"header": [
-					{
-						"key": "Content-Type",
-						"value": "application/json",
-						"type": "text"
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n    \"id\": 1,\r\n    \"name\": \"Abcde\",\r\n    \"email\": \"email@teste.com\",\r\n    \"password\": \"123\"\r\n}",
-					"options": {
-						"raw": {
-							"language": "json"
+			"name": "contacts",
+			"item": [
+				{
+					"name": "get contacts",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-access-token",
+								"value": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2NvdW50SWQiOjEsImlhdCI6MTYzNTQzMDE5NSwiZXhwIjoxNjM1NDMwNDk1fQ.ALaK5lcO-xxmraOHAlMTyPpGxYpLUSkUvmzGE2zTPsRQcR9-ErkfjsIIyDOoySXQhVFZ5yjcvlIBM9imfajKfrsBUW_y6ING3enf4a0DOi1wwMQbl1EFuMrIiAgSRv8M7vmNA8-jKiVM5PrI5tKXBTNvY9XiOqAadbbiuXHn_5_0tMymdnoKj0Ug4q9EBvETV7p1hebHlBx0WdWdKO2M_SviA5IAnXtWXfevy0Z5WfGVMT1zIVh_7CCiaOXbd3E1jk_JzcS9o1kVXJO5A6DS8XvzSGBLmoM9El7yJrRlneznuEYqpRr2RmrSXiKkLcDRQ_aa2gJQq3EnniLt826f2A",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "localhost:4001/contacts/",
+							"host": [
+								"localhost"
+							],
+							"port": "4001",
+							"path": [
+								"contacts",
+								""
+							]
 						}
-					}
-				},
-				"url": {
-					"raw": "localhost:4000/accounts/",
-					"host": [
-						"localhost"
-					],
-					"port": "4000",
-					"path": [
-						"accounts",
-						""
-					]
+					},
+					"response": []
 				}
-			},
-			"response": []
+			]
 		},
 		{
-			"name": "Accounts GET /:id",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "localhost:4000/accounts/1",
-					"host": [
-						"localhost"
-					],
-					"port": "4000",
-					"path": [
-						"accounts",
-						"1"
-					]
+			"name": "accounts",
+			"item": [
+				{
+					"name": "Accounts GET /",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-access-token",
+								"value": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2NvdW50SWQiOjEsImlhdCI6MTYzNTQyNjI0NSwiZXhwIjoxNjM1NDI2NTQ1fQ.KXdVyiqyF06qX1-P-qPfX8n9Og47SUJdwb7O0a2QTDvlzLaGj1-RY8UUdMbEvOihnyiydOttxwAMboLIdZqX4PdC3E0O0eKJBQt6_3Lni1ik42f5i3EUGEh7PC6E5jP8-8f0Impm0LpDbY-8daccHxr1yXHBT7J0h3yFgjD6_0lph3XV9KOhGK-dpixSu4e7wyXN8b9NooXs7fLDacVC-3HSMX6FjIW3_bo4TYyx7gy1vnuNDckDYxPp-g-Bg_Au3x-6XmxHshV1AgaKnSGFtHWbhnBZrMHllPPyUGWscxRelBFkhIjSTLEFVDuyy6VtlBJAhaFZGjjz1dIl9_SfPQ",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "localhost:4000/accounts/",
+							"host": [
+								"localhost"
+							],
+							"port": "4000",
+							"path": [
+								"accounts",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Accounts POST /",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": 1,\r\n    \"name\": \"Abcde\",\r\n    \"email\": \"email@teste.com\",\r\n    \"password\": \"123456\",\r\n    \"domain\": \"vagnerkuntz.com.br\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:4000/accounts/",
+							"host": [
+								"localhost"
+							],
+							"port": "4000",
+							"path": [
+								"accounts",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Accounts GET /:id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:4000/accounts/1",
+							"host": [
+								"localhost"
+							],
+							"port": "4000",
+							"path": [
+								"accounts",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "LOGIN",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"email@teste.com\",\r\n    \"password\": \"123456\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:4000/accounts/login",
+							"host": [
+								"localhost"
+							],
+							"port": "4000",
+							"path": [
+								"accounts",
+								"login"
+							]
+						}
+					},
+					"response": []
 				}
-			},
-			"response": []
+			]
 		}
 	]
 }

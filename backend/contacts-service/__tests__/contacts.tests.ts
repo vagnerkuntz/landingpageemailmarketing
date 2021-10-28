@@ -4,11 +4,9 @@ import app from './../src/app'
 import accountsApp from '../../accounts-service/src/app'
 
 const testEmail = 'jest@accounts.com'
-const testEmail2 = 'jest2@accounts.com'
 const testPassword = '123456'
 let jwt: string = ''
 let testAccountId: number = 0
-let testContactId: number = 0
 
 beforeAll(async () => {
   const testAccount = {
