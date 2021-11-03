@@ -15,3 +15,5 @@
 
 ### Dependencies
 react-router-dom
+react-bootstrap bootstrap
+styled-components
