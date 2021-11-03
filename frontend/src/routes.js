@@ -9,6 +9,7 @@ import {
 } from "react-router-dom";
 
 import SignIn from "./pages/public/SignIn";
+import SignUp from "./pages/public/SignUp";
 
 function Home() {
   return (
@@ -54,14 +55,6 @@ function Contact() {
   return (
     <div>
       <h3>Contato {contactId}</h3>
-    </div>
-  );
-}
-
-function Signup() {
-  return (
-    <div>
-      <h2>Cadastro</h2>
     </div>
   );
 }
@@ -140,7 +133,7 @@ export default function Routes() {
             <SignIn />
           </Route>
           <Route path="/signup">
-            <Signup />
+            <SignUp />
           </Route>
           <Route path="/contacts">
             <Contacts />
