@@ -3,7 +3,7 @@ import { Container, Form, Button, Row, Col, Alert } from "react-bootstrap";
 import { Link, withRouter } from "react-router-dom";
 import { BoxContent, BoxForm } from "../../../shared/styles";
 
-import api from "../../../services/api";
+import AccountsService from "../../../services/accounts";
 
 //  import Logo from '../../../assets/images/logo.png';
 
@@ -20,7 +20,7 @@ class SignUp extends React.Component {
   handleSignUp = async (event) => {
     event.preventDefault();
 
-    const { name, email, password, domain, isLoading } = this.state;
+    const { name, email, password, domain } = this.state;
 
     if (!name) {
       return this.setState({ error: "Preencha o campo nome" });
@@ -41,8 +41,10 @@ class SignUp extends React.Component {
     if (name && email && password && domain) {
       this.setState({ isLoading: true });
       try {
-        await api.post("accounts", { name, email, password, domain });
-        this.setState({ error: "" });
+        const service = new AccountsService();
+
+        await service.signup({ name, email, password, domain });
+
         this.props.history.push("/signin");
       } catch (err) {
         this.setState({ error: "Ocorreu um erro ao realizar o cadastro" });

@@ -3,7 +3,7 @@ import { Button, Form, Container, Row, Col } from "react-bootstrap";
 import { Link, withRouter } from "react-router-dom";
 import { BoxContent, BoxForm } from "../../../shared/styles";
 
-import api from "../../../services/api";
+import AccountsService from "../../../services/accounts";
 import { login } from "../../../services/auth";
 
 //  import Logo from '../../../assets/images/logo.png';
@@ -25,11 +25,11 @@ class SignIn extends React.Component {
       return;
     } else {
       try {
-        const response = await api.post("accounts/login", {
-          email,
-          password,
-        });
+        const service = new AccountsService();
+
+        const response = await service.login(email, password);
         login(response.data.token);
+
         this.props.history.push("/");
       } catch (error) {
         this.setState({ error: "Houve um erro ao fazer login" });
