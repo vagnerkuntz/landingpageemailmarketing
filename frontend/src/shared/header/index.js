@@ -25,8 +25,13 @@ function MainMenu({ history }) {
             <Nav.Link href="/contacts">Contatos</Nav.Link>
             <Nav.Link href="/messages">Mensagens</Nav.Link>
           </Nav>
+          <Nav>
+            <Nav.Link onClick={handleLogout}>Sair</Nav.Link>
+          </Nav>
         </Container>
       </Navbar>
     </Header>
   );
 }
+
+export default withRouter(MainMenu);
