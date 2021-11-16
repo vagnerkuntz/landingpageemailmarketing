@@ -11,6 +11,7 @@ import SignUpPage from "./../pages/public/SignUp";
 
 import DashboardPage from "./../pages/secure/Dashboard";
 import ContactsListPage from "./../pages/secure/ContactList";
+import ContactsAddPage from "./../pages/secure/ContactAdd";
 
 import RoutePrivate from "./route-wrapper";
 
@@ -19,20 +20,11 @@ export default function Routes() {
     <Router>
       <Switch>
         <RoutePrivate exact path="/" component={DashboardPage} />
-        <RoutePrivate exact path="/contacts" component={ContactsRoutes} />
+        <RoutePrivate exact path="/contacts" component={ContactsListPage} />
+        <RoutePrivate exact path="/contacts/add" component={ContactsAddPage} />
         <Route exact path="/signin" component={SignInPage} />
         <Route exact path="/signup" component={SignUpPage} />
       </Switch>
     </Router>
-  );
-}
-
-function ContactsRoutes() {
-  const { path } = useRouteMatch();
-
-  return (
-    <Switch>
-      <Route exact path={path} component={ContactsListPage} />
-    </Switch>
   );
 }
