@@ -12,6 +12,7 @@ import SignUpPage from "./../pages/public/SignUp";
 import DashboardPage from "./../pages/secure/Dashboard";
 import ContactsListPage from "./../pages/secure/ContactList";
 import ContactsAddPage from "./../pages/secure/ContactAdd";
+import ContactDetailsPage from "../pages/secure/ContactDetails";
 
 import RoutePrivate from "./route-wrapper";
 
@@ -22,6 +23,11 @@ export default function Routes() {
         <RoutePrivate exact path="/" component={DashboardPage} />
         <RoutePrivate exact path="/contacts" component={ContactsListPage} />
         <RoutePrivate exact path="/contacts/add" component={ContactsAddPage} />
+        <RoutePrivate
+          exact
+          path="/contacts/:contactId"
+          component={ContactDetailsPage}
+        />
         <Route exact path="/signin" component={SignInPage} />
         <Route exact path="/signup" component={SignUpPage} />
       </Switch>
