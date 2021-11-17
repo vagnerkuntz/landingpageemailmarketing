@@ -10,6 +10,7 @@ const testPassword = '123456'
 let jwt: string = ''
 let testAccountId: number = 0
 let testMessageId: number = 0
+let testMessageId2: number = 0
 
 beforeAll(async () => {
   const testAccount = {
@@ -46,6 +47,7 @@ beforeAll(async () => {
 
 afterAll(async () => {
   await messageRepository.removeById(testMessageId, testAccountId)
+  await messageRepository.removeById(testMessageId2 | 0, testAccountId)
   //await contactRepository.removeByEmail(testEmail2, testAccountId)
 
   await supertest(accountsApp)
@@ -66,4 +68,140 @@ describe('Testando rotas de messages service', () => {
     expect(Array.isArray(result.body)).toBeTruthy()
   })
 
+  it('GET /messages/ - Deve retornar statusCode 401', async () => {
+    const result = await supertest(app).get('/messages/')
+    expect(result.status).toEqual(401)
+  })
+
+  it('GET /messages/:id - Deve retornar statusCode 200', async () => {
+    const result = await supertest(app).get('/messages/'+ testMessageId).set('x-access-token', jwt)
+    expect(result.status).toEqual(200)
+    expect(result.body.id).toEqual(testMessageId)
+  })
+
+  it('GET /messages/:id - Deve retornar statusCode 401', async () => {
+    const result = await supertest(app).get('/messages/'+ testMessageId)
+    expect(result.status).toEqual(401)
+  })
+
+  it('GET /messages/:id - Deve retornar statusCode 400', async () => {
+    const result = await supertest(app).get('/messages/abc').set('x-access-token', jwt)
+    expect(result.status).toEqual(400)
+  })
+
+  it('GET /messages/:id - Deve retornar statusCode 404', async () => {
+    const result = await supertest(app).get('/messages/-1').set('x-access-token', jwt)
+    expect(result.status).toEqual(404)
+  })
+
+  it('POST /messages/ - Deve retornar statusCode 201', async () => {
+    const payload = {
+      accountId: testAccountId,
+      body: 'corpo da mensagem post test',
+      subject: 'assunto da mensagem post test',
+    } as IMessage
+
+    const result = await supertest(app)
+      .post('/messages/')
+      .set('x-access-token', jwt)
+      .send(payload)
+
+    testMessageId2 = parseInt(result.body.id)
+
+    expect(result.status).toEqual(201)
+    expect(result.body.id).toBeTruthy()
+  })
+
+  it('POST /messages/ - Deve retornar statusCode 422', async () => {
+    const payload = {
+      street: 'minha rua',
+    }
+
+    const result = await supertest(app)
+      .post('/messages/')
+      .set('x-access-token', jwt)
+      .send(payload)
+
+    expect(result.status).toEqual(422)
+  })
+
+  it('POST /messages/ - Deve retornar statusCode 401', async () => {
+    const payload = {
+      accountId: testAccountId,
+      body: 'corpo da mensagem post test',
+      subject: 'assunto da mensagem post test',
+    } as IMessage
+
+    const result = await supertest(app)
+      .post('/messages/')
+      .send(payload)
+
+    expect(result.status).toEqual(401)
+  })
+
+  it('PATCH /messages/:id - Deve retornar statusCode 200', async () => {
+    const payload = {
+      subject: 'jest alterado'
+    }
+
+    const result = await supertest(app)
+      .patch(`/messages/${testMessageId}`)
+      .set('x-access-token', jwt)
+      .send(payload)
+
+    expect(result.status).toEqual(200)
+    expect(result.body.subject).toEqual(payload.subject)
+  })
+
+  it('PATCH /messages/:id - Deve retornar statusCode 401', async () => {
+    const payload = {
+      name: 'jest2 patch',
+    }
+
+    const result = await supertest(app)
+      .patch(`/messages/${testMessageId}`)
+      .send(payload)
+
+    expect(result.status).toEqual(401)
+  })
+
+  it('PATCH /messages/:id - Deve retornar statusCode 422', async () => {
+    const payload = {
+      dasdas: 'jest2 patch',
+    }
+
+    const result = await supertest(app)
+      .patch(`/messages/${testMessageId}`)
+      .set('x-access-token', jwt)
+      .send(payload)
+
+    expect(result.status).toEqual(422)
+  })
+
+  it('PATCH /messages/:id - Deve retornar statusCode 404', async () => {
+    const payload = {
+      subject: 'jest2 patch',
+    }
+
+    const result = await supertest(app)
+      .patch(`/messages/-1`)
+      .set('x-access-token', jwt)
+      .send(payload)
+
+    expect(result.status).toEqual(404)
+  })
+
+  it('PATCH /messages/:id - Deve retornar statusCode 400', async () => {
+    const payload = {
+      subject: 'jest2 patch',
+    }
+
+    const result = await supertest(app)
+      .patch(`/messages/abc`)
+      .set('x-access-token', jwt)
+      .send(payload)
+
+    expect(result.status).toEqual(400)
+  })
+  
 })

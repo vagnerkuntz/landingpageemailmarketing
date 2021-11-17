@@ -14,8 +14,8 @@ async function getMessages(req: Request, res: Response, next: NextFunction) {
     res.status(400).end()
   }
 }
-/*
-async function getContact(req: Request, res: Response, next: NextFunction) {
+
+async function getMessage(req: Request, res: Response, next: NextFunction) {
   try {
     const id = parseInt(req.params.id)
     if (!id) {
@@ -23,41 +23,40 @@ async function getContact(req: Request, res: Response, next: NextFunction) {
     }
 
     const token = controllerCommons.getToken(res) as TokenProps
-    const contact = await repository.findById(id, token.accountId)
-    if (contact === null) {
+    const message = await repository.findById(id, token.accountId)
+    if (message === null) {
       return res.status(404).end()
     } else {
-      res.json(contact)
+      res.json(message)
     }
   } catch (error) {
-    console.log(`getContact: ${error}`)
+    console.log(`getMessage: ${error}`)
     res.status(400).end()
   }
 }
 
-
-async function addContact(req: Request, res: Response, next: NextFunction) {
+async function addMessage(req: Request, res: Response, next: NextFunction) {
   try {
     const token = controllerCommons.getToken(res) as TokenProps
-    const contact = req.body as IContact
-    const result = await repository.add(contact, token.accountId)
+    const message = req.body as IMessage
+    const result = await repository.add(message, token.accountId)
     res.status(201).json(result)
   } catch (error) {
-    console.log(`addContact: ${error}`)
+    console.log(`addMessage: ${error}`)
     res.status(400).end()
   }
 }
 
-async function setContact(req: Request, res: Response, next: NextFunction){
+async function setMessage(req: Request, res: Response, next: NextFunction){
   try {
-    const contactId = parseInt(req.params.id)
-    if (!contactId) {
+    const messageId = parseInt(req.params.id)
+    if (!messageId) {
       res.status(400).end()
     }
 
     const token = controllerCommons.getToken(res) as TokenProps
-    const contact = req.body as IContact
-    const result = await repository.set(contactId, contact, token.accountId)
+    const message = req.body as IMessage
+    const result = await repository.set(messageId, message, token.accountId)
 
     if (!result) {
       return res.status(404).end()
@@ -65,10 +64,9 @@ async function setContact(req: Request, res: Response, next: NextFunction){
 
     res.json(result)
   } catch (error) {
-    console.log(`setContact: ${error}`)
+    console.log(`setMessage: ${error}`)
     res.status(400).end()
   }
 }
-getContact, addContact, setContact
-*/
-export default { getMessages }
+
+export default { getMessages, getMessage, addMessage, setMessage }
