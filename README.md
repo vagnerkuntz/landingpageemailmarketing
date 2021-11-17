@@ -19,6 +19,9 @@
  Lista de contatos 
  Campanhas de emails 
 
+ ## SOFT DELETE
+ Não vamos deletar realmente os dados, vamos só ocultar pelo banco para termos um relatorio mais completo
+
  ## Stack de desenvolvimento
  * ReactJS
  * NodeJS
