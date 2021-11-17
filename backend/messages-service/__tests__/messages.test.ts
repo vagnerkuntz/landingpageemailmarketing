@@ -6,7 +6,6 @@ import { IMessage } from "../src/models/message"
 import messageRepository from "../src/models/messageRepository"
 
 const testEmail = 'jest@accounts.com'
-const testEmail2 = 'jest2@accounts.com'
 const testPassword = '123456'
 let jwt: string = ''
 let testAccountId: number = 0
@@ -37,12 +36,11 @@ beforeAll(async () => {
 
   const testMessage = {
     accountId: testAccountId,
-    body: 'jest',
-    sendDate: new Date(),
-    subject: 'jest',
+    body: 'corpo da mensagem',
+    subject: 'assunto da mensagem',
   } as IMessage
-  const addResult = await supertest(testMessage, testAccountId);
-  console.log(`addResult: ${addResult}`)
+
+  const addResult = await messageRepository.add(testMessage, testAccountId);
   testMessageId = addResult.id!
 })
 

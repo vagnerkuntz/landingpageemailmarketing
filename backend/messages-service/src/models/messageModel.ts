@@ -2,9 +2,9 @@ import sequelize, { Model, Optional } from 'sequelize'
 import database from 'commons/data/db'
 import { IMessage } from './message'
 
-interface IMessageCreationAttributes extends Optional<IMessage, 'id'> {}
+interface IMessageCreationAttributes extends Optional<IMessage, 'id'>{}
 
-export interface IMessageModel extends Model<IMessage, IMessageCreationAttributes>, IMessage {}
+export interface IMessageModel extends Model<IMessage, IMessageCreationAttributes>, IMessage{}
 
 const Message = database.define<IMessageModel>('message', {
   id: {
@@ -22,17 +22,17 @@ const Message = database.define<IMessageModel>('message', {
     allowNull: false
   },
   body: {
-    type: sequelize.STRING,
+    type: sequelize.TEXT,
     allowNull: false
+  },
+  sendDate: {
+    type: sequelize.DATE,
+    allowNull: true
   },
   status: {
     type: sequelize.SMALLINT.UNSIGNED,
     allowNull: false,
     defaultValue: 100
-  },
-  sendDate: {
-    type: sequelize.DATE,
-    allowNull: true
   }
 })
 

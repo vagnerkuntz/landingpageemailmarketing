@@ -5,6 +5,6 @@ import controller from '../controllers/messages'
 
 const router = Router()
 
-router.get('/contacts/', middlewareCommons.validateAuth, controller.getMessages)
+router.get('/messages/', middlewareCommons.validateAuth, controller.getMessages)
 
 export default router
