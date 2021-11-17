@@ -1,46 +1,44 @@
-import sequelize, { Model, Optional } from 'sequelize'
+import Sequelize, { Model, Optional } from 'sequelize'
 import database from 'commons/data/db'
 import { IContact } from './contact'
 
-interface IContactCreationAttributes extends Optional<IContact, 'id'> {}
+interface IContactCreationAttributes extends Optional<IContact, "id">{}
 
 export interface IContactModel extends Model<IContact, IContactCreationAttributes>, IContact {}
 
 const Contact = database.define<IContactModel>('contact', {
   id: {
-    type: sequelize.INTEGER.UNSIGNED,
+    type: Sequelize.INTEGER.UNSIGNED,
     primaryKey: true,
     allowNull: false,
     autoIncrement: true
   },
   accountId: {
-    type: sequelize.INTEGER.UNSIGNED,
-    allowNull: false,
+    type: Sequelize.INTEGER.UNSIGNED,
+    allowNull: false
   },
   name: {
-    type: sequelize.STRING,
+    type: Sequelize.STRING(150),
     allowNull: true
   },
   email: {
-    type: sequelize.STRING,
+    type: Sequelize.STRING(150),
     allowNull: false
   },
   phone: {
-    type: sequelize.STRING,
-    allowNull: true,
+    type: Sequelize.STRING(11),
+    allowNull: true
   },
   status: {
-    type: sequelize.SMALLINT.UNSIGNED,
+    type: Sequelize.SMALLINT.UNSIGNED,
     allowNull: false,
     defaultValue: 100
   }
 }, {
   indexes: [{
     unique: true,
-    fields: ['accountId', 'email']
+    fields: ['accountId','email']
   }]
 })
-
 Contact.sync();
-
 export default Contact;

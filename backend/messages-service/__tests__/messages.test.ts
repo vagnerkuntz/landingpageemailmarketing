@@ -51,7 +51,7 @@ afterAll(async () => {
   //await contactRepository.removeByEmail(testEmail2, testAccountId)
 
   await supertest(accountsApp)
-    .delete(`/accounts/${testAccountId}`)
+    .delete(`/accounts/${testAccountId}?force=true`)
     .set('x-access-token', jwt)
 
   await supertest(accountsApp)

@@ -1,10 +1,15 @@
 import { Request, Response, NextFunction } from 'express'
 import { IAccount } from '../models/account'
+import controllerCommons from 'commons/api/controllers/controller'
+import { TokenProps } from 'commons/api/auth'
 import repository from '../models/accountRepository'
 import auth from '../auth'
+import { AccountStatus } from '../models/accountStatus'
 
 async function getAccounts(req: Request, res: Response, next: NextFunction) {
-  const accounts: IAccount[] = await repository.findAll()
+  const includeRemoved = req.query.includeRemoved == 'true'
+
+  const accounts: IAccount[] = await repository.findAll(includeRemoved)
   res.json(accounts.map(item => {
     item.password = ''
     return item
@@ -106,7 +111,23 @@ async function deleteAccount(req: Request, res: Response, next: NextFunction) {
       return res.status(400).end()
     }
 
-    await repository.remove(accountId)
+    const token = controllerCommons.getToken(res) as TokenProps
+    if (accountId !== token.accountId) {
+      return res.status(403).end()
+    }
+
+    if (req.query.force === 'true') {
+      await repository.remove(accountId)
+      res.status(200).end();
+    } else {
+      const accountParams = {
+        status: AccountStatus.REMOVED,
+      } as IAccount
+
+      const updateAccount = await repository.set(accountId, accountParams)
+      res.json(updateAccount)
+    }
+    
     res.status(200).end()
   } catch (error) {
     console.log(`deleteAccount: ${error}`)

@@ -1,19 +1,24 @@
 import contactModel, { IContactModel } from "./contactModel"
 import { IContact } from "./contact"
+import { ContactStatus } from "./contactStatus"
 
-function findAll(accountId: number) {
-  return contactModel.findAll<IContactModel>({ where: { accountId } })
+function findAll(accountId: number, includeRemoved: boolean) {
+  if (includeRemoved) {
+    return contactModel.findAll<IContactModel>({ where: { accountId } })
+  } else {
+    return contactModel.findAll<IContactModel>({ where: { accountId, status: [ContactStatus.SUBSCRIBED, ContactStatus.UNSUBSCRIBED] } })
+  }
 }
 
 async function add(contact: IContact, accountId: number) {
   contact.accountId = accountId
   const result = await contactModel.create(contact)
-  contact.id = result.id
+  contact.id = result.id!
   return contact
 }
 
 async function set(contactId: number, contact: IContact, accountId: number) {
-  const originalContact = await contactModel.findOne({where: { id: contactId, accountId }})
+  const originalContact = await contactModel.findOne({ where: { id: contactId, accountId: accountId } })
 
   if (!originalContact) {
     return null;
@@ -38,11 +43,11 @@ async function set(contactId: number, contact: IContact, accountId: number) {
 }
 
 function findById(contactId: number, accountId: number) {
-  return contactModel.findOne<IContactModel>({ where: { id: contactId, accountId } })
+  return contactModel.findOne<IContactModel>({ where: { id: contactId, accountId: accountId } })
 }
 
 function removeById(contactId: number, accountId: number) {
-  return contactModel.destroy({ where: { id: contactId, accountId } })
+  return contactModel.destroy({ where: { id: contactId, accountId: accountId } })
 }
 
 function removeByEmail(email: string, accountId: number) {

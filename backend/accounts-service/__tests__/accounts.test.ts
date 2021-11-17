@@ -5,6 +5,7 @@ import app from './../src/app'
 
 import repository from '../src/models/accountRepository'
 import auth from "../src/auth"
+import { AccountStatus } from "../src/models/accountStatus"
 
 const testEmail = 'jest@accounts.com'
 const testEmail2 = 'jest2@accounts.com'
@@ -137,6 +138,15 @@ describe('Testando rotas de accounts service', () => {
   it('DELETE /accounts/:id - Deve retornar statusCode 200', async () => {
     const result = await supertest(app)
       .delete('/accounts/'+testId)
+      .set('x-access-token', jwt)
+
+    expect(result.status).toEqual(200)
+    expect(result.body.status).toEqual(AccountStatus.REMOVED)
+  })
+
+  it('DELETE /accounts/:id?force=true - Deve retornar statusCode 200', async () => {
+    const result = await supertest(app)
+      .delete(`/accounts/${testId}?force=true`)
       .set('x-access-token', jwt)
 
     expect(result.status).toEqual(200)

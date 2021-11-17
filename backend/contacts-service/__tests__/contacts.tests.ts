@@ -4,6 +4,7 @@ import app from './../src/app'
 import accountsApp from '../../accounts-service/src/app'
 import { IContact } from "../src/models/contact"
 import contactRepository from "../src/models/contactRepository"
+import { ContactStatus } from "../src/models/contactStatus"
 
 const testEmail = 'jest@accounts.com'
 const testEmail2 = 'jest2@accounts.com'
@@ -38,12 +39,11 @@ beforeAll(async () => {
   const testContact = {
     name: 'jest',
     email: testEmail,
-    phone: '123456789',
+    phone: '51123456789',
   } as IContact
 
   const addResult  = await contactRepository.add(testContact, testAccountId)
   testContactId = addResult.id!
-
 })
 
 afterAll(async () => {
@@ -51,7 +51,7 @@ afterAll(async () => {
   await contactRepository.removeByEmail(testEmail2, testAccountId)
 
   await supertest(accountsApp)
-    .delete(`/accounts/${testAccountId}`)
+    .delete(`/accounts/${testAccountId}?force=true`)
     .set('x-access-token', jwt)
 
   await supertest(accountsApp)
@@ -155,16 +155,16 @@ describe('Testando rotas de contacts service', () => {
 
   it('PATCH /contacts/:id - Deve retornar statusCode 200', async () => {
     const payload = {
-      name: 'jestTes'
+      name: 'patchpayload',
     }
 
     const result = await supertest(app)
-      .patch(`/contacts/${testContactId}`)
+      .patch('/contacts/' + testContactId)
       .set('x-access-token', jwt)
       .send(payload)
 
     expect(result.status).toEqual(200)
-    expect(result.body.name).toEqual('jestTes')
+    expect(result.body.name).toEqual('patchpayload')
   })
 
   it('PATCH /contacts/:id - Deve retornar statusCode 401', async () => {
@@ -216,5 +216,30 @@ describe('Testando rotas de contacts service', () => {
       .send(payload)
 
     expect(result.status).toEqual(400)
+  })
+
+  it('DELETE /contacts/:id - Deve retornar statusCode 200', async () => {
+    const result = await supertest(app)
+      .delete('/contacts/'+testContactId)
+      .set('x-access-token', jwt)
+
+    expect(result.status).toEqual(200)
+    expect(result.body.status).toEqual(ContactStatus.REMOVED)
+  })
+
+  it('DELETE /contacts/:id?force=true - Deve retornar statusCode 200', async () => {
+    const result = await supertest(app)
+      .delete(`/contacts/${testContactId}?force=true`)
+      .set('x-access-token', jwt)
+
+    expect(result.status).toEqual(200)
+  })
+
+  it('DELETE /contacts/:id - Deve retornar statusCode 403', async () => {
+    const result = await supertest(app)
+      .delete('/contacts/-1')
+      .set('x-access-token', jwt);
+
+    expect(result.status).toEqual(403)
   })
 })
