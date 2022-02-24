@@ -7,7 +7,7 @@ class AccountsService {
   }
 
   async signup(userModel) {
-    const response = await this.api.post("accoutns", userModel);
+    const response = await this.api.post("accounts", userModel);
     return response;
   }
 
