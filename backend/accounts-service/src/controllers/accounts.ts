@@ -5,6 +5,7 @@ import { TokenProps } from 'commons/api/auth'
 import repository from '../models/accountRepository'
 import auth from '../auth'
 import { AccountStatus } from '../models/accountStatus'
+import {dangerouslyDisableDefaultSrc} from "helmet/dist/middlewares/content-security-policy";
 
 async function getAccounts(req: Request, res: Response, next: NextFunction) {
   const includeRemoved = req.query.includeRemoved == 'true'
@@ -89,7 +90,7 @@ async function loginAccount(req: Request, res: Response, next: NextFunction) {
         const token = auth.signToken(account.id!)
         return res.json({ auth: true, token })
       }
-      
+
       return res.status(401).end();
     }
 

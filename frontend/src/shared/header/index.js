@@ -1,4 +1,3 @@
-import react from "react";
 import { Container, Navbar, Nav } from "react-bootstrap";
 import { withRouter } from "react-router-dom";
 
@@ -24,6 +23,7 @@ function MainMenu({ history }) {
           <Nav>
             <Nav.Link href="/contacts">Contatos</Nav.Link>
             <Nav.Link href="/messages">Mensagens</Nav.Link>
+            <Nav.Link href="/payments">Compras</Nav.Link>
           </Nav>
           <Nav>
             <Nav.Link onClick={handleLogout}>Sair</Nav.Link>

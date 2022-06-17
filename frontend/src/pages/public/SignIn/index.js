@@ -18,7 +18,7 @@ class SignIn extends React.Component {
   handleSignIn = async (event) => {
     event.preventDefault();
 
-    const { email, password, error } = this.state;
+    const { email, password } = this.state;
 
     if (!email || !password) {
       this.setState({ error: "Preencha todos os campos" });
