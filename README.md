@@ -44,10 +44,10 @@
  * em Dev: https://www.csfieldguide.org.nz/en/interactives/rsa-key-generator/
  * em produção remover o envio das chaves para o git
 
-# TRELLO
-:link: https://trello.com/invite/b/Z6UrZAE8/8da644f59725eec72baf9e584a7c8c3f/lpem
+# ClickUp
+:link: https://sharing.clickup.com/36948462/b/h/6-380852897-2/36d992ad5b8d759
 
-# PACOTES
+# Pacotes para analisar o uso
 - helmet = para corrigir algumas falhas que são bastante comuns nas paginas web
 - artillery.io = para fazer testes de 'stress' e verificar quantos usuários ou acessos à página / API aguenta "considerando a hospedagem"
 - jest-axe para validar acessibilidade durante os testes (IDE)
@@ -56,7 +56,7 @@
 - https://www.npmjs.com/package/@djpfs/react-vlibras-typescript (Pacote de tradução para libras)
 
 ## Validações que ainda podemos fazer para melhorar a segurança
-* adicionar captcha
-* limitar a quantidade de tentativas de 'login' (ou de passar tokens)
+* Adicionar captcha nos formulários
+* Limitar a quantidade de tentativas de 'login' (ou de passar tokens)
 * WAF (web application firewall)
 * 
