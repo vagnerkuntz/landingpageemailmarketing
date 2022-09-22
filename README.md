@@ -1,6 +1,8 @@
 
 # LPEM (Landing Page & E-mail Marketing)
 
+#### Projeto desenvolvido apenas para conclusão de curso.
+
 💡 Pagina para vender E-mail Marketing e Landing page com alta conversão para os buscadores, acessibilidade e facilidade até para as pessoas com mais dificuldade.
 
 - Criar oportunidades para freelancers de Design de Layouts 
