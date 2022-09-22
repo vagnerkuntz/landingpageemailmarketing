@@ -8,8 +8,8 @@ import {
   useRouteMatch,
 } from "react-router-dom";
 
-import SignIn from "./pages/public/SignIn";
-import SignUp from "./pages/public/SignUp";
+import { SignIn } from "./pages/public/SignIn";
+import { SignUp } from "./pages/public/SignUp";
 
 function Home() {
   return (
