@@ -1,5 +1,6 @@
+import { useNavigate } from "react-router-dom";
+
 import { Container, Navbar, Nav } from "react-bootstrap";
-import { withRouter } from "react-router-dom";
 
 import { Header, Logo } from "./styles";
 
@@ -7,10 +8,12 @@ import { logout } from "../../services/auth";
 
 //import IconeLogo from '../../images/icone.png';
 
-function MainMenu({ history }) {
+function MainMenu() {
+  let navigate = useNavigate();
+
   async function handleLogout() {
     await logout();
-    history.push("/");
+    navigate("/");
   }
 
   return (
@@ -34,4 +37,4 @@ function MainMenu({ history }) {
   );
 }
 
-export default withRouter(MainMenu);
+export default MainMenu;

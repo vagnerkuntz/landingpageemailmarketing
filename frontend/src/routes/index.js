@@ -1,10 +1,8 @@
 import React from "react";
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route
-} from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 
+import ChooseTheme from "./../pages/public/ChooseTheme";
+import DashboardPagePublic from "./../pages/public/Dashboard";
 import SignInPage from "./../pages/public/SignIn";
 import SignUpPage from "./../pages/public/SignUp";
 
@@ -18,25 +16,45 @@ import PaymentCancel from "../pages/secure/Payments/payment_cancel";
 
 import RoutePrivate from "./route-wrapper";
 
-export default function Routes() {
-  return (
-    <Router>
-      <Switch>
-        <RoutePrivate exact path="/" component={DashboardPage} />
-        <RoutePrivate exact path="/contacts" component={ContactsListPage} />
-        <RoutePrivate exact path="/contacts/add" component={ContactsAddPage} />
-        <RoutePrivate
-          exact
-          path="/contacts/:contactId"
-          component={ContactDetailsPage}
-        />
-        <RoutePrivate exact path="/payments" component={PaymentsPage}/>
-        <RoutePrivate exact path="/payment_cancel" component={PaymentCancel}/>
-        <RoutePrivate exact path="/payment_success" component={PaymentSuccess}/>
 
-        <Route exact path="/signin" component={SignInPage} />
-        <Route exact path="/signup" component={SignUpPage} />
-      </Switch>
-    </Router>
+export default function AllRoutes() {
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route exact path="/" element={<ChooseTheme />} />
+        <Route exact path="/home" element={<DashboardPagePublic />} />
+
+        <Route exact path="/signin" element={<SignInPage />} />
+        <Route exact path="/signup" element={<SignUpPage />} />
+
+        <Route element={<RoutePrivate />}>
+          <Route exact path="/contacts" element={<ContactsListPage />} />
+        </Route>
+
+        <Route element={<RoutePrivate />}>
+          <Route exact path="/contacts/add" element={<ContactsAddPage />} />
+        </Route>
+
+        <Route element={<RoutePrivate />}>
+          <Route
+            exact
+            path="/contacts/:contactId"
+            element={<ContactDetailsPage />}
+          />
+        </Route>
+
+        <Route element={<RoutePrivate />}>
+          <Route exact path="/payments" element={<PaymentsPage />} />
+        </Route>
+
+        <Route element={<RoutePrivate />}>
+          <Route exact path="/payment_cancel" element={<PaymentCancel />} />
+        </Route>
+
+        <Route element={<RoutePrivate />}>
+          <Route exact path="/payment_success" element={<PaymentSuccess />} />
+        </Route>
+      </Routes>
+    </BrowserRouter>
   );
 }

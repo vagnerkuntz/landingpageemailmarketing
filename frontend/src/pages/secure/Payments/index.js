@@ -2,7 +2,6 @@ import React from "react";
 import Header from "../../../shared/header";
 import { PageContent } from "../../../shared/styles";
 import { Container, Button } from "react-bootstrap";
-import { withRouter } from "react-router";
 
 import PaymentService from "../../../services/payment";
 
@@ -77,4 +76,4 @@ class Payments extends React.Component {
     }
 }
 
-export default withRouter(Payments);
+export default Payments;

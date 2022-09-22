@@ -2,7 +2,6 @@ import React from "react";
 import Header from "../../../shared/header";
 import { PageContent } from "../../../shared/styles";
 import { Container } from "react-bootstrap";
-import { withRouter } from "react-router";
 
 class PaymentCancel extends React.Component {
     render() {
@@ -13,7 +12,6 @@ class PaymentCancel extends React.Component {
                     <Container>
                         <h1>Cancel</h1>
 
-
                     </Container>
                 </PageContent>
             </>
@@ -21,4 +19,4 @@ class PaymentCancel extends React.Component {
     }
 }
 
-export default withRouter(PaymentCancel);
+export default PaymentCancel;

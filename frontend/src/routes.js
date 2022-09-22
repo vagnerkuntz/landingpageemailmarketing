@@ -1,7 +1,7 @@
 import React from "react";
 import {
-  BrowserRouter as Router,
-  Switch,
+  BrowserRouter,
+  Routes,
   Route,
   Link,
   useParams,
@@ -39,12 +39,12 @@ function Contacts() {
         </li>
       </ul>
 
-      <Switch>
+      <Routes>
         <Route exact path={path} />
         <Route path={`${path}/:contactId`}>
           <Contact />
         </Route>
-      </Switch>
+      </Routes>
     </div>
   );
 }
@@ -79,12 +79,12 @@ function Messages() {
         </li>
       </ul>
 
-      <Switch>
+      <Routes>
         <Route exact path={path} />
         <Route path={`${path}/:messageId`}>
           <Message />
         </Route>
-      </Switch>
+      </Routes>
     </div>
   );
 }
@@ -121,11 +121,10 @@ function Menu() {
   );
 }
 
-export default function Routes() {
+export default function RoutesComponent() {
   return (
-    <Router>
-      <div>
-        <Switch>
+    <BrowserRouter>
+        <Routes>
           <Route exact path="/">
             <Home />
           </Route>
@@ -141,8 +140,7 @@ export default function Routes() {
           <Route path="/messages">
             <Messages />
           </Route>
-        </Switch>
-      </div>
-    </Router>
+        </Routes>
+    </BrowserRouter>
   );
 }

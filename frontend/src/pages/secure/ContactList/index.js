@@ -2,17 +2,17 @@ import React from "react";
 import Header from "../../../shared/header";
 import { PageContent } from "../../../shared/styles";
 import { Container, Table, Row, Col } from "react-bootstrap";
-import { Link, withRouter, useRouteMatch } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import ContactsService from "../../../services/contacts";
 
 function RenderLine({ contact }) {
-  const { url } = useRouteMatch();
+  const { pathname } = useLocation();
 
   return (
     <tr key={contact.id}>
       <td>{contact.name}</td>
       <td>
-        <Link to={`${url}/${contact.id}`}>{contact.email}</Link>
+        <Link to={`${pathname}/${contact.id}`}>{contact.email}</Link>
       </td>
     </tr>
   );
@@ -97,4 +97,4 @@ class Contacts extends React.Component {
   }
 }
 
-export default withRouter(Contacts);
+export default Contacts;

@@ -1,5 +1,5 @@
 import React from "react";
-import { withRouter, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import Header from "../../../shared/header";
 import { PageContent } from "../../../shared/styles";
 import { Container, Button, Form, Alert, Row, Col } from "react-bootstrap";
@@ -107,4 +107,4 @@ class ContactAdd extends React.Component {
   }
 }
 
-export default withRouter(ContactAdd);
+export default ContactAdd;

@@ -1,12 +1,22 @@
 import React from "react";
-import { Button, Form, Container, Row, Col } from "react-bootstrap";
-import { Link, withRouter } from "react-router-dom";
-import { BoxContent, BoxForm } from "../../../shared/styles";
 
 import AccountsService from "../../../services/accounts";
 import { login } from "../../../services/auth";
 
-//  import Logo from '../../../assets/images/logo.png';
+import HeaderLogin from "../HeaderLogin";
+import {
+  Container,
+  ElipseGreen,
+  ElipsePurple,
+  Form,
+  Input,
+  ButtonWrapper,
+  Button,
+  LinkCadastrese,
+  Img
+} from './styles'
+
+import CirculoFundo from '../../../assets/images/circulo_fundo_login.svg'
 
 class SignIn extends React.Component {
   state = {
@@ -22,7 +32,6 @@ class SignIn extends React.Component {
 
     if (!email || !password) {
       this.setState({ error: "Preencha todos os campos" });
-      return;
     } else {
       try {
         const service = new AccountsService();
@@ -40,53 +49,32 @@ class SignIn extends React.Component {
   render() {
     return (
       <Container>
-        <Row className="justify-content-md-center">
-          <Col xs={12} md={6}>
-            <BoxContent>logo aqui</BoxContent>
-            <BoxForm>
-              <h2>Login</h2>
-              <p>Informe seus dados para efetuar o login</p>
 
-              <Form onSubmit={this.handleSignIn}>
-                <Form.Group controlId="emailGroup">
-                  <Form.Label>E-mail:</Form.Label>
-                  <Form.Control
-                    type="email"
-                    placeholder="Digite seu e-mail"
-                    onChange={(e) => this.setState({ email: e.target.value })}
-                  />
-                </Form.Group>
-                <Form.Group controlId="passwordGroup">
-                  <Form.Label>Senha:</Form.Label>
-                  <Form.Control
-                    type="password"
-                    placeholder="Digite sua senha"
-                    onChange={(e) =>
-                      this.setState({ password: e.target.value })
-                    }
-                  />
-                </Form.Group>
-                <div className="d-grid mt-2">
-                  <Button variant="secondary" size="lg" type="submit">
-                    Fazer Login
-                  </Button>
-                </div>
-              </Form>
-            </BoxForm>
+        <HeaderLogin />
 
-            <BoxContent>
-              <p>
-                Ainda não possui cadastro?{" "}
-                <Link className="button" to="/signup">
-                  Cadastre-se!
-                </Link>
-              </p>
-            </BoxContent>
-          </Col>
-        </Row>
+        <ElipseGreen />
+        <ElipsePurple />
+
+        <Img src={CirculoFundo} alt="" />
+
+        <Form>
+          <Input type="text" id="email" placeholder="E-mail" />
+
+          <br />
+
+          <Input type="password" id="password" placeholder="Senha" />
+
+          <ButtonWrapper>
+            <Button>Entrar</Button>
+          </ButtonWrapper>
+          <LinkCadastrese href="/signup">
+            Cadastre-se
+          </LinkCadastrese>
+        </Form>
+
       </Container>
     );
   }
 }
 
-export default withRouter(SignIn);
+export default SignIn;

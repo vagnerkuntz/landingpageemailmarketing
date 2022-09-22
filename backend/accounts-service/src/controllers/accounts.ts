@@ -5,7 +5,6 @@ import { TokenProps } from 'commons/api/auth'
 import repository from '../models/accountRepository'
 import auth from '../auth'
 import { AccountStatus } from '../models/accountStatus'
-import {dangerouslyDisableDefaultSrc} from "helmet/dist/middlewares/content-security-policy";
 
 async function getAccounts(req: Request, res: Response, next: NextFunction) {
   const includeRemoved = req.query.includeRemoved == 'true'
@@ -28,7 +27,7 @@ async function getAccount(req: Request, res: Response, next: NextFunction) {
     if (account === null) {
       return res.status(404).end()
     }
-    
+
     account.password = ''
     return res.json(account)
   } catch (error) {
@@ -59,9 +58,9 @@ async function setAccount(req: Request, res: Response, next: NextFunction) {
     if (!accountId) {
       return res.status(400).end()
     }
-    
+
     const accountParams = req.body as IAccount
-    
+
     if (accountParams.password) {
       accountParams.password = auth.hashPassword(accountParams.password)
     }
@@ -128,7 +127,7 @@ async function deleteAccount(req: Request, res: Response, next: NextFunction) {
       const updateAccount = await repository.set(accountId, accountParams)
       res.json(updateAccount)
     }
-    
+
     res.status(200).end()
   } catch (error) {
     console.log(`deleteAccount: ${error}`)

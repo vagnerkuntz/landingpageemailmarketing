@@ -1,6 +1,8 @@
 import React from "react";
-import Routes from "./routes/index";
+import AllRoutes from "./routes/index";
 
-const App = () => <Routes />;
+import './styles/global.css'
+
+const App = () => <AllRoutes />;
 
 export default App;
