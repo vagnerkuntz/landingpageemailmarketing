@@ -29,7 +29,7 @@ function validateAuthorization(req: Request, res: Response, next: NextFunction) 
 
   const token = controllerCommons.getToken(res) as TokenProps
 
-  // autenticado mas não tem permissão
+  // autenticado, mas não tem permissão
   if (accountId !== token.accountId) {
     return res.status(403).end()
   }

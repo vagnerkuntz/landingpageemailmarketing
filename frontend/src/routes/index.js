@@ -3,8 +3,8 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import ChooseTheme from "./../pages/public/ChooseTheme";
 import DashboardPagePublic from "./../pages/public/Dashboard";
-import SignInPage from "./../pages/public/SignIn";
-import SignUpPage from "./../pages/public/SignUp";
+import { SignIn } from "../pages/public/SignIn";
+import { SignUp } from "../pages/public/SignUp";
 
 import DashboardPage from "./../pages/secure/Dashboard";
 import ContactsListPage from "./../pages/secure/ContactList";
@@ -24,8 +24,12 @@ export default function AllRoutes() {
         <Route exact path="/" element={<ChooseTheme />} />
         <Route exact path="/home" element={<DashboardPagePublic />} />
 
-        <Route exact path="/signin" element={<SignInPage />} />
-        <Route exact path="/signup" element={<SignUpPage />} />
+        <Route exact path="/signin" element={<SignIn />} />
+        <Route exact path="/signup" element={<SignUp />} />
+
+        <Route element={<RoutePrivate />}>
+          <Route exact path="/dashboard" element={<DashboardPage />} />
+        </Route>
 
         <Route element={<RoutePrivate />}>
           <Route exact path="/contacts" element={<ContactsListPage />} />

@@ -1,5 +1,5 @@
 TN:
-SF:src\app.ts
+SF:src/app.ts
 FNF:0
 FNH:0
 DA:1,1
@@ -11,7 +11,7 @@ BRF:0
 BRH:0
 end_of_record
 TN:
-SF:src\auth.ts
+SF:src/auth.ts
 FN:11,hashPassword
 FN:15,comparePassword
 FN:19,signToken
@@ -63,7 +63,7 @@ BRF:3
 BRH:3
 end_of_record
 TN:
-SF:src\server.ts
+SF:src/server.ts
 FN:1,(empty-report)
 FNF:1
 FNH:0
@@ -91,7 +91,7 @@ BRF:1
 BRH:0
 end_of_record
 TN:
-SF:src\controllers\accounts.ts
+SF:src/controllers/accounts.ts
 FN:9,getAccounts
 FN:19,getAccount
 FN:39,addAccount
@@ -121,8 +121,8 @@ DA:10,1
 DA:11,1
 DA:12,1
 DA:13,1
-DA:14,3
-DA:15,3
+DA:14,5
+DA:15,5
 DA:16,1
 DA:17,1
 DA:18,1
@@ -257,7 +257,7 @@ DA:146,1
 LF:146
 LH:116
 BRDA:9,0,0,1
-BRDA:13,1,0,3
+BRDA:13,1,0,5
 BRDA:19,2,0,1
 BRDA:22,3,0,0
 BRDA:27,4,0,0
@@ -281,7 +281,7 @@ BRF:21
 BRH:10
 end_of_record
 TN:
-SF:src\models\account.ts
+SF:src/models/account.ts
 FN:1,(empty-report)
 FNF:1
 FNH:0
@@ -303,7 +303,7 @@ BRF:1
 BRH:0
 end_of_record
 TN:
-SF:src\models\accountModel.ts
+SF:src/models/accountModel.ts
 FNF:0
 FNH:0
 DA:1,1
@@ -354,7 +354,7 @@ BRF:0
 BRH:0
 end_of_record
 TN:
-SF:src\models\accountRepository.ts
+SF:src/models/accountRepository.ts
 FN:6,findAll
 FN:15,findByEmail
 FN:21,findById
@@ -454,7 +454,7 @@ BRF:13
 BRH:9
 end_of_record
 TN:
-SF:src\models\accountSchemas.ts
+SF:src/models/accountSchemas.ts
 FNF:0
 FNH:0
 DA:1,1
@@ -487,7 +487,7 @@ BRF:0
 BRH:0
 end_of_record
 TN:
-SF:src\models\accountStatus.ts
+SF:src/models/accountStatus.ts
 FNF:0
 FNH:0
 DA:1,2
@@ -503,7 +503,7 @@ BRF:1
 BRH:1
 end_of_record
 TN:
-SF:src\routes\accounts.ts
+SF:src/routes/accounts.ts
 FNF:0
 FNH:0
 DA:1,1
@@ -543,7 +543,7 @@ BRF:0
 BRH:0
 end_of_record
 TN:
-SF:src\routes\midlewares.ts
+SF:src/routes/midlewares.ts
 FN:8,validateAccountSchema
 FN:12,validateUpdateAccountSchema
 FN:16,validateLoginSchema

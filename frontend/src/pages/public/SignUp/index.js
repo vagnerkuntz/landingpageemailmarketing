@@ -1,4 +1,5 @@
-import React from "react";
+import React, {useState} from "react";
+import { Alert } from "react-bootstrap";
 
 import AccountsService from "../../../services/accounts";
 import { login } from "../../../services/auth";
@@ -12,65 +13,110 @@ import {
   Input,
   ButtonWrapper,
   Button,
-  Img
+  Img,
+  Voltarlogin
 } from './styles'
 
 import CirculoFundo from '../../../assets/images/circulo_fundo_login.svg'
+import {useNavigate} from "react-router-dom";
 
-class SignIn extends React.Component {
-  state = {
-    email: "",
-    password: "",
-    error: "",
-  };
+export function SignUp () {
+  const navigate = useNavigate();
 
-  handleSignUp = async (event) => {
+  const [name, setName] = useState('')
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [domain, setDomain] = useState('')
+  const [error, setError] = useState('')
+  const [isLoading, setIsLoading] = useState(false)
+
+  async function handleSignUp (event) {
     event.preventDefault();
 
-    const { email, password } = this.state;
-
-    if (!email || !password) {
-      this.setState({ error: "Preencha todos os campos" });
+    if (!name || !email || !password || !domain) {
+      setError('Preencha todos os campos')
     } else {
       try {
         const service = new AccountsService();
 
-        const response = await service.login(email, password);
+        const response = await service.signup({ name, email, password, domain });
         login(response.data.token);
 
-        this.props.history.push("/");
+        navigate('/dashboard')
       } catch (error) {
-        this.setState({ error: "Houve um erro ao fazer login" });
+        setError(error)
       }
     }
-  };
-
-  render() {
-    return (
-      <Container>
-
-        <HeaderLogin />
-
-        <ElipseGreen />
-        <ElipsePurple />
-
-        <Img src={CirculoFundo} alt="" />
-
-        <Form>
-          <Input type="text" id="email" placeholder="E-mail" />
-
-          <br />
-
-          <Input type="password" id="password" placeholder="Senha" />
-
-          <ButtonWrapper>
-            <Button>Entrar</Button>
-          </ButtonWrapper>
-        </Form>
-
-      </Container>
-    );
   }
+
+  function renderError () {
+    return (
+      <Alert variant="danger">
+        {error}
+      </Alert>
+    )
+  }
+
+  return (
+    <Container>
+
+      <HeaderLogin />
+
+      <ElipseGreen />
+      <ElipsePurple />
+
+      <Img src={CirculoFundo} alt="" />
+
+      <Form onSubmit={handleSignUp}>
+        {error && renderError()}
+
+        <Input
+          type="text"
+          id="name"
+          name="name"
+          placeholder="Name"
+          onChange={e => setName(e.target.value)}
+        />
+
+        <br />
+
+        <Input
+          type="text"
+          id="email"
+          name="email"
+          placeholder="E-mail"
+          onChange={e => setEmail(e.target.value)}
+        />
+
+        <br />
+
+        <Input
+          type="password"
+          id="password"
+          name="password"
+          placeholder="Senha"
+          onChange={e => setPassword(e.target.value)}
+        />
+
+        <br />
+
+        <Input
+          type="text"
+          id="domain"
+          name="domain"
+          placeholder="Domain"
+          onChange={e => setDomain(e.target.value)}
+        />
+
+        <ButtonWrapper type="submit">
+          <Button>Realizar cadastro</Button>
+        </ButtonWrapper>
+
+        <Voltarlogin href="/signin">Voltar para o login</Voltarlogin>
+      </Form>
+
+
+    </Container>
+  )
 }
 
-export default SignIn;

@@ -86,3 +86,15 @@ export const Img = styled.img`
   position: absolute;
   right: 0;
 `
+
+export const Voltarlogin = styled.a`
+  color: #fff;
+  text-align: center;
+  margin-top: 20px;
+  text-decoration: none;
+  
+  &:hover {
+    color: #FCE1E5;
+    font-weight: 700;
+  }
+`

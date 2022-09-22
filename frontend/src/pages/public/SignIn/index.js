@@ -1,7 +1,9 @@
-import React from "react";
+import React, {useState} from "react";
 
 import AccountsService from "../../../services/accounts";
 import { login } from "../../../services/auth";
+
+import { useNavigate } from "react-router-dom";
 
 import HeaderLogin from "../HeaderLogin";
 import {
@@ -17,21 +19,20 @@ import {
 } from './styles'
 
 import CirculoFundo from '../../../assets/images/circulo_fundo_login.svg'
+import {Alert} from "react-bootstrap";
 
-class SignIn extends React.Component {
-  state = {
-    email: "",
-    password: "",
-    error: "",
-  };
+export function SignIn () {
+  const navigate = useNavigate();
 
-  handleSignIn = async (event) => {
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [error, setError] = useState('')
+
+  async function handleSignIn (event) {
     event.preventDefault();
 
-    const { email, password } = this.state;
-
     if (!email || !password) {
-      this.setState({ error: "Preencha todos os campos" });
+      setError('Preencha todos os campos')
     } else {
       try {
         const service = new AccountsService();
@@ -39,42 +40,58 @@ class SignIn extends React.Component {
         const response = await service.login(email, password);
         login(response.data.token);
 
-        this.props.history.push("/");
+        navigate("/dashboard")
       } catch (error) {
-        this.setState({ error: "Houve um erro ao fazer login" });
+        setError(error);
       }
     }
-  };
-
-  render() {
-    return (
-      <Container>
-
-        <HeaderLogin />
-
-        <ElipseGreen />
-        <ElipsePurple />
-
-        <Img src={CirculoFundo} alt="" />
-
-        <Form>
-          <Input type="text" id="email" placeholder="E-mail" />
-
-          <br />
-
-          <Input type="password" id="password" placeholder="Senha" />
-
-          <ButtonWrapper>
-            <Button>Entrar</Button>
-          </ButtonWrapper>
-          <LinkCadastrese href="/signup">
-            Cadastre-se
-          </LinkCadastrese>
-        </Form>
-
-      </Container>
-    );
   }
-}
 
-export default SignIn;
+  function renderError () {
+    return (
+      <Alert variant="danger">
+        {error}
+      </Alert>
+    )
+  }
+
+  return (
+    <Container>
+
+      <HeaderLogin />
+
+      <ElipseGreen />
+      <ElipsePurple />
+
+      <Img src={CirculoFundo} alt="" />
+
+      <Form onSubmit={handleSignIn}>
+        {error && renderError()}
+
+        <Input
+          type="text"
+          id="email"
+          placeholder="E-mail"
+          onChange={e => setEmail(e.target.value)}
+        />
+
+        <br />
+
+        <Input
+          type="password"
+          id="password"
+          placeholder="Senha"
+          onChange={e => setPassword(e.target.value)}
+        />
+
+        <ButtonWrapper type="submit">
+          <Button>Entrar</Button>
+        </ButtonWrapper>
+        <LinkCadastrese href="/signup">
+          Cadastre-se
+        </LinkCadastrese>
+      </Form>
+
+    </Container>
+  )
+}
