@@ -1,8 +1,10 @@
-import Header from "../Header";
+import React from 'react';
+import Carousel from "react-multi-carousel";
 import Container from 'react-bootstrap/Container';
 
-import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
+
+import { Header } from "../../../shared/Header";
 
 import {
   ContainerDashBoard,
@@ -20,6 +22,8 @@ import {
 
 import CirculoFundo from '../../../assets/images/circulo_fundo_login.svg'
 import CardImage from '../../../assets/images/card.svg'
+
+import { Footer } from "../../../shared/Footer";
 
 const responsive = {
   superLargeDesktop: {
@@ -41,7 +45,7 @@ const responsive = {
   }
 };
 
-const DashboardPagePublic = () => {
+export function DashboardPagePublic () {
   return (
     <ContainerDashBoard>
       <Header/>
@@ -68,7 +72,7 @@ const DashboardPagePublic = () => {
         </Container>
       </WrapperText>
 
-      <Container style={{ zIndex: 1}}>
+      <Container style={{ zIndex: 1, marginBottom: 100 }}>
         <WrapperContasVerificadas>
           <span style={{ fontSize: 28 }}>Contas verificadas</span>
           <span>Ver todas</span>
@@ -138,8 +142,8 @@ const DashboardPagePublic = () => {
         </Carousel>
 
       </Container>
+
+      <Footer />
     </ContainerDashBoard>
   )
 }
-
-export default DashboardPagePublic

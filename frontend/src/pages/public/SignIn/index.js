@@ -5,7 +5,8 @@ import { login } from "../../../services/auth";
 
 import { useNavigate } from "react-router-dom";
 
-import HeaderLogin from "../HeaderLogin";
+import {HeaderLogin} from "../../../shared/HeaderLogin";
+
 import {
   Container,
   ElipseGreen,

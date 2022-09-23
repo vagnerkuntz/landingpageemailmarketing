@@ -4,7 +4,7 @@ import { Alert } from "react-bootstrap";
 import AccountsService from "../../../services/accounts";
 import { login } from "../../../services/auth";
 
-import HeaderLogin from "../HeaderLogin";
+import {HeaderLogin} from "../../../shared/HeaderLogin";
 import {
   Container,
   ElipseGreen,

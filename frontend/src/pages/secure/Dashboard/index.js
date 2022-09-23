@@ -1,21 +1,15 @@
 import React from "react";
-import Header from "../../../shared/header";
-import { PageContent } from "../../../shared/styles";
 import { Container } from "react-bootstrap";
+import { Header } from "../../../shared/Header";
 
-class Dashboard extends React.Component {
-  render() {
-    return (
-      <>
-        <Header />
-        <PageContent>
-          <Container>
-            <h1>Dashboard</h1>
-          </Container>
-        </PageContent>
-      </>
-    );
-  }
+export function Dashboard () {
+  return (
+    <>
+      <Header />
+      <Container>
+        <h1>Dashboard</h1>
+      </Container>
+    </>
+  );
 }
 
-export default Dashboard;

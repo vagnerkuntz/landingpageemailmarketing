@@ -3,14 +3,13 @@ import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import Form from 'react-bootstrap/Form';
 
-import InputGroup from 'react-bootstrap/InputGroup';
 import { BsSearch } from 'react-icons/bs';
 
-import {ReactComponent as Logo} from '../../../assets/images/logo.svg'
+import {ReactComponent as Logo} from '../../assets/images/logo.svg'
 
 import { Bg } from './styles'
 
-function Header() {
+export function Header () {
   return (
     <Bg>
       <Navbar collapseOnSelect expand="lg" fixed="top" style={{ background: 'rgba(31, 29, 43, 0.8)' }}>
@@ -60,4 +59,3 @@ function Header() {
   );
 }
 
-export default Header;

@@ -1,8 +1,9 @@
-import React from "react";
-import Header from "../../../shared/header";
-import { PageContent } from "../../../shared/styles";
+import React, {useEffect, useState} from "react";
 import { Container, Table, Row, Col } from "react-bootstrap";
 import { Link, useLocation } from "react-router-dom";
+
+import { Header } from "../../../shared/Header";
+
 import ContactsService from "../../../services/contacts";
 
 function RenderLine({ contact }) {
@@ -44,57 +45,46 @@ function RenderTable({ contacts }) {
   );
 }
 
-class Contacts extends React.Component {
-  constructor(props) {
-    super(props);
+export function ContactsList () {
+  const [isLoading, setIsLoading] = useState(true)
+  const [contacts, setContacts] = useState([])
 
-    this.state = {
-      isLoading: true,
-      contacts: [],
-    };
-  }
+  useEffect(() => {
+    async function getContacts () {
+      const service = new ContactsService();
+      const result = await service.getAll();
 
-  async componentDidMount() {
-    const service = new ContactsService();
+      setIsLoading(false)
+      setContacts(result)
+    }
 
-    const result = await service.getAll();
+    getContacts()
+  }, [])
 
-    this.setState({
-      isLoading: false,
-      contacts: result,
-    });
-  }
+  return (
+    <>
+      <Header />
+      <Container>
+        <Row>
+          <Col>
+            <h3>Contatos</h3>
+          </Col>
+          <Col>
+            <Link
+              className="btn btn-success float-right"
+              to="/contacts/add"
+            >
+              Adicionar contato
+            </Link>
+          </Col>
+          <p>Relação de contatos cadastrados.</p>
 
-  render() {
-    const { isLoading, contacts } = this.state;
+          {contacts.length === 0 && <RenderEmptyRow />}
+          {!isLoading && <RenderTable contacts={contacts} />}
+        </Row>
+      </Container>
+    </>
+  );
 
-    return (
-      <>
-        <Header />
-        <PageContent>
-          <Container>
-            <Row>
-              <Col>
-                <h3>Contatos</h3>
-              </Col>
-              <Col>
-                <Link
-                  className="btn btn-success float-right"
-                  to="/contacts/add"
-                >
-                  Adicionar contato
-                </Link>
-              </Col>
-              <p>Relação de contatos cadastrados.</p>
-
-              {contacts.length === 0 && <RenderEmptyRow />}
-              {!isLoading && <RenderTable contacts={contacts} />}
-            </Row>
-          </Container>
-        </PageContent>
-      </>
-    );
-  }
 }
 
-export default Contacts;
