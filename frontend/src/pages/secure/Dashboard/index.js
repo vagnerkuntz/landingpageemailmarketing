@@ -1,15 +1,15 @@
 import React from "react";
-import { Container } from "react-bootstrap";
 import { Header } from "../../../shared/Header";
+import {ContainerDashBoard, Elipse, ElipseBottom} from "./styles";
 
 export function Dashboard () {
   return (
-    <>
-      <Header />
-      <Container>
-        <h1>Dashboard</h1>
-      </Container>
-    </>
-  );
+      <ContainerDashBoard>
+          <Header/>
+
+          <Elipse />
+          <ElipseBottom />
+      </ContainerDashBoard>
+  )
 }
 

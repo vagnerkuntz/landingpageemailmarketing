@@ -1,4 +1,5 @@
-import React from 'react';
+import React, {useEffect} from 'react';
+import {useNavigate} from "react-router-dom";
 
 import {
   Background,
@@ -14,6 +15,21 @@ import ChooseWhiteTheme from '../../../assets/images/choose_white_theme.svg'
 import ChooseDarkTheme from '../../../assets/images/choose_dark_theme.svg'
 
 const ChooseTheme = () => {
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const theme = localStorage.getItem('@lpem:theme')
+
+    if (theme) {
+      navigate('/home')
+    }
+  }, [])
+
+  function setDarkTheme() {
+    localStorage.setItem('@lpem:theme', 'dark');
+    navigate('/home')
+  }
+
   return (
     <Background>
       <WrapperLeft>
@@ -27,7 +43,7 @@ const ChooseTheme = () => {
 
           <WrapperButtons>
             <Button>Tema Claro</Button>
-            <Button href="/home">
+            <Button onClick={() => setDarkTheme()}>
               Tema Escuro
             </Button>
           </WrapperButtons>

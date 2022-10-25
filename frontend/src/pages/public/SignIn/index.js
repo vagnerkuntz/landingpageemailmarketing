@@ -1,7 +1,7 @@
 import React, {useState} from "react";
 
 import AccountsService from "../../../services/accounts";
-import { login } from "../../../services/auth";
+import {login} from "../../../services/auth";
 
 import { useNavigate } from "react-router-dom";
 
@@ -43,7 +43,8 @@ export function SignIn () {
 
         navigate("/dashboard")
       } catch (error) {
-        setError(error);
+        console.log('Error handleSignIn', error)
+        setError('Erro. Por favor, tente novamente');
       }
     }
   }

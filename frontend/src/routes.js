@@ -5,7 +5,7 @@ import {
   Route,
   Link,
   useParams,
-  useRouteMatch,
+  useRouteMatch
 } from "react-router-dom";
 
 import { SignIn } from "./pages/public/SignIn";

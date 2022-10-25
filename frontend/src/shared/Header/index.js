@@ -1,3 +1,5 @@
+import {useEffect, useState} from "react";
+
 import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
@@ -8,8 +10,19 @@ import { BsSearch } from 'react-icons/bs';
 import {ReactComponent as Logo} from '../../assets/images/logo.svg'
 
 import { Bg } from './styles'
+import {getToken} from "../../services/auth";
 
 export function Header () {
+  const [logged, setLogged] = useState(null)
+
+  useEffect(() => {
+    const token = getToken()
+
+    if (token) {
+      setLogged(token)
+    }
+  }, [])
+
   return (
     <Bg>
       <Navbar collapseOnSelect expand="lg" fixed="top" style={{ background: 'rgba(31, 29, 43, 0.8)' }}>
@@ -34,14 +47,13 @@ export function Header () {
                     paddingLeft: 50,
                   }}
                 />
-
               </Form>
             </Nav>
             <Nav>
-              <Nav.Link href="#home" style={{ color: 'white' }}>Sobre a empresa</Nav.Link>
-              <Nav.Link href="#home" style={{ color: 'white' }}>FAQ</Nav.Link>
-              <Nav.Link href="#home" style={{ color: 'white' }}>Configuração</Nav.Link>
-              <Nav.Link eventKey={2} href="/signin" style={{
+              <Nav.Link href="#" style={{ color: 'white' }}>Sobre a empresa</Nav.Link>
+              <Nav.Link href="#" style={{ color: 'white' }}>FAQ</Nav.Link>
+              <Nav.Link href="#" style={{ color: 'white' }}>Configuração</Nav.Link>
+              <Nav.Link eventKey={2} href={logged ? '/dashboard' : '/signin'} style={{
                 color: 'white',
                 border: '1px solid #fff',
                 borderRadius: 30,
@@ -49,7 +61,7 @@ export function Header () {
                 textAlign: 'center',
                 marginLeft: 20
               }}>
-                Entrar
+                {logged ? 'Dashboard' : 'Entrar'}
               </Nav.Link>
             </Nav>
           </Navbar.Collapse>
