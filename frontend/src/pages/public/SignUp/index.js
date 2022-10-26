@@ -1,134 +1,122 @@
-import React from "react";
-import { Container, Form, Button, Row, Col, Alert } from "react-bootstrap";
-import { Link, withRouter } from "react-router-dom";
-import { BoxContent, BoxForm } from "../../../shared/styles";
+import React, {useState} from "react";
+import { Alert } from "react-bootstrap";
 
 import AccountsService from "../../../services/accounts";
+import { login } from "../../../services/auth";
 
-//  import Logo from '../../../assets/images/logo.png';
+import {HeaderLogin} from "../../../shared/HeaderLogin";
+import {
+  Container,
+  ElipseGreen,
+  ElipsePurple,
+  Form,
+  Input,
+  ButtonWrapper,
+  Button,
+  Img,
+  Voltarlogin
+} from './styles'
 
-class SignUp extends React.Component {
-  state = {
-    name: "",
-    email: "",
-    password: "",
-    domain: "",
-    error: "",
-    isLoading: false,
-  };
+import CirculoFundo from '../../../assets/images/circulo_fundo_login.svg'
+import {useNavigate} from "react-router-dom";
 
-  handleSignUp = async (event) => {
+export function SignUp () {
+  const navigate = useNavigate();
+
+  const [name, setName] = useState('')
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [domain, setDomain] = useState('')
+  const [error, setError] = useState('')
+  const [isLoading, setIsLoading] = useState(false)
+
+  async function handleSignUp (event) {
     event.preventDefault();
 
-    const { name, email, password, domain } = this.state;
-
-    if (!name) {
-      return this.setState({ error: "Preencha o campo nome" });
-    }
-
-    if (!email) {
-      return this.setState({ error: "Preencha o campo email" });
-    }
-
-    if (!password) {
-      return this.setState({ error: "Preencha o campo senha" });
-    }
-
-    if (!domain) {
-      return this.setState({ error: "Preencha o campo domínio" });
-    }
-
-    if (name && email && password && domain) {
-      this.setState({ isLoading: true });
+    if (!name || !email || !password || !domain) {
+      setError('Preencha todos os campos')
+    } else {
       try {
         const service = new AccountsService();
 
-        await service.signup({ name, email, password, domain });
+        const response = await service.signup({ name, email, password, domain });
+        login(response.data.token);
 
-        this.props.history.push("/signin");
-      } catch (err) {
-        this.setState({ error: "Ocorreu um erro ao realizar o cadastro" });
+        navigate('/dashboard')
+      } catch (error) {
+        setError(error)
       }
-      this.setState({ isLoading: false });
     }
-  };
+  }
 
-  renderError = () => {
-    const { error } = this.state;
-
-    if (!error) return null;
-
+  function renderError () {
     return (
-      <Alert variant="danger" onClose={() => this.setState({ error: "" })}>
+      <Alert variant="danger">
         {error}
       </Alert>
-    );
-  };
-
-  render() {
-    return (
-      <Container>
-        <Row className="justify-content-md-center">
-          <Col xs={12} md={6}>
-            <BoxContent>logo aqui</BoxContent>
-            <BoxForm>
-              <h2>Cadastro</h2>
-              <p>Preencha os campos para criar uma conta </p>
-
-              <Form onSubmit={this.handleSignUp}>
-                {this.state.error && this.renderError()}
-
-                <Form.Group controlId="nomeGroup">
-                  <Form.Label>Nome:</Form.Label>
-                  <Form.Control
-                    type="text"
-                    placeholder="Digite seu nome"
-                    onChange={(e) => this.setState({ name: e.target.value })}
-                  />
-                </Form.Group>
-                <Form.Group controlId="emailGroup">
-                  <Form.Label>E-mail:</Form.Label>
-                  <Form.Control
-                    type="email"
-                    placeholder="Digite seu e-mail"
-                    onChange={(e) => this.setState({ email: e.target.value })}
-                  />
-                </Form.Group>
-                <Form.Group controlId="dominioGroup">
-                  <Form.Label>Dominio:</Form.Label>
-                  <Form.Control
-                    type="url"
-                    placeholder="Digite seu dominio"
-                    onChange={(e) => this.setState({ domain: e.target.value })}
-                  />
-                </Form.Group>
-                <Form.Group controlId="senhaGroup">
-                  <Form.Label>Senha:</Form.Label>
-                  <Form.Control
-                    type="password"
-                    placeholder="Digite sua senha"
-                    onChange={(e) =>
-                      this.setState({ password: e.target.value })
-                    }
-                  />
-                </Form.Group>
-                <div className="d-grid mt-2">
-                  <Button variant="secondary" size="lg" type="submit">
-                    Realizar cadastro
-                  </Button>
-                </div>
-              </Form>
-            </BoxForm>
-            <BoxContent>
-              <Link className="button" to="/signin">
-                Já tenho cadastro
-              </Link>
-            </BoxContent>
-          </Col>
-        </Row>
-      </Container>
-    );
+    )
   }
+
+  return (
+    <Container>
+
+      <HeaderLogin />
+
+      <ElipseGreen />
+      <ElipsePurple />
+
+      <Img src={CirculoFundo} alt="" />
+
+      <Form onSubmit={handleSignUp}>
+        {error && renderError()}
+
+        <Input
+          type="text"
+          id="name"
+          name="name"
+          placeholder="Name"
+          onChange={e => setName(e.target.value)}
+        />
+
+        <br />
+
+        <Input
+          type="text"
+          id="email"
+          name="email"
+          placeholder="E-mail"
+          onChange={e => setEmail(e.target.value)}
+        />
+
+        <br />
+
+        <Input
+          type="password"
+          id="password"
+          name="password"
+          placeholder="Senha"
+          onChange={e => setPassword(e.target.value)}
+        />
+
+        <br />
+
+        <Input
+          type="text"
+          id="domain"
+          name="domain"
+          placeholder="Domain"
+          onChange={e => setDomain(e.target.value)}
+        />
+
+        <ButtonWrapper type="submit">
+          <Button>Realizar cadastro</Button>
+        </ButtonWrapper>
+
+        <Voltarlogin href="/signin">Voltar para o login</Voltarlogin>
+      </Form>
+
+
+    </Container>
+  )
 }
 
-export default withRouter(SignUp);

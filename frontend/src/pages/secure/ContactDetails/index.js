@@ -1,7 +1,6 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Container } from "react-bootstrap";
-import Header from "../../../shared/header";
-import { PageContent } from "../../../shared/styles";
+import { Header } from "../../../shared/Header";
 import ContactsService from "../../../services/contacts";
 
 function RenderContact({ contact }) {
@@ -14,52 +13,39 @@ function RenderContact({ contact }) {
   );
 }
 
-class ContactDetails extends React.Component {
-  constructor(props) {
-    super(props);
+export function ContactDetails () {
+  const [contact, setContact] = useState(null)
+  const [isLoading, setIsLoading] = useState(true)
 
-    this.state = {
-      isLoading: true,
-      contact: null,
-    };
-  }
-
-  async getContact(contactId) {
+  async function getContact(contactId) {
     const service = new ContactsService();
     const result = await service.getOne(contactId);
-    this.setState({
-      isLoading: false,
-      contact: result,
-    });
+
+    setIsLoading(false)
+    setContact(result)
   }
 
-  async componentDidMount() {
+  useEffect(() => {
     const {
       params: { contactId },
     } = this.props.match;
 
-    await this.getContact(contactId);
-  }
+    getContact(contactId);
+  }, [])
 
-  render() {
-    const { isLoading, contact } = this.state;
 
-    return (
-      <>
-        <Header />
-        <PageContent>
-          <Container>
-            <h3>Detalhes do Contato</h3>
-            {isLoading ? (
-              <p>Carregando...</p>
-            ) : (
-              <RenderContact contact={contact} />
-            )}
-          </Container>
-        </PageContent>
-      </>
-    );
-  }
+  return (
+    <>
+      <Header />
+
+      <Container>
+        <h3>Detalhes do Contato</h3>
+        {isLoading ? (
+          <p>Carregando...</p>
+        ) : (
+          <RenderContact contact={contact} />
+        )}
+      </Container>
+    </>
+  );
 }
-
-export default ContactDetails;

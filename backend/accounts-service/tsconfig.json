@@ -14,5 +14,13 @@
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true
   },
-  "exclude": ["__tests__"]
+  "exclude": [
+    "node_modules",
+    "dist"
+  ],
+  "include": [
+    "src/**/*",
+    "src/__tests__",
+    "jest.config"
+  ]
 }

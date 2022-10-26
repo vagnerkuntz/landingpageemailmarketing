@@ -1,28 +1,39 @@
-import React from "react";
-import { Button, Form, Container, Row, Col } from "react-bootstrap";
-import { Link, withRouter } from "react-router-dom";
-import { BoxContent, BoxForm } from "../../../shared/styles";
+import React, {useState} from "react";
 
 import AccountsService from "../../../services/accounts";
-import { login } from "../../../services/auth";
+import {login} from "../../../services/auth";
 
-//  import Logo from '../../../assets/images/logo.png';
+import { useNavigate } from "react-router-dom";
 
-class SignIn extends React.Component {
-  state = {
-    email: "",
-    password: "",
-    error: "",
-  };
+import {HeaderLogin} from "../../../shared/HeaderLogin";
 
-  handleSignIn = async (event) => {
+import {
+  Container,
+  ElipseGreen,
+  ElipsePurple,
+  Form,
+  Input,
+  ButtonWrapper,
+  Button,
+  LinkCadastrese,
+  Img
+} from './styles'
+
+import CirculoFundo from '../../../assets/images/circulo_fundo_login.svg'
+import {Alert} from "react-bootstrap";
+
+export function SignIn () {
+  const navigate = useNavigate();
+
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [error, setError] = useState('')
+
+  async function handleSignIn (event) {
     event.preventDefault();
 
-    const { email, password } = this.state;
-
     if (!email || !password) {
-      this.setState({ error: "Preencha todos os campos" });
-      return;
+      setError('Preencha todos os campos')
     } else {
       try {
         const service = new AccountsService();
@@ -30,63 +41,59 @@ class SignIn extends React.Component {
         const response = await service.login(email, password);
         login(response.data.token);
 
-        this.props.history.push("/");
+        navigate("/dashboard")
       } catch (error) {
-        this.setState({ error: "Houve um erro ao fazer login" });
+        console.log('Error handleSignIn', error)
+        setError('Erro. Por favor, tente novamente');
       }
     }
-  };
-
-  render() {
-    return (
-      <Container>
-        <Row className="justify-content-md-center">
-          <Col xs={12} md={6}>
-            <BoxContent>logo aqui</BoxContent>
-            <BoxForm>
-              <h2>Login</h2>
-              <p>Informe seus dados para efetuar o login</p>
-
-              <Form onSubmit={this.handleSignIn}>
-                <Form.Group controlId="emailGroup">
-                  <Form.Label>E-mail:</Form.Label>
-                  <Form.Control
-                    type="email"
-                    placeholder="Digite seu e-mail"
-                    onChange={(e) => this.setState({ email: e.target.value })}
-                  />
-                </Form.Group>
-                <Form.Group controlId="passwordGroup">
-                  <Form.Label>Senha:</Form.Label>
-                  <Form.Control
-                    type="password"
-                    placeholder="Digite sua senha"
-                    onChange={(e) =>
-                      this.setState({ password: e.target.value })
-                    }
-                  />
-                </Form.Group>
-                <div className="d-grid mt-2">
-                  <Button variant="secondary" size="lg" type="submit">
-                    Fazer Login
-                  </Button>
-                </div>
-              </Form>
-            </BoxForm>
-
-            <BoxContent>
-              <p>
-                Ainda não possui cadastro?{" "}
-                <Link className="button" to="/signup">
-                  Cadastre-se!
-                </Link>
-              </p>
-            </BoxContent>
-          </Col>
-        </Row>
-      </Container>
-    );
   }
-}
 
-export default withRouter(SignIn);
+  function renderError () {
+    return (
+      <Alert variant="danger">
+        {error}
+      </Alert>
+    )
+  }
+
+  return (
+    <Container>
+
+      <HeaderLogin />
+
+      <ElipseGreen />
+      <ElipsePurple />
+
+      <Img src={CirculoFundo} alt="" />
+
+      <Form onSubmit={handleSignIn}>
+        {error && renderError()}
+
+        <Input
+          type="text"
+          id="email"
+          placeholder="E-mail"
+          onChange={e => setEmail(e.target.value)}
+        />
+
+        <br />
+
+        <Input
+          type="password"
+          id="password"
+          placeholder="Senha"
+          onChange={e => setPassword(e.target.value)}
+        />
+
+        <ButtonWrapper type="submit">
+          <Button>Entrar</Button>
+        </ButtonWrapper>
+        <LinkCadastrese href="/signup">
+          Cadastre-se
+        </LinkCadastrese>
+      </Form>
+
+    </Container>
+  )
+}

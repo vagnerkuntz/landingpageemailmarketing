@@ -15,45 +15,51 @@
         }
     </style>
 </head>
-    
+
 <body>
 <div class='wrapper'>
     <div class='pad1'>
         <h1><a href="../../index.html">All files</a> / <a href="index.html">src/controllers</a> accounts.ts</h1>
         <div class='clearfix'>
-            
+
             <div class='fl pad1y space-right2'>
                 <span class="strong">79.45% </span>
                 <span class="quiet">Statements</span>
                 <span class='fraction'>116/146</span>
             </div>
-        
-            
+
+
             <div class='fl pad1y space-right2'>
-                <span class="strong">47.62% </span>
+                <span class="strong">47.61% </span>
                 <span class="quiet">Branches</span>
                 <span class='fraction'>10/21</span>
             </div>
-        
-            
+
+
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
                 <span class='fraction'>7/7</span>
             </div>
-        
-            
+
+
             <div class='fl pad1y space-right2'>
                 <span class="strong">79.45% </span>
                 <span class="quiet">Lines</span>
                 <span class='fraction'>116/146</span>
             </div>
-        
-            
+
+
         </div>
         <p class="quiet">
             Press <em>n</em> or <em>j</em> to go to the next uncovered block, <em>b</em>, <em>p</em> or <em>k</em> for the previous block.
         </p>
+        <template id="filterTemplate">
+            <div class="quiet">
+                Filter:
+                <input oninput="onInput()" type="search" id="fileSearch">
+            </div>
+        </template>
     </div>
     <div class='status-line medium'></div>
     <pre><table class="coverage">
@@ -202,7 +208,8 @@
 <a name='L143'></a><a href='#L143'>143</a>
 <a name='L144'></a><a href='#L144'>144</a>
 <a name='L145'></a><a href='#L145'>145</a>
-<a name='L146'></a><a href='#L146'>146</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
+<a name='L146'></a><a href='#L146'>146</a>
+<a name='L147'></a><a href='#L147'>147</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
@@ -215,8 +222,8 @@
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">5x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
@@ -347,7 +354,8 @@
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span></td><td class="text"><pre class="prettyprint lang-js">import { Request, Response, NextFunction } from 'express'
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { Request, Response, NextFunction } from 'express'
 import { IAccount } from '../models/account'
 import controllerCommons from 'commons/api/controllers/controller'
 import { TokenProps } from 'commons/api/auth'
@@ -356,9 +364,9 @@ import auth from '../auth'
 import { AccountStatus } from '../models/accountStatus'
 &nbsp;
 async function getAccounts(req: Request, res: Response, next: NextFunction) {
-  const includeRemoded = req.query.includeRemoded == 'true'
+  const includeRemoved = req.query.includeRemoved == 'true'
 &nbsp;
-  const accounts: IAccount[] = await repository.findAll(includeRemoded)
+  const accounts: IAccount[] = await repository.findAll(includeRemoved)
   res.json(accounts.map(item =&gt; {
     item.password = ''
     return item
@@ -376,7 +384,7 @@ async function getAccount(req: Request, res: Response, next: NextFunction) {
     if (account === null) <span class="branch-0 cbranch-no" title="branch not covered" >{</span>
 <span class="cstat-no" title="statement not covered" >      return res.status(404).end()</span>
 <span class="cstat-no" title="statement not covered" >    }</span>
-    
+&nbsp;
     account.password = ''
     return res.json(account)
   } <span class="branch-0 cbranch-no" title="branch not covered" >catch (error) {</span>
@@ -407,9 +415,9 @@ async function setAccount(req: Request, res: Response, next: NextFunction) {
     if (!accountId) <span class="branch-0 cbranch-no" title="branch not covered" >{</span>
 <span class="cstat-no" title="statement not covered" >      return res.status(400).end()</span>
 <span class="cstat-no" title="statement not covered" >    }</span>
-    
+&nbsp;
     const accountParams = req.body as IAccount
-    
+&nbsp;
     if (accountParams.password) <span class="branch-0 cbranch-no" title="branch not covered" >{</span>
 <span class="cstat-no" title="statement not covered" >      accountParams.password = auth.hashPassword(accountParams.password)</span>
 <span class="cstat-no" title="statement not covered" >    }</span>
@@ -438,7 +446,7 @@ async function loginAccount(req: Request, res: Response, next: NextFunction) {
         const token = auth.signToken(account.id!)
         return res.json({ auth: true, token })
       }
-      
+&nbsp;
       return res.status(401).end();
     }
 <span class="cstat-no" title="statement not covered" ><span class="branch-0 cbranch-no" title="branch not covered" ></span></span>
@@ -465,7 +473,7 @@ async function deleteAccount(req: Request, res: Response, next: NextFunction) {
 <span class="cstat-no" title="statement not covered" >      return res.status(403).end()</span>
 <span class="cstat-no" title="statement not covered" >    }</span>
 &nbsp;
-    if (req.query.force) {
+    if (req.query.force === 'true') {
       await repository.remove(accountId)
       res.status(200).end();
     } else {
@@ -476,7 +484,7 @@ async function deleteAccount(req: Request, res: Response, next: NextFunction) {
       const updateAccount = await repository.set(accountId, accountParams)
       res.json(updateAccount)
     }
-    
+&nbsp;
     res.status(200).end()
   } <span class="branch-0 cbranch-no" title="branch not covered" >catch (error) {</span>
 <span class="cstat-no" title="statement not covered" >    console.log(`deleteAccount: ${error}`)</span>
@@ -492,16 +500,16 @@ export default {
   loginAccount,
   logoutAccount,
   deleteAccount
-}</pre></td></tr></table></pre>
+}
+&nbsp;</pre></td></tr></table></pre>
 
-                <div class='push'></div><!-- for sticky footer -->
+                <div class='push'></div><!-- for sticky Footer -->
             </div><!-- /wrapper -->
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
-                <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Wed Nov 17 2021 13:46:23 GMT-0300 (Horário Padrão de Brasília)
+                <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
+                at Thu Sep 22 2022 16:52:44 GMT-0300 (Brasilia Standard Time)
             </div>
-        </div>
         <script src="../../prettify.js"></script>
         <script>
             window.onload = function () {
@@ -512,4 +520,3 @@ export default {
         <script src="../../block-navigation.js"></script>
     </body>
 </html>
-    

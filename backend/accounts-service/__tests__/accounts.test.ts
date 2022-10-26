@@ -1,5 +1,5 @@
 import { beforeAll, afterAll, describe, it, expect } from "@jest/globals"
-import supertest from 'supertest'
+import request from 'supertest'
 import { IAccount } from "../src/models/account"
 import app from './../src/app'
 
@@ -10,8 +10,8 @@ import { AccountStatus } from "../src/models/accountStatus"
 const testEmail = 'jest@accounts.com'
 const testEmail2 = 'jest2@accounts.com'
 const hashPassword = '$2a$10$ye/d5KSzdLt0TIOpevAtde2mgreLPUpLpnE0vyQJ0iMBVeZyklKSi'
-let jwt : string = ''
-let testId : number = 0
+let jwt: string = ''
+let testId: number = 0
 
 beforeAll(async () => {
   const testAccount: IAccount = {
@@ -33,10 +33,10 @@ afterAll(async () => {
 
 describe('Testando rotas de accounts service', () => {
   it('GET /accounts/ - Deve retornar statusCode 200', async () => {
-    const result = await supertest(app)
+    const result = await request(app)
       .get('/accounts/')
       .set('x-access-token', jwt)
-      
+
     expect(result.status).toEqual(200)
     expect(Array.isArray(result.body)).toBeTruthy()
   })
@@ -49,7 +49,7 @@ describe('Testando rotas de accounts service', () => {
       domain: 'jest.com'
     }
 
-    const result = await supertest(app)
+    const result = await request(app)
       .post('/accounts/')
       .send(payload)
 
@@ -64,7 +64,7 @@ describe('Testando rotas de accounts service', () => {
       state: 'PR'
     }
 
-    const result = await supertest(app)
+    const result = await request(app)
       .post('/accounts/')
       .send(payload)
 
@@ -76,7 +76,7 @@ describe('Testando rotas de accounts service', () => {
       name: 'John Doe 2'
     }
 
-    const result = await supertest(app)
+    const result = await request(app)
       .patch('/accounts/'+testId)
       .send(payload)
       .set('x-access-token', jwt)
@@ -85,13 +85,13 @@ describe('Testando rotas de accounts service', () => {
     expect(result.body.id).toEqual(testId)
     expect(result.body.name).toEqual(payload.name);
   })
-  
+
   it('PATCH /accounts/:id - Deve retornar statusCode 400', async () => {
     const payload = {
       name: 'John Doe 2',
     }
 
-    const result = await supertest(app).patch('/accounts/abc')
+    const result = await request(app).patch('/accounts/abc')
       .send(payload)
       .set('x-access-token', jwt)
 
@@ -103,15 +103,15 @@ describe('Testando rotas de accounts service', () => {
       name: 'John Doe 2',
     }
 
-    const result = await supertest(app).patch('/accounts/-1')
+    const result = await request(app).patch('/accounts/-1')
       .send(payload)
       .set('x-access-token', jwt)
 
     expect(result.status).toEqual(403)
   })
-  
+
   it('GET /accounts/:id - Deve retornar statusCode 200', async () => {
-    const result = await supertest(app)
+    const result = await request(app)
       .get('/accounts/'+testId)
       .set('x-access-token', jwt)
 
@@ -120,7 +120,7 @@ describe('Testando rotas de accounts service', () => {
   })
 
   it('GET /accounts/:id - Deve retornar statusCode 403', async () => {
-    const result = await supertest(app)
+    const result = await request(app)
       .get('/accounts/-1')
       .set('x-access-token', jwt)
 
@@ -128,7 +128,7 @@ describe('Testando rotas de accounts service', () => {
   })
 
   it('GET /accounts/:id - Deve retornar statusCode 400', async () => {
-    const result = await supertest(app)
+    const result = await request(app)
       .get('/accounts/dasdasd')
       .set('x-access-token', jwt)
 
@@ -136,7 +136,7 @@ describe('Testando rotas de accounts service', () => {
   })
 
   it('DELETE /accounts/:id - Deve retornar statusCode 200', async () => {
-    const result = await supertest(app)
+    const result = await request(app)
       .delete('/accounts/'+testId)
       .set('x-access-token', jwt)
 
@@ -145,7 +145,7 @@ describe('Testando rotas de accounts service', () => {
   })
 
   it('DELETE /accounts/:id?force=true - Deve retornar statusCode 200', async () => {
-    const result = await supertest(app)
+    const result = await request(app)
       .delete(`/accounts/${testId}?force=true`)
       .set('x-access-token', jwt)
 
@@ -153,7 +153,7 @@ describe('Testando rotas de accounts service', () => {
   })
 
   it('DELETE /accounts/:id - Deve retornar statusCode 403', async () => {
-    const result = await supertest(app)
+    const result = await request(app)
       .delete('/accounts/-1')
       .set('x-access-token', jwt);
 

@@ -1,22 +1,16 @@
 import React from "react";
-import { Route, Redirect } from "react-router-dom";
+import { Outlet, Navigate } from "react-router-dom";
 import { isAuthenticated } from "../services/auth";
 
-const RouteWrapper = ({ component: Component, ...rest }) => {
-  return (
-    <Route
-      {...rest}
-      render={(props) =>
-        isAuthenticated() ? (
-          <Component {...props} />
-        ) : (
-          <Redirect
-            to={{ pathname: "/signin", state: { from: props.location } }}
-          />
-        )
-      }
-    />
-  );
+const RouteWrapper = () => {
+  console.log('isAuthenticated', isAuthenticated())
+
+  return isAuthenticated() ?
+    <Outlet />
+    :
+    <Navigate to="signin" replace={true} />
 };
+
+
 
 export default RouteWrapper;
