@@ -40,5 +40,4 @@ const Contact = database.define<IContactModel>('contact', {
     fields: ['accountId','email']
   }]
 })
-Contact.sync();
 export default Contact;
