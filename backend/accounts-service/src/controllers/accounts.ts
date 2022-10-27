@@ -20,19 +20,21 @@ async function getAccount(req: Request, res: Response, next: NextFunction) {
   try {
     const accountId = parseInt(req.params.id)
     if (!accountId) {
-      return res.status(400).end()
+      return res.status(400).json({
+        message: 'ID is required'
+      })
     }
 
     const account = await repository.findById(accountId)
     if (account === null) {
-      return res.status(404).end()
+      return res.sendStatus(404)
     }
 
     account.password = ''
     return res.json(account)
   } catch (error) {
     console.log(error)
-    res.status(400).end()
+    res.sendStatus(400)
   }
 }
 
@@ -48,7 +50,7 @@ async function addAccount(req: Request, res: Response, next: NextFunction) {
     res.status(201).json(newAccount)
   } catch (error) {
     console.error(error)
-    res.status(400).end()
+    res.sendStatus(400)
   }
 }
 
@@ -56,7 +58,9 @@ async function setAccount(req: Request, res: Response, next: NextFunction) {
   try {
     const accountId = parseInt(req.params.id)
     if (!accountId) {
-      return res.status(400).end()
+      return res.status(400).json({
+        message: 'ID is required'
+      })
     }
 
     const accountParams = req.body as IAccount
@@ -71,10 +75,10 @@ async function setAccount(req: Request, res: Response, next: NextFunction) {
       res.status(200).json(updateAccount)
     }
 
-    res.status(404).end()
+    res.sendStatus(404)
   } catch (error) {
     console.error(error)
-    res.status(400).end()
+    res.sendStatus(400)
   }
 }
 
@@ -90,13 +94,13 @@ async function loginAccount(req: Request, res: Response, next: NextFunction) {
         return res.json({ auth: true, token })
       }
 
-      return res.status(401).end();
+      return res.sendStatus(401);
     }
 
-    return res.status(404).end();
+    return res.sendStatus(404);
   } catch (error) {
     console.log(`loginAccount: ${error}`);
-    res.status(400).end();
+    res.sendStatus(400);
   }
 }
 
@@ -108,12 +112,14 @@ async function deleteAccount(req: Request, res: Response, next: NextFunction) {
   try {
     const accountId = parseInt(req.params.id)
     if (!accountId) {
-      return res.status(400).end()
+      return res.status(400).json({
+        message: 'ID is required'
+      })
     }
 
     const token = controllerCommons.getToken(res) as TokenProps
     if (accountId !== token.accountId) {
-      return res.status(403).end()
+      return res.sendStatus(403)
     }
 
     if (req.query.force === 'true') {
@@ -128,10 +134,10 @@ async function deleteAccount(req: Request, res: Response, next: NextFunction) {
       res.json(updateAccount)
     }
 
-    res.status(200).end()
+    res.sendStatus(204)
   } catch (error) {
     console.log(`deleteAccount: ${error}`)
-    res.status(400).end()
+    res.sendStatus(400)
   }
 }
 
