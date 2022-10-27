@@ -73,9 +73,9 @@ async function setAccount(req: Request, res: Response, next: NextFunction) {
     if (updateAccount !== null) {
       updateAccount.password = ''
       res.status(200).json(updateAccount)
+    } else {
+      res.sendStatus(404)
     }
-
-    res.sendStatus(404)
   } catch (error) {
     console.error(error)
     res.sendStatus(400)

@@ -9,7 +9,7 @@ import database from 'commons/data/db'
     console.log(`Server is using database ${process.env.DB_NAME}`)
 
     app.listen(port)
-    console.log(`Server is running on port ${port}`)
+    console.log(`Server ${process.env.SERVICE_NAME} is running on port ${port}`)
   } catch(error) {
     console.log(`Server: ${error}`)
   }

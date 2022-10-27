@@ -31,5 +31,11 @@ export default (router: Router) => {
   app.use(express.json())
   app.use(router)
 
+  app.get('/health', (req, res) => {
+    res.json({
+      message: `${process.env.SERVICE_NAME} is up and running!`,
+    })
+  })
+
   return app;
 }
