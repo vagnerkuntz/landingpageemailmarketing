@@ -1,5 +1,5 @@
 import { beforeAll, afterAll, describe, it, expect } from "@jest/globals"
-import request from 'supertest'
+const request = require('supertest')
 import { IAccount } from "../src/models/account"
 import app from './../src/app'
 
@@ -144,12 +144,12 @@ describe('Testando rotas de accounts service', () => {
     expect(result.body.status).toEqual(AccountStatus.REMOVED)
   })
 
-  it('DELETE /accounts/:id?force=true - Deve retornar statusCode 200', async () => {
+  it('DELETE /accounts/:id?force=true - Deve retornar statusCode 204', async () => {
     const result = await request(app)
       .delete(`/accounts/${testId}?force=true`)
       .set('x-access-token', jwt)
 
-    expect(result.status).toEqual(200)
+    expect(result.status).toEqual(204)
   })
 
   it('DELETE /accounts/:id - Deve retornar statusCode 403', async () => {

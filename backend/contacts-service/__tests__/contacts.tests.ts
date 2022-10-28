@@ -1,5 +1,5 @@
 import { beforeAll, afterAll, describe, it, expect } from "@jest/globals"
-import supertest from 'supertest'
+const request = require('supertest')
 import app from './../src/app'
 import accountsApp from '../../accounts-service/src/app'
 import { IContact } from "../src/models/contact"
@@ -15,19 +15,19 @@ let testContactId: number = 0
 
 beforeAll(async () => {
   const testAccount = {
-    name: 'jest',
+    name: 'jestone',
     email: testEmail,
     password: testPassword,
-    domain: 'jest.com'
+    domain: 'jest.com.br'
   }
   
-  const accountResponse = await supertest(accountsApp)
+  const accountResponse = await request(accountsApp)
     .post('/accounts/')
     .send(testAccount);
   
   testAccountId = accountResponse.body.id;
 
-  const loginResponse = await supertest(accountsApp)
+  const loginResponse = await request(accountsApp)
     .post('/accounts/login')
     .send({
       email: testEmail,
@@ -40,6 +40,7 @@ beforeAll(async () => {
     name: 'jest',
     email: testEmail,
     phone: '51123456789',
+    accountId: testAccountId
   } as IContact
 
   const addResult  = await contactRepository.add(testContact, testAccountId)
@@ -50,47 +51,54 @@ afterAll(async () => {
   await contactRepository.removeByEmail(testEmail, testAccountId)
   await contactRepository.removeByEmail(testEmail2, testAccountId)
 
-  await supertest(accountsApp)
-    .delete(`/accounts/${testAccountId}?force=true`)
-    .set('x-access-token', jwt)
+  await request(accountsApp)
+      .delete(`/accounts/${testAccountId}?force=true`)
+      .set('x-access-token', jwt)
 
-  await supertest(accountsApp)
-    .post('/accounts/logout')
-    .set('x-access-token', jwt)
-    .send({})
-  
+  await request(accountsApp)
+      .post('/accounts/logout')
+      .set('x-access-token', jwt)
 })
 
 describe('Testando rotas de contacts service', () => {
   it('GET /contacts/ - Deve retornar statusCode 200', async () => {
-    const result = await supertest(app).get('/contacts/').set('x-access-token', jwt)
+    const result = await request(app)
+        .get('/contacts/')
+        .set('x-access-token', jwt)
+
     expect(result.status).toEqual(200)
     expect(Array.isArray(result.body)).toBeTruthy()
   })
 
   it('GET /contacts/ - Deve retornar statusCode 401', async () => {
-    const result = await supertest(app).get('/contacts/')
+    const result = await request(app).get('/contacts/')
     expect(result.status).toEqual(401)
   })
 
   it('GET /contacts/:id - Deve retornar statusCode 200', async () => {
-    const result = await supertest(app).get(`/contacts/${testContactId}`).set('x-access-token', jwt)
+    const result = await request(app)
+        .get(`/contacts/${testContactId}`)
+        .set('x-access-token', jwt)
+
     expect(result.status).toEqual(200)
     expect(result.body.id).toEqual(testContactId)
   })
 
   it('GET /contacts/:id - Deve retornar statusCode 404', async () => {
-    const result = await supertest(app).get(`/contacts/-1`).set('x-access-token', jwt)
+    const result = await request(app).get(`/contacts/-1`).set('x-access-token', jwt)
     expect(result.status).toEqual(404)
   })
 
   it('GET /contacts/:id - Deve retornar statusCode 400', async () => {
-    const result = await supertest(app).get(`/contacts/abc`).set('x-access-token', jwt)
+    const result = await request(app)
+        .get('/contacts/abc')
+        .set('x-access-token', jwt)
+
     expect(result.status).toEqual(400)
   })
 
   it('GET /contacts/:id - Deve retornar statusCode 401', async () => {
-    const result = await supertest(app).get(`/contacts/${testContactId}`)
+    const result = await request(app).get(`/contacts/${testContactId}`)
     expect(result.status).toEqual(401)
   })
 
@@ -101,7 +109,7 @@ describe('Testando rotas de contacts service', () => {
       phone: '12345678910',
     } as IContact
 
-    const result = await supertest(app)
+    const result = await request(app)
       .post('/contacts/')
       .set('x-access-token', jwt)
       .send(testContact)
@@ -117,7 +125,7 @@ describe('Testando rotas de contacts service', () => {
       phone: '12345678910',
     } as IContact
 
-    const result = await supertest(app)
+    const result = await request(app)
       .post('/contacts/')
       .set('x-access-token', jwt)
       .send(testContact)
@@ -131,7 +139,7 @@ describe('Testando rotas de contacts service', () => {
       phone: '123456789',
     }
 
-    const result = await supertest(app)
+    const result = await request(app)
       .post('/contacts/')
       .set('x-access-token', jwt)
       .send(testContact)
@@ -146,7 +154,7 @@ describe('Testando rotas de contacts service', () => {
       phone: '12345678910',
     } as IContact
 
-    const result = await supertest(app)
+    const result = await request(app)
       .post('/contacts/')
       .send(testContact)
 
@@ -158,8 +166,8 @@ describe('Testando rotas de contacts service', () => {
       name: 'patchpayload',
     }
 
-    const result = await supertest(app)
-      .patch('/contacts/' + testContactId)
+    const result = await request(app)
+      .patch(`/contacts/${testContactId}`)
       .set('x-access-token', jwt)
       .send(payload)
 
@@ -172,7 +180,7 @@ describe('Testando rotas de contacts service', () => {
       name: 'jest2 patch',
     }
 
-    const result = await supertest(app)
+    const result = await request(app)
       .patch(`/contacts/${testContactId}`)
       .send(payload)
 
@@ -184,7 +192,7 @@ describe('Testando rotas de contacts service', () => {
       dasdas: 'jest2 patch',
     }
 
-    const result = await supertest(app)
+    const result = await request(app)
       .patch(`/contacts/${testContactId}`)
       .set('x-access-token', jwt)
       .send(payload)
@@ -197,7 +205,7 @@ describe('Testando rotas de contacts service', () => {
       name: 'jest2 patch',
     }
 
-    const result = await supertest(app)
+    const result = await request(app)
       .patch(`/contacts/-1`)
       .set('x-access-token', jwt)
       .send(payload)
@@ -210,7 +218,7 @@ describe('Testando rotas de contacts service', () => {
       name: 'jest2 patch',
     }
 
-    const result = await supertest(app)
+    const result = await request(app)
       .patch(`/contacts/abc`)
       .set('x-access-token', jwt)
       .send(payload)
@@ -219,7 +227,7 @@ describe('Testando rotas de contacts service', () => {
   })
 
   it('DELETE /contacts/:id - Deve retornar statusCode 200', async () => {
-    const result = await supertest(app)
+    const result = await request(app)
       .delete('/contacts/'+testContactId)
       .set('x-access-token', jwt)
 
@@ -227,16 +235,16 @@ describe('Testando rotas de contacts service', () => {
     expect(result.body.status).toEqual(ContactStatus.REMOVED)
   })
 
-  it('DELETE /contacts/:id?force=true - Deve retornar statusCode 200', async () => {
-    const result = await supertest(app)
+  it('DELETE /contacts/:id?force=true - Deve retornar statusCode 204', async () => {
+    const result = await request(app)
       .delete(`/contacts/${testContactId}?force=true`)
       .set('x-access-token', jwt)
 
-    expect(result.status).toEqual(200)
+    expect(result.status).toEqual(204)
   })
 
   it('DELETE /contacts/:id - Deve retornar statusCode 403', async () => {
-    const result = await supertest(app)
+    const result = await request(app)
       .delete('/contacts/-1')
       .set('x-access-token', jwt);
 

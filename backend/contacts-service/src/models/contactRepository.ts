@@ -18,7 +18,7 @@ async function add(contact: IContact, accountId: number) {
 }
 
 async function set(contactId: number, contact: IContact, accountId: number) {
-  const originalContact = await contactModel.findOne({ where: { id: contactId, accountId: accountId } })
+  const originalContact = await contactModel.findOne({ where: { id: contactId, accountId } })
 
   if (!originalContact) {
     return null;
@@ -43,15 +43,22 @@ async function set(contactId: number, contact: IContact, accountId: number) {
 }
 
 function findById(contactId: number, accountId: number) {
-  return contactModel.findOne<IContactModel>({ where: { id: contactId, accountId: accountId } })
+  return contactModel.findOne<IContactModel>({ where: { id: contactId, accountId } })
 }
 
 function removeById(contactId: number, accountId: number) {
-  return contactModel.destroy({ where: { id: contactId, accountId: accountId } })
+  return contactModel.destroy({ where: { id: contactId, accountId } })
 }
 
 function removeByEmail(email: string, accountId: number) {
   return contactModel.destroy({ where: { email, accountId } })
 }
 
-export default { findAll, add, removeByEmail, removeById, findById, set }
+export default {
+  findAll,
+  add,
+  removeByEmail,
+  removeById,
+  findById,
+  set
+}

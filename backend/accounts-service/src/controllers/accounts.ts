@@ -49,8 +49,8 @@ async function addAccount(req: Request, res: Response, next: NextFunction) {
 
     res.status(201).json(newAccount)
   } catch (error) {
-    console.error(error)
-    res.sendStatus(400)
+    console.log(`controllers/accounts.addAccount: ${error}`);
+    res.sendStatus(400);
   }
 }
 
@@ -61,6 +61,11 @@ async function setAccount(req: Request, res: Response, next: NextFunction) {
       return res.status(400).json({
         message: 'ID is required'
       })
+    }
+
+    const token = controllerCommons.getToken(res) as TokenProps;
+    if (accountId !== token.accountId) {
+      return res.sendStatus(403);
     }
 
     const accountParams = req.body as IAccount
@@ -77,7 +82,7 @@ async function setAccount(req: Request, res: Response, next: NextFunction) {
       res.sendStatus(404)
     }
   } catch (error) {
-    console.error(error)
+    console.log(`setAccount: ${error}`);
     res.sendStatus(400)
   }
 }
@@ -124,17 +129,21 @@ async function deleteAccount(req: Request, res: Response, next: NextFunction) {
 
     if (req.query.force === 'true') {
       await repository.remove(accountId)
-      res.status(200).end();
+      res.sendStatus(204)
     } else {
       const accountParams = {
         status: AccountStatus.REMOVED,
       } as IAccount
 
       const updateAccount = await repository.set(accountId, accountParams)
-      res.json(updateAccount)
-    }
 
-    res.sendStatus(204)
+      if (updateAccount != null) {
+        updateAccount.password = ''
+        res.status(200).json(updateAccount)
+      } else {
+        res.sendStatus(404)
+      }
+    }
   } catch (error) {
     console.log(`deleteAccount: ${error}`)
     res.sendStatus(400)

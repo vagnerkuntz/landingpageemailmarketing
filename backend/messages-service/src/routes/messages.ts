@@ -12,4 +12,8 @@ router.post('/messages/', middlewareCommons.validateAuth, validateMessageSchema,
 
 router.patch('/messages/:id', middlewareCommons.validateAuth, validateUpdateMessageSchema, controller.setMessage)
 
+router.delete('/messages/:id', middlewareCommons.validateAuth, controller.deleteMessage)
+
+router.post('/messages/:id/send', middlewareCommons.validateAuth, controller.sendMessage)
+
 export default router

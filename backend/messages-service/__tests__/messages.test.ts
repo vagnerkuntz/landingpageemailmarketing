@@ -1,5 +1,6 @@
 import { beforeAll, afterAll, describe, it, expect } from "@jest/globals"
-import supertest from 'supertest'
+const request = require('supertest')
+
 import app from './../src/app'
 import accountsApp from '../../accounts-service/src/app'
 import { IMessage } from "../src/models/message"
@@ -20,13 +21,13 @@ beforeAll(async () => {
     domain: 'jest.com'
   }
   
-  const accountResponse = await supertest(accountsApp)
+  const accountResponse = await request(accountsApp)
     .post('/accounts/')
     .send(testAccount);
   
   testAccountId = accountResponse.body.id;
 
-  const loginResponse = await supertest(accountsApp)
+  const loginResponse = await request(accountsApp)
     .post('/accounts/login')
     .send({
       email: testEmail,
@@ -48,49 +49,46 @@ beforeAll(async () => {
 afterAll(async () => {
   await messageRepository.removeById(testMessageId, testAccountId)
   await messageRepository.removeById(testMessageId2 | 0, testAccountId)
-  //await contactRepository.removeByEmail(testEmail2, testAccountId)
 
-  await supertest(accountsApp)
+  await request(accountsApp)
     .delete(`/accounts/${testAccountId}?force=true`)
     .set('x-access-token', jwt)
 
-  await supertest(accountsApp)
+  await request(accountsApp)
     .post('/accounts/logout')
     .set('x-access-token', jwt)
-    .send({})
-  
 })
 
 describe('Testando rotas de messages service', () => {
   it('GET /messages/ - Deve retornar statusCode 200', async () => {
-    const result = await supertest(app).get('/messages/').set('x-access-token', jwt)
+    const result = await request(app).get('/messages/').set('x-access-token', jwt)
     expect(result.status).toEqual(200)
     expect(Array.isArray(result.body)).toBeTruthy()
   })
 
-  it('GET /messages/ - Deve retornar statusCode 401', async () => {
-    const result = await supertest(app).get('/messages/')
-    expect(result.status).toEqual(401)
-  })
-
   it('GET /messages/:id - Deve retornar statusCode 200', async () => {
-    const result = await supertest(app).get('/messages/'+ testMessageId).set('x-access-token', jwt)
+    const result = await request(app).get('/messages/'+ testMessageId).set('x-access-token', jwt)
     expect(result.status).toEqual(200)
     expect(result.body.id).toEqual(testMessageId)
   })
 
+  it('GET /messages/ - Deve retornar statusCode 401', async () => {
+    const result = await request(app).get('/messages/')
+    expect(result.status).toEqual(401)
+  })
+
   it('GET /messages/:id - Deve retornar statusCode 401', async () => {
-    const result = await supertest(app).get('/messages/'+ testMessageId)
+    const result = await request(app).get('/messages/'+ testMessageId)
     expect(result.status).toEqual(401)
   })
 
   it('GET /messages/:id - Deve retornar statusCode 400', async () => {
-    const result = await supertest(app).get('/messages/abc').set('x-access-token', jwt)
+    const result = await request(app).get('/messages/abc').set('x-access-token', jwt)
     expect(result.status).toEqual(400)
   })
 
   it('GET /messages/:id - Deve retornar statusCode 404', async () => {
-    const result = await supertest(app).get('/messages/-1').set('x-access-token', jwt)
+    const result = await request(app).get('/messages/-1').set('x-access-token', jwt)
     expect(result.status).toEqual(404)
   })
 
@@ -101,7 +99,7 @@ describe('Testando rotas de messages service', () => {
       subject: 'assunto da mensagem post test',
     } as IMessage
 
-    const result = await supertest(app)
+    const result = await request(app)
       .post('/messages/')
       .set('x-access-token', jwt)
       .send(payload)
@@ -117,7 +115,7 @@ describe('Testando rotas de messages service', () => {
       street: 'minha rua',
     }
 
-    const result = await supertest(app)
+    const result = await request(app)
       .post('/messages/')
       .set('x-access-token', jwt)
       .send(payload)
@@ -132,7 +130,7 @@ describe('Testando rotas de messages service', () => {
       subject: 'assunto da mensagem post test',
     } as IMessage
 
-    const result = await supertest(app)
+    const result = await request(app)
       .post('/messages/')
       .send(payload)
 
@@ -144,7 +142,7 @@ describe('Testando rotas de messages service', () => {
       subject: 'jest alterado'
     }
 
-    const result = await supertest(app)
+    const result = await request(app)
       .patch(`/messages/${testMessageId}`)
       .set('x-access-token', jwt)
       .send(payload)
@@ -158,7 +156,7 @@ describe('Testando rotas de messages service', () => {
       name: 'jest2 patch',
     }
 
-    const result = await supertest(app)
+    const result = await request(app)
       .patch(`/messages/${testMessageId}`)
       .send(payload)
 
@@ -170,7 +168,7 @@ describe('Testando rotas de messages service', () => {
       dasdas: 'jest2 patch',
     }
 
-    const result = await supertest(app)
+    const result = await request(app)
       .patch(`/messages/${testMessageId}`)
       .set('x-access-token', jwt)
       .send(payload)
@@ -183,7 +181,7 @@ describe('Testando rotas de messages service', () => {
       subject: 'jest2 patch',
     }
 
-    const result = await supertest(app)
+    const result = await request(app)
       .patch(`/messages/-1`)
       .set('x-access-token', jwt)
       .send(payload)
@@ -196,7 +194,7 @@ describe('Testando rotas de messages service', () => {
       subject: 'jest2 patch',
     }
 
-    const result = await supertest(app)
+    const result = await request(app)
       .patch(`/messages/abc`)
       .set('x-access-token', jwt)
       .send(payload)

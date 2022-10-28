@@ -1,8 +1,12 @@
-import messageModel, { IMessageModel } from "./messageModel"
-import { IMessage } from "./message"
+import messageModel, {IMessageModel} from "./messageModel"
+import {IMessage} from "./message"
+import {MessageStatus} from "./messageStatus";
 
-function findAll(accountId: number) {
-  return messageModel.findAll<IMessageModel>({ where: { accountId } })
+function findAll(accountId: number, includeRemoved: boolean) {
+  if (includeRemoved) {
+    return messageModel.findAll<IMessageModel>({ where: { accountId }})
+  }
+  return messageModel.findAll<IMessageModel>({ where: { accountId, status: [MessageStatus.SENT, MessageStatus.CREATED] } })
 }
 
 async function add(message: IMessage, accountId: number) {
@@ -41,8 +45,14 @@ async function set(messageId: number, message: IMessage, accountId: number) {
   return message
 }
 
-function findById(messageId: number, accountId: number) {
-  return messageModel.findOne<IMessageModel>({ where: { id: messageId, accountId } })
+async function findById(messageId: number, accountId: number) {
+  try {
+    const message = await messageModel.findOne<IMessageModel>({ where: { id: messageId, accountId } })
+    return message
+  } catch (error) {
+    console.log(`messageRepository.findById ${error}`)
+    return null
+  }
 }
 
 function removeById(messageId: number, accountId: number) {

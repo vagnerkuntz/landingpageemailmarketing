@@ -1,6 +1,5 @@
 import { beforeAll, afterAll, describe, it, expect } from "@jest/globals";
-
-import supertest from 'supertest';
+const supertest = require('supertest')
 import app from '../src/app';
 import auth from "../src/auth";
 import { IAccount } from "../src/models/account";
