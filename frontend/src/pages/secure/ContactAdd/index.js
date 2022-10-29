@@ -20,7 +20,7 @@ export function ContactAdd () {
       try {
         const service = new ContactsService();
         await service.add({ name, email, phone });
-        this.props.history.push("/contacts");
+        navigate("/contacts")
       } catch (error) {
         setError(error)
       }

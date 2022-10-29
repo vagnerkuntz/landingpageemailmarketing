@@ -13,7 +13,7 @@ function RenderLine({ contact }) {
     <tr key={contact.id}>
       <td>{contact.name}</td>
       <td>
-        <Link to={`${pathname}/${contact.id}`}>{contact.email}</Link>
+        <Link to={`/contacts/${contact.id}`}>{contact.email}</Link>
       </td>
     </tr>
   );

@@ -7,7 +7,7 @@ const baseApi = (baseURL) => {
   });
 
   api.interceptors.request.use(async (config) => {
-    const token = getToken();
+    const token = await getToken();
 
     if (token) {
       config.headers["x-access-token"] = token;

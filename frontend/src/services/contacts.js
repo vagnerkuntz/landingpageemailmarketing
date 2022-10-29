@@ -17,6 +17,7 @@ class ContactsService {
   }
 
   async add(contactModel) {
+    console.log(`contactModel`, contactModel)
     const result = await this.api.post("/contacts/", contactModel);
     return result;
   }

@@ -9,6 +9,10 @@ import { SignUp } from "../pages/public/SignUp";
 import { Dashboard } from "../pages/secure/Dashboard";
 import { ContactsList } from "../pages/secure/ContactList";
 
+import { MessageList } from "../pages/secure/MessageList";
+import { MessageAdd } from "../pages/secure/MessageAdd";
+import { MessageDetail } from "../pages/secure/MessageDetail";
+
 import {ContactAdd} from "../pages/secure/ContactAdd";
 
 import {ContactDetails} from "../pages/secure/ContactDetails";
@@ -35,6 +39,18 @@ export default function AllRoutes() {
 
         <Route element={<RoutePrivate />}>
           <Route exact path="/contacts" element={<ContactsList />} />
+        </Route>
+
+        <Route element={<RoutePrivate />}>
+          <Route exact path="/messages" element={<MessageList />} />
+        </Route>
+
+        <Route element={<RoutePrivate />}>
+          <Route exact path="/messages/add" element={<MessageAdd />} />
+        </Route>
+
+        <Route element={<RoutePrivate />}>
+          <Route exact path="/messages/:messageId" element={<MessageDetail />} />
         </Route>
 
         <Route element={<RoutePrivate />}>
