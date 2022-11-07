@@ -2,6 +2,7 @@ import accountModel, { IAccountModel } from './accountModel'
 import { IAccount } from './account'
 import { DestroyOptions } from 'sequelize/types'
 import { AccountStatus } from './accountStatus'
+import AccountEmailModel from './accountEmailModel'
 
 function findAll(includeRemoved: boolean) {
   if (includeRemoved) {
@@ -34,10 +35,6 @@ async function set(id: number, account: IAccount) {
       originalAccount.name = account.name
     }
 
-    if (account.domain) {
-      originalAccount.domain = account.domain
-    }
-
     if (account.status) {
       originalAccount.status = account.status
     }
@@ -60,6 +57,19 @@ function remove(id: number) {
 function removeByEmail(email: string) {
   return accountModel.destroy({ where: { email }} as DestroyOptions<IAccount>)
 }
+
+function findByIdWithEmails (id: number) {
+  return accountModel.findByPk<IAccountModel>(id, { include: AccountEmailModel })
+}
   
-export default { findAll, findById, add, set, findByEmail, remove, removeByEmail }
+export default {
+  findAll,
+  findById,
+  add,
+  set,
+  findByEmail,
+  remove,
+  removeByEmail,
+  findByIdWithEmails
+}
   

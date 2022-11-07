@@ -36,6 +36,4 @@ const Message = database.define<IMessageModel>('message', {
   }
 })
 
-Message.sync();
-
 export default Message;

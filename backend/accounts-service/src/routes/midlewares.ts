@@ -2,8 +2,17 @@ import { Request, Response, NextFunction } from 'express'
 import commonsMidleware from 'commons/api/routes/midlewares'
 import controllerCommons from 'commons/api/controllers/controller'
 import { TokenProps } from 'commons/api/auth'
+import { accountEmailSchema, accountEmailUpdateSchema } from '../models/accountEmailSchemas'
 
 import { accountSchema, accountUpdateSchema, loginSchema } from '../models/accountSchemas'
+
+function validateAccountEmailSchema (req: Request, res: Response, next: NextFunction) {
+  return commonsMidleware.validateSchema(accountEmailSchema, req, res, next)
+}
+
+function validateAccountEmailUpdateSchema (req: Request, res: Response, next: NextFunction) {
+  return commonsMidleware.validateSchema(accountEmailUpdateSchema, req, res, next)
+}
 
 function validateAccountSchema(req: Request, res: Response, next: NextFunction) {
   return commonsMidleware.validateSchema(accountSchema, req, res, next)
@@ -42,5 +51,7 @@ export {
   validateLoginSchema,
   validateUpdateAccountSchema,
   validateAuthentication,
-  validateAuthorization
+  validateAuthorization,
+  validateAccountEmailSchema,
+  validateAccountEmailUpdateSchema
 }

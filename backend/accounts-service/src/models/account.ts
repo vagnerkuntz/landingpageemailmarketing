@@ -1,4 +1,5 @@
 import { AccountStatus } from './accountStatus'
+import {AccountSettings} from 'commons/clients/emailService'
 
 export interface IAccount {
   id?: number
@@ -7,4 +8,5 @@ export interface IAccount {
   password: string
   status?: AccountStatus
   domain: string
+  settings?: AccountSettings
 }

@@ -1,6 +1,7 @@
 import Sequelize, { Model, Optional } from 'sequelize'
 import database from 'commons/data/db'
 import { IAccount } from './account'
+import AccountEmail from './accountEmailModel'
 
 interface IAccountCreationAttributes extends Optional<IAccount, 'id'>{}
 
@@ -33,10 +34,14 @@ const Account = database.define<IAccountModel>('account', {
   },
   domain: {
     type: Sequelize.STRING,
-    allowNull: false
+    allowNull: false,
+    unique: true
   }
 })
 
-Account.sync();
+Account.hasMany(AccountEmail, {
+  constraints: true,
+  foreignKey: 'accountId'
+})
 
 export default Account;
