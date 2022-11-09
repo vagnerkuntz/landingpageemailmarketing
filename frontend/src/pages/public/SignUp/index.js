@@ -1,10 +1,10 @@
-import React, {useState} from "react";
-import { Alert } from "react-bootstrap";
+import React, {useState} from 'react'
+import { Alert } from 'react-bootstrap'
 
-import AccountsService from "../../../services/accounts";
-import { login } from "../../../services/auth";
+import AccountsService from '../../../services/accounts'
+import { login } from '../../../services/auth'
 
-import {HeaderLogin} from "../../../shared/HeaderLogin";
+import {HeaderLogin} from '../../../shared/HeaderLogin'
 import {
   Container,
   ElipseGreen,
@@ -18,10 +18,10 @@ import {
 } from './styles'
 
 import CirculoFundo from '../../../assets/images/circulo_fundo_login.svg'
-import {useNavigate} from "react-router-dom";
+import {useNavigate} from 'react-router-dom'
 
 export function SignUp () {
-  const navigate = useNavigate();
+  const navigate = useNavigate()
 
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
@@ -31,16 +31,16 @@ export function SignUp () {
   const [isLoading, setIsLoading] = useState(false)
 
   async function handleSignUp (event) {
-    event.preventDefault();
+    event.preventDefault()
 
     if (!name || !email || !password || !domain) {
       setError('Preencha todos os campos')
     } else {
       try {
-        const service = new AccountsService();
+        const service = new AccountsService()
 
-        const response = await service.signup({ name, email, password, domain });
-        login(response.data.token);
+        const response = await service.signup({ name, email, password, domain })
+        login(response.data.token)
 
         navigate('/dashboard')
       } catch (error) {

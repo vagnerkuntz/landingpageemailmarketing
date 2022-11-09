@@ -1,31 +1,31 @@
-import baseAPI from "./api";
-import baseURLs from "../configs/baseURLs";
+import baseAPI from './api'
+import baseURLs from '../configs/baseURLs'
 
 class ContactsService {
   constructor() {
-    this.api = baseAPI(baseURLs.API_CONTACTS);
+    this.api = baseAPI(baseURLs.API_CONTACTS)
   }
 
   async getAll() {
-    const result = await this.api.get("/contacts");
-    return result.data;
+    const result = await this.api.get('/contacts')
+    return result.data
   }
 
   async getOne(contactId) {
-    const result = await this.api.get(`/contacts/${contactId}`);
-    return result.data;
+    const result = await this.api.get(`/contacts/${contactId}`)
+    return result.data
   }
 
   async add(contactModel) {
     console.log(`contactModel`, contactModel)
-    const result = await this.api.post("/contacts/", contactModel);
-    return result;
+    const result = await this.api.post('/contacts/', contactModel)
+    return result
   }
 
   async delete(contactId) {
-    const result = await this.api.delete(`/contacts/${contactId}`);
-    return result;
+    const result = await this.api.delete(`/contacts/${contactId}`)
+    return result
   }
 }
 
-export default ContactsService;
+export default ContactsService

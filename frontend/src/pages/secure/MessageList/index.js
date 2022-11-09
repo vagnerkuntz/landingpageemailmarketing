@@ -1,7 +1,8 @@
 import React, {useEffect, useState} from 'react'
-import {Badge, Table} from "react-bootstrap";
-import {Link} from "react-router-dom";
-import MessagesService from "../../../services/messages";
+import {Badge, Table} from 'react-bootstrap'
+import {Link} from 'react-router-dom'
+import MessagesService from '../../../services/messages'
+import {Header} from '../../../shared/Header'
 
 export function MessageList () {
     const [isLoading, setIsLoading] = useState(true)
@@ -92,11 +93,14 @@ export function MessageList () {
             setMessages(result)
             setIsLoading(false)
         }
+
+        getAllMessages()
     }, [])
 
     return (
         <p>
-            Messages
+            <Header />
+
             {isLoading
                 ? <p>Carregando</p>
                 : <RenderTable messages={messages}/>

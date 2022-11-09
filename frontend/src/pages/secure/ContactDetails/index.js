@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from "react";
-import { Container } from "react-bootstrap";
-import { Header } from "../../../shared/Header";
-import ContactsService from "../../../services/contacts";
+import React, { useEffect, useState } from 'react'
+import { Container } from 'react-bootstrap'
+import { Header } from '../../../shared/Header'
+import ContactsService from '../../../services/contacts'
 
 function RenderContact({ contact }) {
   return (
@@ -10,7 +10,7 @@ function RenderContact({ contact }) {
       <p>Email: {contact.email}</p>
       <p>Telefone: {contact.phone}</p>
     </>
-  );
+  )
 }
 
 export function ContactDetails () {
@@ -18,8 +18,8 @@ export function ContactDetails () {
   const [isLoading, setIsLoading] = useState(true)
 
   async function getContact(contactId) {
-    const service = new ContactsService();
-    const result = await service.getOne(contactId);
+    const service = new ContactsService()
+    const result = await service.getOne(contactId)
 
     setIsLoading(false)
     setContact(result)
@@ -28,9 +28,9 @@ export function ContactDetails () {
   useEffect(() => {
     const {
       params: { contactId },
-    } = this.props.match;
+    } = this.props.match
 
-    getContact(contactId);
+    getContact(contactId)
   }, [])
 
 
@@ -47,5 +47,5 @@ export function ContactDetails () {
         )}
       </Container>
     </>
-  );
+  )
 }

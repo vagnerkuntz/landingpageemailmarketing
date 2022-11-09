@@ -179,6 +179,8 @@ async function deleteAccount(req: Request, res: Response, next: NextFunction) {
 async function getAccountsSettings(req: Request, res: Response, next: NextFunction) {
   try {
     const token = controllerCommons.getToken(res) as TokenProps
+
+    console.log('tokengetAccountsSettings ', token)
     const account = await accountRepository.findByIdWithEmails(token.accountId)
     if (!account) {
       return res.sendStatus(404)

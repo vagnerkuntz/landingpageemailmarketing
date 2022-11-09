@@ -1,10 +1,12 @@
-import React, {useState} from "react";
-import { Link } from "react-router-dom";
-import { Header } from "../../../shared/Header";
-import { Container, Button, Form, Alert, Row, Col } from "react-bootstrap";
-import ContactsService from "../../../services/contacts";
+import React, {useState} from 'react'
+import {Link, useNavigate} from 'react-router-dom'
+import { Header } from '../../../shared/Header'
+import { Container, Button, Form, Alert, Row, Col } from 'react-bootstrap'
+import ContactsService from '../../../services/contacts'
 
 export function ContactAdd () {
+  const navigate = useNavigate()
+
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [phone, setPhone] = useState('')
@@ -12,15 +14,15 @@ export function ContactAdd () {
   const [isLoading, setIsLoading] = useState(false)
 
   async function handleSave (event) {
-    event.preventDefault();
+    event.preventDefault()
 
     if (!name || !email || !phone) {
       setName('Preencha todos os campos')
     } else {
       try {
-        const service = new ContactsService();
-        await service.add({ name, email, phone });
-        navigate("/contacts")
+        const service = new ContactsService()
+        await service.add({ name, email, phone })
+        navigate('/contacts')
       } catch (error) {
         setError(error)
       }
@@ -33,7 +35,7 @@ export function ContactAdd () {
         <Alert.Heading>Ops! Algo deu errado.</Alert.Heading>
         <p>{error}</p>
       </Alert>
-    );
+    )
   }
 
   return (
@@ -87,6 +89,6 @@ export function ContactAdd () {
           </Row>
         </Container>
     </>
-  );
+  )
 }
 

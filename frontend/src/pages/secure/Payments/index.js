@@ -1,9 +1,9 @@
-import React, { useState } from "react";
-import { Container, Button } from "react-bootstrap";
+import React, { useState } from 'react'
+import { Container, Button } from 'react-bootstrap'
 
-import { Header } from "../../../shared/Header";
+import { Header } from '../../../shared/Header'
 
-import PaymentService from "../../../services/payment";
+import PaymentService from '../../../services/payment'
 
 export function Payments () {
   const [isLoading, setIsLoading] = useState(false)
@@ -12,7 +12,7 @@ export function Payments () {
     try {
       setIsLoading(true)
 
-      const payment = new PaymentService();
+      const payment = new PaymentService()
       const result = await payment.checkout({
         items: [
           {
@@ -30,13 +30,13 @@ export function Payments () {
 
       if (result.data.url) {
         if (typeof window !== 'undefined') {
-          window.open(result.data.url, '_blank');
+          window.open(result.data.url, '_blank')
         }
       }
 
       setIsLoading(false)
     } catch (e) {
-      console.log('e', e);
+      console.log('e', e)
       setIsLoading(false)
     }
   }
@@ -56,5 +56,5 @@ export function Payments () {
         </Button>
       </Container>
     </>
-  );
+  )
 }

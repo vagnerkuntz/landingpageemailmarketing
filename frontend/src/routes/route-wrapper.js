@@ -1,6 +1,6 @@
-import React from "react";
-import { Outlet, Navigate } from "react-router-dom";
-import { isAuthenticated } from "../services/auth";
+import React from 'react'
+import { Outlet, Navigate } from 'react-router-dom'
+import { isAuthenticated } from '../services/auth'
 
 const RouteWrapper = () => {
   console.log('isAuthenticated', isAuthenticated())
@@ -9,8 +9,8 @@ const RouteWrapper = () => {
     <Outlet />
     :
     <Navigate to="signin" replace={true} />
-};
+}
 
 
 
-export default RouteWrapper;
+export default RouteWrapper

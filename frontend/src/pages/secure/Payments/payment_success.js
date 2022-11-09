@@ -1,7 +1,7 @@
-import React from "react";
-import { Container } from "react-bootstrap";
+import React from 'react'
+import { Container } from 'react-bootstrap'
 
-import { Header } from "../../../shared/Header";
+import { Header } from '../../../shared/Header'
 
 export function PaymentSuccess () {
   return (
@@ -11,5 +11,5 @@ export function PaymentSuccess () {
         <h1>Success</h1>
       </Container>
     </>
-  );
+  )
 }

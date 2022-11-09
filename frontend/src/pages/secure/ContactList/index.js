@@ -1,13 +1,13 @@
-import React, {useEffect, useState} from "react";
-import { Container, Table, Row, Col } from "react-bootstrap";
-import { Link, useLocation } from "react-router-dom";
+import React, {useEffect, useState} from 'react'
+import { Container, Table, Row, Col } from 'react-bootstrap'
+import { Link, useLocation } from 'react-router-dom'
 
-import { Header } from "../../../shared/Header";
+import { Header } from '../../../shared/Header'
 
-import ContactsService from "../../../services/contacts";
+import ContactsService from '../../../services/contacts'
 
 function RenderLine({ contact }) {
-  const { pathname } = useLocation();
+  const { pathname } = useLocation()
 
   return (
     <tr key={contact.id}>
@@ -16,7 +16,7 @@ function RenderLine({ contact }) {
         <Link to={`/contacts/${contact.id}`}>{contact.email}</Link>
       </td>
     </tr>
-  );
+  )
 }
 
 function RenderEmptyRow() {
@@ -24,7 +24,7 @@ function RenderEmptyRow() {
     <tr>
       <td colSpan="2">Nenhum contato encontrado</td>
     </tr>
-  );
+  )
 }
 
 function RenderTable({ contacts }) {
@@ -42,7 +42,7 @@ function RenderTable({ contacts }) {
         ))}
       </tbody>
     </Table>
-  );
+  )
 }
 
 export function ContactsList () {
@@ -51,8 +51,8 @@ export function ContactsList () {
 
   useEffect(() => {
     async function getContacts () {
-      const service = new ContactsService();
-      const result = await service.getAll();
+      const service = new ContactsService()
+      const result = await service.getAll()
 
       setIsLoading(false)
       setContacts(result)
@@ -84,7 +84,7 @@ export function ContactsList () {
         </Row>
       </Container>
     </>
-  );
+  )
 
 }
 

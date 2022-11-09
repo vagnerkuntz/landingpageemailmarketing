@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react'
 import {
   BrowserRouter,
   Routes,
@@ -6,10 +6,10 @@ import {
   Link,
   useParams,
   useRouteMatch
-} from "react-router-dom";
+} from 'react-router-dom'
 
-import { SignIn } from "./pages/public/SignIn";
-import { SignUp } from "./pages/public/SignUp";
+import { SignIn } from './pages/public/SignIn'
+import { SignUp } from './pages/public/SignUp'
 
 function Home() {
   return (
@@ -17,11 +17,11 @@ function Home() {
       <Menu />
       <h2>Home</h2>
     </div>
-  );
+  )
 }
 
 function Contacts() {
-  let { path, url } = useRouteMatch();
+  let { path, url } = useRouteMatch()
 
   return (
     <div>
@@ -46,21 +46,21 @@ function Contacts() {
         </Route>
       </Routes>
     </div>
-  );
+  )
 }
 
 function Contact() {
-  let { contactId } = useParams();
+  let { contactId } = useParams()
 
   return (
     <div>
       <h3>Contato {contactId}</h3>
     </div>
-  );
+  )
 }
 
 function Messages() {
-  let { path, url } = useRouteMatch();
+  let { path, url } = useRouteMatch()
 
   return (
     <div>
@@ -86,17 +86,17 @@ function Messages() {
         </Route>
       </Routes>
     </div>
-  );
+  )
 }
 
 function Message() {
-  let { messageId } = useParams();
+  let { messageId } = useParams()
 
   return (
     <div>
       <h3>Mensagem {messageId}</h3>
     </div>
-  );
+  )
 }
 
 function Menu() {
@@ -118,7 +118,7 @@ function Menu() {
         <Link to="/signup">Cadastro</Link>
       </li>
     </ul>
-  );
+  )
 }
 
 export default function RoutesComponent() {
@@ -142,5 +142,5 @@ export default function RoutesComponent() {
           </Route>
         </Routes>
     </BrowserRouter>
-  );
+  )
 }

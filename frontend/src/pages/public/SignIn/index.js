@@ -1,11 +1,11 @@
-import React, {useState} from "react";
+import React, {useState} from 'react'
 
-import AccountsService from "../../../services/accounts";
-import {login} from "../../../services/auth";
+import AccountsService from '../../../services/accounts'
+import {login} from '../../../services/auth'
 
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from 'react-router-dom'
 
-import {HeaderLogin} from "../../../shared/HeaderLogin";
+import {HeaderLogin} from '../../../shared/HeaderLogin'
 
 import {
   Container,
@@ -20,31 +20,31 @@ import {
 } from './styles'
 
 import CirculoFundo from '../../../assets/images/circulo_fundo_login.svg'
-import {Alert} from "react-bootstrap";
+import {Alert} from 'react-bootstrap'
 
 export function SignIn () {
-  const navigate = useNavigate();
+  const navigate = useNavigate()
 
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
 
   async function handleSignIn (event) {
-    event.preventDefault();
+    event.preventDefault()
 
     if (!email || !password) {
       setError('Preencha todos os campos')
     } else {
       try {
-        const service = new AccountsService();
+        const service = new AccountsService()
 
-        const response = await service.login(email, password);
-        login(response.data.token);
+        const response = await service.login(email, password)
+        login(response.data.token)
 
-        navigate("/dashboard")
+        navigate('/dashboard')
       } catch (error) {
         console.log('Error handleSignIn', error)
-        setError('Erro. Por favor, tente novamente');
+        setError('Erro. Por favor, tente novamente')
       }
     }
   }

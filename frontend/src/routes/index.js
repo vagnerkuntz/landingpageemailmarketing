@@ -1,26 +1,28 @@
-import React from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import React from 'react'
+import { BrowserRouter, Routes, Route } from 'react-router-dom'
 
-import ChooseTheme from "./../pages/public/ChooseTheme";
-import { DashboardPagePublic } from "../pages/public/Dashboard";
-import { SignIn } from "../pages/public/SignIn";
-import { SignUp } from "../pages/public/SignUp";
+import ChooseTheme from './../pages/public/ChooseTheme'
+import { DashboardPagePublic } from '../pages/public/Dashboard'
+import { SignIn } from '../pages/public/SignIn'
+import { SignUp } from '../pages/public/SignUp'
 
-import { Dashboard } from "../pages/secure/Dashboard";
-import { ContactsList } from "../pages/secure/ContactList";
+import { Dashboard } from '../pages/secure/Dashboard'
+import { ContactsList } from '../pages/secure/ContactList'
 
-import { MessageList } from "../pages/secure/MessageList";
-import { MessageAdd } from "../pages/secure/MessageAdd";
-import { MessageDetail } from "../pages/secure/MessageDetail";
+import { MessageList } from '../pages/secure/MessageList'
+import { MessageAdd } from '../pages/secure/MessageAdd'
+import { MessageDetail } from '../pages/secure/MessageDetail'
 
-import {ContactAdd} from "../pages/secure/ContactAdd";
+import { SettingsDetailsPage } from '../pages/secure/SettingsDetails'
 
-import {ContactDetails} from "../pages/secure/ContactDetails";
-import {Payments} from "../pages/secure/Payments";
-import {PaymentSuccess} from "../pages/secure/Payments/payment_success";
-import {PaymentCancel} from "../pages/secure/Payments/payment_cancel";
+import {ContactAdd} from '../pages/secure/ContactAdd'
 
-import RoutePrivate from "./route-wrapper";
+import {ContactDetails} from '../pages/secure/ContactDetails'
+import {Payments} from '../pages/secure/Payments'
+import {PaymentSuccess} from '../pages/secure/Payments/payment_success'
+import {PaymentCancel} from '../pages/secure/Payments/payment_cancel'
+
+import RoutePrivate from './route-wrapper'
 
 
 export default function AllRoutes() {
@@ -54,6 +56,10 @@ export default function AllRoutes() {
         </Route>
 
         <Route element={<RoutePrivate />}>
+          <Route exact path="/settings" element={<SettingsDetailsPage />} />
+        </Route>
+
+        <Route element={<RoutePrivate />}>
           <Route exact path="/contacts/add" element={<ContactAdd />} />
         </Route>
 
@@ -78,5 +84,5 @@ export default function AllRoutes() {
         </Route>
       </Routes>
     </BrowserRouter>
-  );
+  )
 }

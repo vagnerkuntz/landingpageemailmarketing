@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react'
-import MessagesService from "../../../services/messages";
-import {Alert} from "react-bootstrap";
+import MessagesService from '../../../services/messages'
+import {Alert} from 'react-bootstrap'
 
 export function MessageAdd () {
     const [isLoading, setIsLoading] = useState(false)
@@ -36,8 +36,7 @@ export function MessageAdd () {
 
     return (
         <p>
-            Adicionar mensagem
-
+            Adicionar mensage
         </p>
     )
 }

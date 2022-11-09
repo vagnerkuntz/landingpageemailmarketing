@@ -1,6 +1,6 @@
-import React from "react";
-import { Header } from "../../../shared/Header";
-import {ContainerDashBoard, Elipse, ElipseBottom} from "./styles";
+import React from 'react'
+import { Header } from '../../../shared/Header'
+import {ContainerDashBoard, Elipse, ElipseBottom} from './styles'
 
 export function Dashboard () {
   return (

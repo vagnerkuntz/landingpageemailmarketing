@@ -1,8 +1,7 @@
 import React from 'react'
-import { Container, Col, Row } from "react-bootstrap";
+import { Container, Col, Row } from 'react-bootstrap'
 
 import * as S from './styles'
-import {Elipse, ElipseBottom} from "../../pages/public/Dashboard/styles";
 
 export function Footer () {
   return (

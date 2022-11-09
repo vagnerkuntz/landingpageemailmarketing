@@ -1,10 +1,10 @@
-import React from 'react';
-import Carousel from "react-multi-carousel";
-import Container from 'react-bootstrap/Container';
+import React from 'react'
+import Carousel from 'react-multi-carousel'
+import Container from 'react-bootstrap/Container'
 
-import "react-multi-carousel/lib/styles.css";
+import 'react-multi-carousel/lib/styles.css'
 
-import { Header } from "../../../shared/Header";
+import { Header } from '../../../shared/Header'
 
 import {
   ContainerDashBoard,
@@ -23,7 +23,7 @@ import {
 import CirculoFundo from '../../../assets/images/circulo_fundo_login.svg'
 import CardImage from '../../../assets/images/card.svg'
 
-import { Footer } from "../../../shared/Footer";
+import { Footer } from '../../../shared/Footer'
 
 const responsive = {
   superLargeDesktop: {
@@ -43,7 +43,7 @@ const responsive = {
     breakpoint: { max: 464, min: 0 },
     items: 1
   }
-};
+}
 
 export function DashboardPagePublic () {
   return (
