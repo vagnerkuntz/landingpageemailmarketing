@@ -16,11 +16,14 @@ export function Header () {
   const [logged, setLogged] = useState(null)
 
   useEffect(() => {
-    const token = getToken()
+    async function loadLogged () {
+      const token = await getToken()
 
-    if (token) {
-      setLogged(token)
+      if (token) {
+        setLogged(token)
+      }
     }
+    void loadLogged()
   }, [])
 
   return (

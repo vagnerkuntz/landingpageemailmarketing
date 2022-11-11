@@ -6,8 +6,8 @@ const baseApi = (baseURL) => {
     baseURL,
   })
 
-  api.interceptors.request.use(async (config) => {
-    const token = await getToken()
+  api.interceptors.request.use((config) => {
+    const token = getToken()
 
     if (token) {
       config.headers['x-access-token'] = token
@@ -16,14 +16,12 @@ const baseApi = (baseURL) => {
     return config
   })
 
-  // Response interceptor for API calls
   api.interceptors.response.use((response) => {
-    console.log('response', response)
     return response
   }, async function (error) {
-    console.log('error', error)
+    console.log('error interceptors response', error)
     if (error.response.status === 401) {
-      console.log('xxxxxx')
+      window.location.href = '/signin'
     }
     // const originalRequest = error.config;
     // if (error.response.status === 403 && !originalRequest._retry) {
@@ -34,8 +32,6 @@ const baseApi = (baseURL) => {
     // }
     // return Promise.reject(error);
   })
-
-  console.log('api', api)
 
   return api
 }

@@ -90,6 +90,7 @@ export function MessageList () {
         async function getAllMessages () {
             const service = new MessagesService()
             const result = await service.getAll()
+
             setMessages(result)
             setIsLoading(false)
         }

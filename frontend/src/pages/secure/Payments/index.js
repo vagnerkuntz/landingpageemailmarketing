@@ -26,8 +26,6 @@ export function Payments () {
         ]
       })
 
-      console.log('result', result)
-
       if (result.data.url) {
         if (typeof window !== 'undefined') {
           window.open(result.data.url, '_blank')
@@ -36,7 +34,6 @@ export function Payments () {
 
       setIsLoading(false)
     } catch (e) {
-      console.log('e', e)
       setIsLoading(false)
     }
   }

@@ -77,13 +77,15 @@ export function ContactAdd () {
                   />
                 </Form.Group>
 
-                <Button variant="primary" type="submit">
-                  Adicionar contato
-                </Button>
+                <div className="d-flex justify-content-between align-items-end">
+                  <Button className="mt-3" variant="primary" type="submit">
+                    Adicionar contato
+                  </Button>
 
-                <Link className="btn btn-link" to="/contacts">
-                  Voltar
-                </Link>
+                  <Link className="btn btn-link" to="/contacts">
+                    Voltar
+                  </Link>
+                </div>
               </Form>
             </Col>
           </Row>

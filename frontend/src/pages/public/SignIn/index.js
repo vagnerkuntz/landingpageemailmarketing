@@ -43,7 +43,6 @@ export function SignIn () {
 
         navigate('/dashboard')
       } catch (error) {
-        console.log('Error handleSignIn', error)
         setError('Erro. Por favor, tente novamente')
       }
     }

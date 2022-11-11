@@ -1,14 +1,12 @@
 import React, {useEffect, useState} from 'react'
 import { Container, Table, Row, Col } from 'react-bootstrap'
-import { Link, useLocation } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 
 import { Header } from '../../../shared/Header'
 
 import ContactsService from '../../../services/contacts'
 
 function RenderLine({ contact }) {
-  const { pathname } = useLocation()
-
   return (
     <tr key={contact.id}>
       <td>{contact.name}</td>

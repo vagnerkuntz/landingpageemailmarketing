@@ -15,7 +15,7 @@ export function SettingsDetailsPage () {
     useEffect(() => {
         async function getService () {
             const result = await service.get()
-            console.log('result', result)
+            console.log('getService', result)
         }
         getService()
     }, [])

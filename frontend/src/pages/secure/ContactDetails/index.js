@@ -1,38 +1,42 @@
 import React, { useEffect, useState } from 'react'
+import { useParams } from 'react-router-dom'
 import { Container } from 'react-bootstrap'
 import { Header } from '../../../shared/Header'
+
 import ContactsService from '../../../services/contacts'
 
-function RenderContact({ contact }) {
-  return (
-    <>
-      <p>Nome: {contact.name}</p>
-      <p>Email: {contact.email}</p>
-      <p>Telefone: {contact.phone}</p>
-    </>
-  )
-}
-
 export function ContactDetails () {
+  const { contactId } = useParams()
+
   const [contact, setContact] = useState(null)
   const [isLoading, setIsLoading] = useState(true)
 
   async function getContact(contactId) {
-    const service = new ContactsService()
-    const result = await service.getOne(contactId)
+    try {
+      const service = new ContactsService()
+      const result = await service.getOne(contactId)
+      setContact(result)
+    } catch (e) {
+      console.log('error getContact::', e)
+    }
 
     setIsLoading(false)
-    setContact(result)
   }
 
   useEffect(() => {
-    const {
-      params: { contactId },
-    } = this.props.match
-
     getContact(contactId)
   }, [])
 
+
+  function RenderContact({ contact }) {
+    return (
+      <>
+        <p>Nome: {contact.name}</p>
+        <p>Email: {contact.email}</p>
+        <p>Telefone: {contact.phone}</p>
+      </>
+    )
+  }
 
   return (
     <>

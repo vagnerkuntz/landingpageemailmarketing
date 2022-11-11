@@ -24,7 +24,6 @@ import {PaymentCancel} from '../pages/secure/Payments/payment_cancel'
 
 import RoutePrivate from './route-wrapper'
 
-
 export default function AllRoutes() {
   return (
     <BrowserRouter>
@@ -64,11 +63,9 @@ export default function AllRoutes() {
         </Route>
 
         <Route element={<RoutePrivate />}>
-          <Route
-            exact
-            path="/contacts/:contactId"
-            element={<ContactDetails />}
-          />
+          <Route path="contacts">
+            <Route path=":contactId" element={<ContactDetails />} />
+          </Route>
         </Route>
 
         <Route element={<RoutePrivate />}>
