@@ -2,7 +2,7 @@ const request = require('supertest')
 const AWSMock = require('aws-sdk-mock')
 const path = require('path')
 
-import { beforeAll, describe, it, expect } from "@jest/globals"
+import { describe, it, expect } from "@jest/globals"
 import { IAccount } from "../src/models/account"
 import app from './../src/app'
 import auth from "../src/auth"
@@ -11,24 +11,28 @@ import { AccountStatus } from "../src/models/accountStatus"
 AWSMock.setSDK(path.resolve('../__commons__/node_modules/aws-sdk'))
 
 const testEmail = 'jest@accounts.com'
-let jwt: string = ''
 const testId: number = 1
 
 jest.mock('../src/models/accountRepository')
 jest.mock('../src/models/accountEmailRepository')
 
-beforeAll(async () => {
-  jwt = auth.signToken(testId)
-})
-
 describe('Testando rotas de accounts service', () => {
   it('GET /accounts/ - Deve retornar statusCode 200', async () => {
+    const jwt = await auth.signToken(testId)
+
     const result = await request(app)
       .get('/accounts/')
       .set('x-access-token', jwt)
 
     expect(result.status).toEqual(200)
     expect(Array.isArray(result.body)).toBeTruthy()
+  })
+
+  it('GET /accounts/ - Deve retornar statusCode 401', async () => {
+    const result = await request(app)
+      .get('/accounts/')
+
+    expect(result.status).toEqual(401)
   })
 
   it('POST /accounts/ - Deve retornar statusCode 201', async () => {
@@ -140,6 +144,7 @@ describe('Testando rotas de accounts service', () => {
     const payload = {
       name: 'John Doe 2'
     }
+    const jwt = await auth.signToken(testId)
 
     const result = await request(app)
       .patch('/accounts/'+testId)
@@ -151,10 +156,18 @@ describe('Testando rotas de accounts service', () => {
     expect(result.body.name).toEqual(payload.name);
   })
 
+  it('PATCH /accounts/:id - Deve retornar statusCode 401', async () => {
+    const result = await request(app)
+      .patch('/accounts/'+testId)
+
+    expect(result.status).toEqual(401)
+  })
+
   it('PATCH /accounts/:id - Deve retornar statusCode 400', async () => {
     const payload = {
       name: 'John Doe 2',
     }
+    const jwt = await auth.signToken(testId)
 
     const result = await request(app).patch('/accounts/abc')
       .send(payload)
@@ -167,6 +180,7 @@ describe('Testando rotas de accounts service', () => {
     const payload = {
       name: 'John Doe 2',
     }
+    const jwt = await auth.signToken(testId)
 
     const result = await request(app).patch('/accounts/-1')
       .send(payload)
@@ -176,15 +190,25 @@ describe('Testando rotas de accounts service', () => {
   })
 
   it('GET /accounts/:id - Deve retornar statusCode 200', async () => {
+    const jwt = await auth.signToken(testId)
+
     const result = await request(app)
       .get('/accounts/'+testId)
       .set('x-access-token', jwt)
-
     expect(result.status).toEqual(200)
     expect(result.body.id).toBe(testId)
   })
 
+  it('GET /accounts/:id - Deve retornar statusCode 401', async () => {
+    const result = await request(app)
+      .get('/accounts/'+testId)
+
+    expect(result.status).toEqual(401)
+  })
+
   it('GET /accounts/:id - Deve retornar statusCode 403', async () => {
+    const jwt = await auth.signToken(testId)
+
     const result = await request(app)
       .get('/accounts/-1')
       .set('x-access-token', jwt)
@@ -193,6 +217,8 @@ describe('Testando rotas de accounts service', () => {
   })
 
   it('GET /accounts/:id - Deve retornar statusCode 400', async () => {
+    const jwt = await auth.signToken(testId)
+
     const result = await request(app)
       .get('/accounts/dasdasd')
       .set('x-access-token', jwt)
@@ -207,6 +233,8 @@ describe('Testando rotas de accounts service', () => {
       return callback(null, {})
     })
 
+    const jwt = await auth.signToken(testId)
+
     const result = await request(app)
       .delete('/accounts/'+testId)
       .set('x-access-token', jwt)
@@ -217,7 +245,16 @@ describe('Testando rotas de accounts service', () => {
     AWSMock.restore('SESV2', 'deleteEmailIdentity')
   })
 
+  it('DELETE /accounts/:id - Deve retornar statusCode 401', async () => {
+    const result = await request(app)
+      .delete('/accounts/'+testId)
+
+    expect(result.status).toEqual(401)
+  })
+
   it('DELETE /accounts/:id?force=true - Deve retornar statusCode 204', async () => {
+    const jwt = await auth.signToken(testId)
+
     const result = await request(app)
       .delete(`/accounts/${testId}?force=true`)
       .set('x-access-token', jwt)
@@ -226,6 +263,8 @@ describe('Testando rotas de accounts service', () => {
   })
 
   it('DELETE /accounts/:id - Deve retornar statusCode 403', async () => {
+    const jwt = await auth.signToken(testId)
+
     const result = await request(app)
       .delete('/accounts/-1')
       .set('x-access-token', jwt);
