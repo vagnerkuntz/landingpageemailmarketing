@@ -1,33 +1,14 @@
-import { beforeAll, afterAll, describe, it, expect } from "@jest/globals";
 const supertest = require('supertest')
+
+import { describe, it, expect } from '@jest/globals'
 import app from '../src/app';
-import auth from "../src/auth";
-import { IAccount } from "../src/models/account";
+import auth from '../src/auth'
 
-import repository from '../src/models/accountRepository'
-
-const testEmail = 'jest@accounts.auth.com';
-const hashPassword = '$2a$10$ye/d5KSzdLt0TIOpevAtde2mgreLPUpLpnE0vyQJ0iMBVeZyklKSi';
+let testAccountId: number = 1
+const testEmail = 'jest@accounts.auth.com'
 const testPassword = '123456';
-let jwt = '';
-let testAccountId = 0;
 
-beforeAll(async () => {
-  const testAccount: IAccount = {
-    name: 'jest',
-    email: testEmail,
-    password: hashPassword,
-    domain: 'jest.com'
-  }
-
-  const result = await repository.add(testAccount);
-  testAccountId = result.id!;
-  jwt = auth.signToken(testAccountId);
-})
-
-afterAll(async () => {
-  await repository.removeByEmail(testEmail)
-})
+jest.mock('../src/models/accountRepository')
 
 describe('Testando rotas de autenticação', () => {
   it('POST /accounts/login - 200 OK', async () => {
@@ -71,6 +52,8 @@ describe('Testando rotas de autenticação', () => {
   })
 
   it('POST /accounts/logout - 200 Logout OK', async () => {
+    const jwt = await auth.signToken(testAccountId)
+
     const result = await supertest(app)
       .post('/accounts/logout')
       .set('x-access-token', jwt)

@@ -2,11 +2,6 @@ import { IAccount } from '../account'
 import { AccountStatus } from '../accountStatus'
 import { IAccountEmail } from '../accountEmail'
 
-function add(account: IAccount) {
-  account.id = 1;
-  return account
-}
-
 const accountOk: IAccount = {
   domain: 'jest.com',
   email: 'jest@jest.com',
@@ -14,6 +9,11 @@ const accountOk: IAccount = {
   id: 1,
   name: 'jest',
   status: AccountStatus.ACTIVE
+}
+
+function add(account: IAccount) {
+  account.id = 1;
+  return account
 }
 
 function findAll(includeRemoved: boolean) {
@@ -88,11 +88,20 @@ function findByIdWithEmails(id: number) {
   return accountOk
 }
 
+function findByEmail(email: string) {
+  if (!email || email.indexOf('@') === -1) {
+    return null
+  }
+
+  return accountOk
+}
+
 export default {
   add,
   findAll,
   set,
   findById,
   remove,
-  findByIdWithEmails
+  findByIdWithEmails,
+  findByEmail
 }
