@@ -1,34 +1,24 @@
-import { beforeAll, afterAll, describe, it, expect } from "@jest/globals"
 const request = require('supertest')
+const AWSMock = require('aws-sdk-mock')
+const path = require('path')
+
+import { beforeAll, describe, it, expect } from "@jest/globals"
 import { IAccount } from "../src/models/account"
 import app from './../src/app'
-
-import repository from '../src/models/accountRepository'
 import auth from "../src/auth"
 import { AccountStatus } from "../src/models/accountStatus"
 
+AWSMock.setSDK(path.resolve('../__commons__/node_modules/aws-sdk'))
+
 const testEmail = 'jest@accounts.com'
-const testEmail2 = 'jest2@accounts.com'
-const hashPassword = '$2a$10$ye/d5KSzdLt0TIOpevAtde2mgreLPUpLpnE0vyQJ0iMBVeZyklKSi'
 let jwt: string = ''
-let testId: number = 0
+const testId: number = 1
+
+jest.mock('../src/models/accountRepository')
+jest.mock('../src/models/accountEmailRepository')
 
 beforeAll(async () => {
-  const testAccount: IAccount = {
-    name: 'jest',
-    email: testEmail,
-    password: hashPassword,
-    domain: 'jest.com'
-  }
-
-  const result = await repository.add(testAccount)
-  testId = result.id!
   jwt = auth.signToken(testId)
-})
-
-afterAll(async () => {
-  await repository.removeByEmail(testEmail)
-  await repository.removeByEmail(testEmail2)
 })
 
 describe('Testando rotas de accounts service', () => {
@@ -42,9 +32,79 @@ describe('Testando rotas de accounts service', () => {
   })
 
   it('POST /accounts/ - Deve retornar statusCode 201', async () => {
+    AWSMock.mock('SESV2', 'createEmailIdentity', (params: {
+      EmailIdentity: string
+    }, callback: Function) => {
+      return callback(null, {
+        IdentityType: 'DOMAIN',
+        VerifiedForSendingStatus: false,
+        DkimAttributes: {
+          SigningEnabled: true,
+          Status: 'NOT_STARTED',
+          Tokens: ['30923kdqdada', 'dok23dk23d', 'd4543fsadasd09dasa'],
+          SigningAttributesOrigin: 'AWS_SES'
+        }
+      })
+    })
+
+    AWSMock.mock('SESV2', 'putEmailIdentityMailFromAttributes', (params: {
+      EmailIdentity: string,
+      BehaviorOnMxFailure: string,
+      MailFromDomain: string
+    }, callback: Function) => {
+      return callback(null, {})
+    })
+
+    AWSMock.mock('SESV2', 'getEmailIdentity', (params: {
+      EmailIdentity: string
+    }, callback: Function) => {
+      return callback(null, {
+        IdentityType: 'DOMAIN',
+        FeedbackForwardingStatus: true,
+        VerifiedForSendingStatus: false,
+        DkimAttributes: {
+          SigningEnabled: true,
+          Status: 'PENDING',
+          Tokens: ['30923kdqdada', 'dok23dk23d', 'd4543fsadasd09dasa'],
+          SigningAttributesOrigin: 'AWS_SES'
+        },
+        MailFromAttributes: {
+          MailFromDomain: `lpem.${params.EmailIdentity}`,
+          MailFromDomainStatus: 'PENDING',
+          BehaviorOnMxFailure: 'USE_DEFAULT_VALUE',
+        },
+        Policies: {},
+        Tags: []
+      })
+    })
+
+    interface IStringArray {
+      [index: string]: {}
+    }
+
+    AWSMock.mock('SES', 'getIdentityVerificationAttributes', (params: {
+      Identities: string[]
+    }, callback: Function) => {
+      const result = {
+        ResponseMetadata: {
+          RequestId: 'ad96c9c3-9730-4585-9dff-42e195666593'
+        },
+        VerificationAttributes: {} as IStringArray
+      }
+
+      for (let i = 0; i < params.Identities.length; i++) {
+        result.VerificationAttributes[params.Identities[i]] = {
+          VerificationStatus: 'Pending',
+          VerificationToken: 'daoskdpoakd2923m23409dmalk'
+        }
+      }
+
+      return callback(null, result)
+    })
+
     const payload: IAccount = {
       name: 'jest2',
-      email: testEmail2,
+      email: testEmail,
       password: '123456',
       domain: 'jest.com'
     }
@@ -55,6 +115,11 @@ describe('Testando rotas de accounts service', () => {
 
     expect(result.status).toEqual(201)
     expect(result.body.id).toBeTruthy()
+
+    AWSMock.restore('SESV2', 'createEmailIdentity')
+    AWSMock.restore('SESV2', 'putEmailIdentityMailFromAttributes')
+    AWSMock.restore('SESV2', 'getEmailIdentity')
+    AWSMock.restore('SESV2', 'getIdentityVerificationAttributes')
   })
 
   it('POST /accounts/ - Deve retornar statusCode 422', async () => {
@@ -136,12 +201,20 @@ describe('Testando rotas de accounts service', () => {
   })
 
   it('DELETE /accounts/:id - Deve retornar statusCode 200', async () => {
+    AWSMock.mock('SESV2', 'deleteEmailIdentity', (params: {
+      EmailIdentity: string
+    }, callback: Function) => {
+      return callback(null, {})
+    })
+
     const result = await request(app)
       .delete('/accounts/'+testId)
       .set('x-access-token', jwt)
 
     expect(result.status).toEqual(200)
     expect(result.body.status).toEqual(AccountStatus.REMOVED)
+
+    AWSMock.restore('SESV2', 'deleteEmailIdentity')
   })
 
   it('DELETE /accounts/:id?force=true - Deve retornar statusCode 204', async () => {

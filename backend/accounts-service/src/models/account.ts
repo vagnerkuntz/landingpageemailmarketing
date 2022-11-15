@@ -9,4 +9,5 @@ export interface IAccount {
   status?: AccountStatus
   domain: string
   settings?: AccountSettings
+  get?: Function
 }
