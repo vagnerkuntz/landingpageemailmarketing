@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express'
 import repository from '../models/paymentsRepository'
 import controllerCommons from "commons/api/controllers/controller";
-import {TokenProps} from "commons/api/auth";
+import {TokenProps} from "commons/api/auth/accountsAuth";
 import {IPayments} from "../models/payments";
 import Stripe from 'stripe';
 const stripe = new Stripe(`${process.env.STRIPE_PRIVATE_KEY}`, {

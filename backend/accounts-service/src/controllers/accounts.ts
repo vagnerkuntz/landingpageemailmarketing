@@ -1,7 +1,7 @@
 import {NextFunction, Request, Response} from 'express'
 import {IAccount} from '../models/account'
 import controllerCommons from 'commons/api/controllers/controller'
-import {TokenProps} from 'commons/api/auth'
+import {TokenProps} from 'commons/api/auth/accountsAuth'
 import repository from '../models/accountRepository'
 import accountRepository from '../models/accountRepository'
 import auth from '../auth'
@@ -179,8 +179,6 @@ async function deleteAccount(req: Request, res: Response, next: NextFunction) {
 async function getAccountsSettings(req: Request, res: Response, next: NextFunction) {
   try {
     const token = controllerCommons.getToken(res) as TokenProps
-
-    console.log('tokengetAccountsSettings ', token)
     const account = await accountRepository.findByIdWithEmails(token.accountId)
     if (!account) {
       return res.sendStatus(404)
@@ -228,8 +226,8 @@ async function createAccountsSettings(req: Request, res: Response, next: NextFun
 }
 
 async function addAccountEmail (req: Request, res: Response, next: NextFunction) {
-  const accountEmail = req.body as IAccountEmail
   const token = controllerCommons.getToken(res) as TokenProps
+  const accountEmail = req.body as IAccountEmail
 
   try {
     const account = await accountRepository.findByIdWithEmails(token.accountId)
@@ -238,7 +236,9 @@ async function addAccountEmail (req: Request, res: Response, next: NextFunction)
     }
 
     if (!accountEmail.email.endsWith(`@${account.domain}`)) {
-      return res.sendStatus(403)
+      return res.status(403).json({
+        message: 'Você só pode adicionar e-mails do seu próprio domínio'
+      })
     }
 
     const accountEmails = account.get('accountEmails', { plain: true }) as IAccountEmail[]
@@ -248,17 +248,20 @@ async function addAccountEmail (req: Request, res: Response, next: NextFunction)
     }
 
     if (alreadyExists) {
-      return res.sendStatus(400)
+      return res.status(400).json({
+        message: 'accountEmail já existe'
+      })
     }
 
     accountEmail.accountId = token.accountId
     const result = await accountEmailRepository.add(accountEmail)
     if (!result.id) {
-      return res.sendStatus(400)
+      return res.status(400).json("Não foi possível salvar a accountEmail.")
     }
 
     accountEmail.id = result.id!
-    const response = await emailService.addEmailIdentity(accountEmail.email)
+    await emailService.addEmailIdentity(accountEmail.email)
+
     res.status(201).json(accountEmail)
   } catch (error) {
     console.log(`addAccountEmail: ${error}`)
@@ -273,19 +276,24 @@ async function addAccountEmail (req: Request, res: Response, next: NextFunction)
 async function getAccountEmails (req: Request, res: Response, next: NextFunction) {
   try {
     const token = controllerCommons.getToken(res) as TokenProps
-    const account = await accountRepository.findById(token.accountId)
+    const account = await accountRepository.findByIdWithEmails(token.accountId)
     if (!account) {
       return res.sendStatus(404)
     }
 
     let emails: string[] = []
     const accountEmails = account.get('accountEmails', { plain: true }) as IAccountEmail[]
+
     if (accountEmails && accountEmails.length > 0) {
       emails = accountEmails.map(item => item.email)
     }
 
     const settings = await emailService.getEmailSettings(emails)
-    res.json(settings)
+    accountEmails.forEach(item => {
+      item.settings = settings.find(s => s.email === item.email)
+    })
+
+    res.status(200).json(accountEmails);
   } catch (error) {
     console.log(`getAccountEmails: ${error}`)
     res.sendStatus(400)
@@ -294,27 +302,34 @@ async function getAccountEmails (req: Request, res: Response, next: NextFunction
 
 async function getAccountEmail (req: Request, res: Response, next: NextFunction) {
   try {
-    const id = parseInt(req.params.id)
-    if (!id) {
+    let accountId = parseInt(req.params.accountId)
+    if (!accountId) {
+      const token = controllerCommons.getToken(res) as TokenProps
+      accountId = token.accountId
+    }
+
+    const accountEmailId = parseInt(req.params.accountEmailId)
+    if (!accountId || !accountEmailId) {
       return res.status(400).json({
-        message: 'ID is a required'
+        message: 'Todos os ids são obrigatórios'
       })
     }
 
-    const token = controllerCommons.getToken(res) as TokenProps
-    const accountEmail = await accountEmailRepository.findById(id, token.accountId, true)
+    const accountEmail = await accountEmailRepository.findById(accountEmailId, accountId, true)
     if (!accountEmail) {
       return res.sendStatus(404)
     }
 
     const settings = await emailService.getEmailSettings([accountEmail.email])
     if (!settings || settings.length === 0) {
-      return res.sendStatus(404)
+      return res.status(404).json({
+        message: 'Settings não encontrada'
+      })
     }
 
     accountEmail.settings = settings[0]
 
-    res.json(accountEmail)
+    res.status(200).json(accountEmail)
   } catch (error) {
     console.log(`getAccountEmail: ${error}`)
     res.sendStatus(400)
@@ -356,7 +371,7 @@ async function deleteAccountEmail (req: Request, res: Response, next: NextFuncti
     const token = controllerCommons.getToken(res) as TokenProps
 
     const accountEmail = await accountEmailRepository.findById(accountEmailId, token.accountId)
-    if (accountEmail === null) {
+    if (accountEmail == null) {
       return res.sendStatus(404)
     }
 

@@ -9,23 +9,25 @@ import { ContactStatus } from "../src/models/contactStatus"
 const testEmail = 'jest@accounts.com'
 const testEmail2 = 'jest2@accounts.com'
 const testPassword = '123456'
+
 let jwt: string = ''
 let testAccountId: number = 0
 let testContactId: number = 0
 
 beforeAll(async () => {
   const testAccount = {
-    name: 'jestone',
+    name: 'jest',
     email: testEmail,
     password: testPassword,
-    domain: 'jest.com.br'
+    domain: 'jest.com'
   }
   
   const accountResponse = await request(accountsApp)
     .post('/accounts/')
     .send(testAccount);
-  
-  testAccountId = accountResponse.body.id;
+
+  console.log(`accountResponse: ${accountResponse.status}`)
+  testAccountId = accountResponse.body.id
 
   const loginResponse = await request(accountsApp)
     .post('/accounts/login')
@@ -33,7 +35,7 @@ beforeAll(async () => {
       email: testEmail,
       password: testPassword
     })
-
+  console.log(`loginResponse: ${loginResponse.status}`)
   jwt = loginResponse.body.token
 
   const testContact = {
@@ -98,7 +100,9 @@ describe('Testando rotas de contacts service', () => {
   })
 
   it('GET /contacts/:id - Deve retornar statusCode 401', async () => {
-    const result = await request(app).get(`/contacts/${testContactId}`)
+    const result = await request(app)
+      .get(`/contacts/${testContactId}`)
+
     expect(result.status).toEqual(401)
   })
 
@@ -106,7 +110,7 @@ describe('Testando rotas de contacts service', () => {
     const testContact = {
       name: 'jest2',
       email: testEmail2,
-      phone: '12345678910',
+      phone: '51123456789',
     } as IContact
 
     const result = await request(app)
@@ -118,25 +122,9 @@ describe('Testando rotas de contacts service', () => {
     expect(result.body.id).toBeTruthy()
   })
 
-  it('POST /contacts/ - Deve retornar statusCode 400', async () => {
-    const testContact = {
-      name: 'jest3',
-      email: testEmail,
-      phone: '12345678910',
-    } as IContact
-
-    const result = await request(app)
-      .post('/contacts/')
-      .set('x-access-token', jwt)
-      .send(testContact)
-
-    expect(result.status).toEqual(400)
-  })
-
   it('POST /contacts/ - Deve retornar statusCode 422', async () => {
     const testContact = {
-      rua: 'jest2',
-      phone: '123456789',
+      street: 'jest2'
     }
 
     const result = await request(app)
@@ -161,9 +149,24 @@ describe('Testando rotas de contacts service', () => {
     expect(result.status).toEqual(401)
   })
 
+  it('POST /contacts/ - Deve retornar statusCode 400', async () => {
+    const testContact = {
+      name: 'jest3',
+      email: testEmail,
+      phone: '12345678910',
+    } as IContact
+
+    const result = await request(app)
+      .post('/contacts/')
+      .set('x-access-token', jwt)
+      .send(testContact)
+
+    expect(result.status).toEqual(400)
+  })
+
   it('PATCH /contacts/:id - Deve retornar statusCode 200', async () => {
     const payload = {
-      name: 'patchpayload',
+      name: 'Patch',
     }
 
     const result = await request(app)
@@ -172,7 +175,7 @@ describe('Testando rotas de contacts service', () => {
       .send(payload)
 
     expect(result.status).toEqual(200)
-    expect(result.body.name).toEqual('patchpayload')
+    expect(result.body.name).toEqual('Patch')
   })
 
   it('PATCH /contacts/:id - Deve retornar statusCode 401', async () => {
@@ -181,7 +184,7 @@ describe('Testando rotas de contacts service', () => {
     }
 
     const result = await request(app)
-      .patch(`/contacts/${testContactId}`)
+      .patch('/contacts/' + testContactId)
       .send(payload)
 
     expect(result.status).toEqual(401)

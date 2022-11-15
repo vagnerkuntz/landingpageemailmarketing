@@ -1,19 +1,57 @@
 import { Router } from 'express'
 import middlewareCommons from 'commons/api/routes/midlewares'
-import { validateMessageSchema, validateUpdateMessageSchema } from './middlewares'
+import {
+  validateMessageSchema,
+  validateUpdateMessageSchema,
+  validateSendingSchema
+} from './middlewares'
 import controller from '../controllers/messages'
 
 const router = Router()
 
-router.get('/messages/:id', middlewareCommons.validateAuth, controller.getMessage)
-router.get('/messages/', middlewareCommons.validateAuth, controller.getMessages)
+  /**
+   * GET /messages/:id
+   * Returns one message from this account
+   */
+router.get('/messages/:id', middlewareCommons.validateAccountAuth, controller.getMessage)
 
-router.post('/messages/', middlewareCommons.validateAuth, validateMessageSchema, controller.addMessage)
+/**
+ * GET /messages/
+ * Returns all messas from this account
+ */
+router.get('/messages/', middlewareCommons.validateAccountAuth, controller.getMessages)
 
-router.patch('/messages/:id', middlewareCommons.validateAuth, validateUpdateMessageSchema, controller.setMessage)
+/**
+ * POST /messages/
+ * Add one message to this account
+ */
+router.post('/messages/', middlewareCommons.validateAccountAuth, validateMessageSchema, controller.addMessage);
 
-router.delete('/messages/:id', middlewareCommons.validateAuth, controller.deleteMessage)
+/**
+ * PATCH /messages/:id
+ * Updates one message from this account
+ */
+router.patch('/messages/:id', middlewareCommons.validateAccountAuth, validateUpdateMessageSchema, controller.setMessage)
 
-router.post('/messages/:id/send', middlewareCommons.validateAuth, controller.sendMessage)
+/**
+ * DELETE /messages/:id
+ * Soft-delete one message from this account
+ * ?force=true to really remove
+ */
+router.delete('/messages/:id', middlewareCommons.validateAccountAuth, controller.deleteMessage)
+
+/**
+ * POST /messages/:id/send
+ * Front-end calls this route to send a message to a bunch of contacts
+ * In fact, the message will be queued.
+ */
+router.post('/messages/:id/send', middlewareCommons.validateAccountAuth, controller.scheduleMessage)
+
+/**
+ * POST /messages/send
+ * AWS Lambda calls this route to send a message from the queue to one contact
+ * The back-end will send the email
+ */
+router.post('/messages/sending', middlewareCommons.validateMicroserviceAuth, validateSendingSchema, controller.sendMessage)
 
 export default router

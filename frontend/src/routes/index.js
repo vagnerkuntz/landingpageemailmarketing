@@ -14,6 +14,7 @@ import { MessageAdd } from '../pages/secure/MessageAdd'
 import { MessageDetail } from '../pages/secure/MessageDetail'
 
 import { SettingsDetailsPage } from '../pages/secure/SettingsDetails'
+import { SettingsEmailAdd } from '../pages/secure/SettingsEmailAdd'
 
 import {ContactAdd} from '../pages/secure/ContactAdd'
 
@@ -51,11 +52,17 @@ export default function AllRoutes() {
         </Route>
 
         <Route element={<RoutePrivate />}>
-          <Route exact path="/messages/:messageId" element={<MessageDetail />} />
+          <Route path="message">
+            <Route path=":messageId" element={<MessageDetail />} />
+          </Route>
         </Route>
 
         <Route element={<RoutePrivate />}>
           <Route exact path="/settings" element={<SettingsDetailsPage />} />
+        </Route>
+
+        <Route element={<RoutePrivate />}>
+          <Route exact path="/settings/email/add" element={<SettingsEmailAdd />} />
         </Route>
 
         <Route element={<RoutePrivate />}>

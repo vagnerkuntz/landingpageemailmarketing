@@ -5,13 +5,42 @@ import controller from '../controllers/contacts'
 
 const router = Router()
 
-router.get('/contacts/:id', middlewareCommons.validateAuth, controller.getContact)
-router.get('/contacts/', middlewareCommons.validateAuth, controller.getContacts)
+/**
+ * GET /contacts/:id/account/:accountId
+ * Only microservices call this route
+ * Returns one contact from the account
+ */
+router.get('/contacts/:id/account/:accountId', middlewareCommons.validateMicroserviceAuth, controller.getContact)
 
-router.post('/contacts/', middlewareCommons.validateAuth, validateContactSchema, controller.addContact)
+/**
+ * GET /contacts/:id
+ * Retuns one contact from the account
+ */
+router.get('/contacts/:id', middlewareCommons.validateAccountAuth, controller.getContact)
 
-router.patch('/contacts/:id', middlewareCommons.validateAuth, validateUpdateContactSchema, controller.setContact)
+/**
+ * GET /contacts/
+ * Returns all contacts from the account
+ */
+router.get('/contacts/', middlewareCommons.validateAccountAuth, controller.getContacts)
 
-router.delete('/contacts/:id', middlewareCommons.validateAuth, controller.deleteContact)
+/**
+ * POST /contacts/
+ * Save a contact to an account
+ */
+router.post('/contacts/', middlewareCommons.validateAccountAuth, validateContactSchema, controller.addContact)
+
+/**
+ * PATCH /contacts/:id
+ * Updates a contact from the account
+ */
+router.patch('/contacts/:id', middlewareCommons.validateAccountAuth, validateUpdateContactSchema, controller.setContact)
+
+/**
+ * DELETE /contacts/:id
+ * Soft-delete one contact from the account
+ * ?force=true to really remove
+ */
+router.delete('/contacts/:id', middlewareCommons.validateAccountAuth, controller.deleteContact)
 
 export default router

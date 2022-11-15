@@ -1,4 +1,4 @@
-import { ContactStatus } from './contactStatus';
+import { ContactStatus } from './contactStatus'
 
 export interface IContact {
   id?: number,

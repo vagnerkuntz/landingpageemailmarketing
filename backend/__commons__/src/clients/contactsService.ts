@@ -1,7 +1,9 @@
 import axios from 'axios'
+import microserviceAuth from "../api/auth/microserviceAuth"
 
 export interface IContact {
     id: number
+    email: string
 }
 
 export async function getContacts(jwt: string) {
@@ -17,6 +19,28 @@ export async function getContacts(jwt: string) {
         }
 
         return response.data as Array<IContact>
+    } catch (error) {
+        console.log(`contactsService.getContacts: ${error}`)
+        return null
+    }
+}
+
+export async function getContact(contactId: number, accountId: number) {
+    try {
+        const config = {
+            headers: {
+                'x-access-token': await microserviceAuth.sign({
+                    accountId,
+                    contactId
+                })
+            }
+        }
+        const response = await axios.get(`${process.env.CONTACTS_API}/contacts/${contactId}/account/${accountId}`, config)
+        if (response.status !== 200) {
+            return null
+        }
+
+        return response.data as IContact
     } catch (error) {
         console.log(`contactsService.getContacts: ${error}`)
         return null

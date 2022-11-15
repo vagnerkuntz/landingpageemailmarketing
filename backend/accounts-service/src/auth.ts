@@ -1,6 +1,6 @@
 import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
-import authCommons, { TokenProps } from 'commons/api/auth'
+import authCommons, { TokenProps } from 'commons/api/auth/accountsAuth'
 import fs from 'fs'
 import path from 'path'
 

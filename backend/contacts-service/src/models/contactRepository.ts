@@ -6,7 +6,12 @@ function findAll(accountId: number, includeRemoved: boolean) {
   if (includeRemoved) {
     return contactModel.findAll<IContactModel>({ where: { accountId } })
   } else {
-    return contactModel.findAll<IContactModel>({ where: { accountId, status: [ContactStatus.SUBSCRIBED, ContactStatus.UNSUBSCRIBED] } })
+    return contactModel.findAll<IContactModel>({
+      where: {
+        accountId,
+        status: [ContactStatus.SUBSCRIBED, ContactStatus.UNSUBSCRIBED]
+      }
+    })
   }
 }
 
@@ -18,7 +23,12 @@ async function add(contact: IContact, accountId: number) {
 }
 
 async function set(contactId: number, contact: IContact, accountId: number) {
-  const originalContact = await contactModel.findOne({ where: { id: contactId, accountId } })
+  const originalContact = await contactModel.findOne({
+    where: {
+      id: contactId,
+      accountId: accountId
+    }
+  })
 
   if (!originalContact) {
     return null;
@@ -43,11 +53,21 @@ async function set(contactId: number, contact: IContact, accountId: number) {
 }
 
 function findById(contactId: number, accountId: number) {
-  return contactModel.findOne<IContactModel>({ where: { id: contactId, accountId } })
+  return contactModel.findOne<IContactModel>({
+    where: {
+      id: contactId,
+      accountId: accountId
+    }
+  })
 }
 
 function removeById(contactId: number, accountId: number) {
-  return contactModel.destroy({ where: { id: contactId, accountId } })
+  return contactModel.destroy({
+    where: {
+      id: contactId,
+      accountId: accountId
+    }
+  })
 }
 
 function removeByEmail(email: string, accountId: number) {

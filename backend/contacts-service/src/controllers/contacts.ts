@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express'
 import repository from '../models/contactRepository'
 import controllerCommons from 'commons/api/controllers/controller'
-import { TokenProps } from 'commons/api/auth'
+import { TokenProps } from 'commons/api/auth/accountsAuth'
 import { IContact } from '../models/contact'
 import { ContactStatus } from '../models/contactStatus'
 
@@ -26,9 +26,13 @@ async function getContact(req: Request, res: Response, next: NextFunction) {
       })
     }
 
-    const token = controllerCommons.getToken(res) as TokenProps
-    const contact = await repository.findById(id, token.accountId)
+    let accountId = parseInt(req.params.accountId)
+    if (!accountId) {
+      const token = controllerCommons.getToken(res) as TokenProps
+      accountId = token.accountId
+    }
 
+    const contact = await repository.findById(id, accountId)
     if (contact === null) {
       return res.sendStatus(404)
     } else {

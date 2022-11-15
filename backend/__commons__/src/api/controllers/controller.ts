@@ -1,5 +1,5 @@
 import { Response } from 'express'
-import { TokenProps } from '../auth'
+import { TokenProps } from '../auth/accountsAuth'
 
 function getToken(res: Response) {
   const payload = res.locals.payload as TokenProps

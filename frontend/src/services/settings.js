@@ -9,14 +9,14 @@ class SettingsService {
 
    // configurações do domínio
    async get () {
-       const result = await this.api.get('accounts/settings')
-       return result.data
+      const result = await this.api.get('accounts/settings')
+      return result.data
    }
 
    // adiciona uma conta de e-mail
     async addAccountEmail (accountEmailModel) {
-        const result = await this.api.put('accounts/settings/accountEmails', accountEmailModel)
-        return result.data
+      const result = await this.api.put('accounts/settings/accountEmails', accountEmailModel)
+      return result
     }
 
     // retorna uma conta de e-mail
