@@ -91,7 +91,7 @@ async function deleteMessage(req: Request, res: Response, next: NextFunction) {
   try {
     const messageId = parseInt(req.params.id)
     if (!messageId) {
-      res.status(400).json({
+      return res.status(400).json({
         message: 'ID is a required'
       })
     }
@@ -100,7 +100,7 @@ async function deleteMessage(req: Request, res: Response, next: NextFunction) {
 
     if (req.query.force === 'true') {
       await repository.removeById(messageId, token.accountId)
-      res.sendStatus(204)
+      return res.sendStatus(204)
     } else {
       const messageParams = {
         status: MessageStatus.REMOVED
@@ -109,9 +109,9 @@ async function deleteMessage(req: Request, res: Response, next: NextFunction) {
       const updatedMessage = await repository.set(messageId, messageParams, token.accountId)
 
       if (updatedMessage) {
-        res.status(200).json(updatedMessage)
+        return res.status(200).json(updatedMessage)
       } else {
-        res.sendStatus(403)
+        return res.sendStatus(403)
       }
     }
   } catch (error) {
@@ -238,6 +238,7 @@ async function sendMessage (req: Request, res: Response, next: NextFunction) {
       message.subject,
       message.body
     )
+
     if (!result.success) {
       return res.status(400).json({
         message: 'Não foi possível enviar a mensagem'

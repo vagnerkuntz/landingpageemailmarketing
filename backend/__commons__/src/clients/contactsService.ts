@@ -13,6 +13,7 @@ export async function getContacts(jwt: string) {
                 'x-access-token': jwt
             }
         }
+
         const response = await axios.get(`${process.env.CONTACTS_API}/contacts`, config)
         if (response.status !== 200) {
             return null
@@ -42,7 +43,7 @@ export async function getContact(contactId: number, accountId: number) {
 
         return response.data as IContact
     } catch (error) {
-        console.log(`contactsService.getContacts: ${error}`)
+        console.log(`contactsService.getContact: ${error}`)
         return null
     }
 }

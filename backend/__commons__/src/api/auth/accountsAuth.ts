@@ -27,7 +27,10 @@ async function verifyToken(token: string) {
       algorithm: [jwtAlgorithm]
     } as VerifyOptions) as TokenProps
 
-    return { accountId: decoded.accountId }
+    return {
+      accountId: decoded.accountId,
+      jwt: token
+    }
   } catch(error) {
     console.log(`verifyToken: ${error}`)
     return null

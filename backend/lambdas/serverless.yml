@@ -1,0 +1,49 @@
+service: lpem
+app: lpem
+org: vagnerkuntz
+
+frameworkVersion: '3'
+
+useDotenv: true
+
+provider:
+  name: aws
+  stage: dev
+  runtime: nodejs16.x
+  region: us-east-1
+  iamRoleStatements:
+    - Effect: 'Allow'
+      Action: 'sqs:*'
+      Resource: '*'
+  environment:
+    MS_URL_MESSAGES: ${env:MS_URL_MESSAGES}
+    MS_JWT_SECRET: ${env:MS_JWT_SECRET}
+    MS_JWT_EXPIRES: ${env:MS_JWT_EXPIRES}
+  tags:
+    STAGE: production
+    PROJECT: lpem
+  deploymentBucket:
+    name: ${self:service}
+    tags:
+      STAGE: ${self:provider.stage}
+      PROJECT: ${self:service}
+
+plugins:
+  - serverless-layers
+  - serverless-dotenv-plugin
+
+custom:
+  serverless-layers:
+    dependenciesPath: ./package.json
+
+functions:
+  send-message:
+    name: ${opt:stage, self:provider.stage}-${self:service}-send-message
+    description: 'Envia o e-mail'
+    handler: src/handlers/send-message/index.sendMessage
+    memorySize: 128
+    timeout: 60
+    events:
+      - sqs:
+          arn: arn:aws:sqs:us-east-1:317452710728:Lpem.fifo
+          batchSize: 1

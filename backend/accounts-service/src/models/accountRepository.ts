@@ -61,8 +61,8 @@ function removeByEmail(email: string) {
   return accountModel.destroy({ where: { email }} as DestroyOptions<IAccount>)
 }
 
-function findByIdWithEmails (id: number) {
-  return accountModel.findOne<IAccountModel>({
+async function findByIdWithEmails (id: number) {
+  return await accountModel.findOne<IAccountModel>({
     where: { id },
     include: AccountEmailModel
   })

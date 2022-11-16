@@ -298,6 +298,7 @@ async function getAccountEmails (req: Request, res: Response, next: NextFunction
 
     let emails: string[] = []
     const { accountEmails } = account.get({ plain: true })
+
     if (accountEmails && accountEmails.length > 0) {
       emails = accountEmails.map(item => item.email)
 
@@ -306,7 +307,7 @@ async function getAccountEmails (req: Request, res: Response, next: NextFunction
         item.settings = settings.find(s => s.email === item.email)
       })
 
-      res.status(200).json(accountEmails);
+      return res.status(200).json(accountEmails);
     }
 
     return res.status(200).json([])

@@ -7,7 +7,7 @@ function sendMessage(message: any) {
   return sqs.sendMessage({
     MessageBody: JSON.stringify(message),
     QueueUrl: `${process.env.AWS_QUEUE_URL}`,
-    MessageGroupId: `${process.env.AWS_MESSAGE_GROUP}`
+    MessageGroupId: `${process.env.AWS_MESSAGE_GROUP}` // talvez desnecessario
   }).promise()
 }
 

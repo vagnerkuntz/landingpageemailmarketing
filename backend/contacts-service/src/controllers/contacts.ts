@@ -10,7 +10,7 @@ async function getContacts(req: Request, res: Response, next: NextFunction) {
     const includeRemoved = req.query.includeRemove == 'true'
     const token = controllerCommons.getToken(res) as TokenProps
     const contacts = await repository.findAll(token.accountId, includeRemoved)
-    res.status(200).json(contacts)
+    return res.status(200).json(contacts)
   } catch (error) {
     console.log(`getContacts: ${error}`)
     res.sendStatus(400)
@@ -36,7 +36,7 @@ async function getContact(req: Request, res: Response, next: NextFunction) {
     if (!contact) {
       return res.sendStatus(404)
     } else {
-      res.status(200).json(contact)
+      return res.status(200).json(contact)
     }
   } catch (error) {
     console.log(`getContact: ${error}`)
@@ -83,7 +83,7 @@ async function setContact(req: Request, res: Response, next: NextFunction){
       return res.sendStatus(404)
     }
 
-    res.status(200).json(result)
+    return res.status(200).json(result)
   } catch (error) {
     console.log(`setContact: ${error}`)
     res.sendStatus(400)
@@ -103,7 +103,7 @@ async function deleteContact(req: Request, res: Response, next: NextFunction) {
 
     if (req.query.force === 'true') {
       await repository.removeById(contactId, token.accountId)
-      res.sendStatus(204)
+      return res.sendStatus(204)
     } else {
       const contactParams = {
         status: ContactStatus.REMOVED
@@ -112,9 +112,9 @@ async function deleteContact(req: Request, res: Response, next: NextFunction) {
       const updatedContact = await repository.set(contactId, contactParams, token.accountId);
       
       if (updatedContact) {
-        res.status(200).json(updatedContact)
+        return res.status(200).json(updatedContact)
       } else {
-        res.sendStatus(403)
+        return res.sendStatus(403)
       }
     }
   } catch (error) {
