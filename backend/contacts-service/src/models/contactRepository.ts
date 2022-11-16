@@ -56,7 +56,16 @@ function findById(contactId: number, accountId: number) {
   return contactModel.findOne<IContactModel>({
     where: {
       id: contactId,
-      accountId: accountId
+      accountId
+    }
+  })
+}
+
+function findByEmail(email: string, accountId: number) {
+  return contactModel.findOne<IContactModel>({
+    where: {
+      email,
+      accountId
     }
   })
 }
@@ -65,13 +74,18 @@ function removeById(contactId: number, accountId: number) {
   return contactModel.destroy({
     where: {
       id: contactId,
-      accountId: accountId
+      accountId
     }
   })
 }
 
 function removeByEmail(email: string, accountId: number) {
-  return contactModel.destroy({ where: { email, accountId } })
+  return contactModel.destroy({
+    where: {
+      email,
+      accountId
+    }
+  })
 }
 
 export default {
@@ -80,5 +94,6 @@ export default {
   removeByEmail,
   removeById,
   findById,
-  set
+  set,
+  findByEmail
 }

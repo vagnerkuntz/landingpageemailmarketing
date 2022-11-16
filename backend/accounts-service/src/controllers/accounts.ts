@@ -106,7 +106,10 @@ async function loginAccount(req: Request, res: Response, next: NextFunction) {
 
       if (isValidPassword) {
         const token = auth.signToken(account.id!)
-        return res.json({ auth: true, token })
+        return res.json({
+          auth: true,
+          token
+        })
       }
 
       return res.sendStatus(401);
@@ -142,7 +145,7 @@ async function deleteAccount(req: Request, res: Response, next: NextFunction) {
       return res.sendStatus(404)
     }
 
-    const accountEmails = account.get('accountEmails', { plain: true }) as IAccount[]
+    const { accountEmails } = account.get({ plain: true })
     if (accountEmails && accountEmails.length > 0) {
       const promises = accountEmails.map(item => {
         return emailService.removeEmailIdentity(item.email)
@@ -185,12 +188,24 @@ async function getAccountsSettings(req: Request, res: Response, next: NextFuncti
     }
 
     let emails: string[] = []
-    const accountEmails = account.get('accountEmails', { plain: true }) as IAccountEmail[]
+    const { accountEmails } = account.get({ plain: true })
     if (accountEmails && accountEmails.length > 0) {
       emails = accountEmails.map(item => item.email)
     }
 
     const settings = await emailService.getAccountSettings(account.domain, emails)
+
+    if (accountEmails != null) {
+      settings.EmailAddress.forEach(item => {
+        const email = accountEmails.find(ae => ae.email === item.email)
+        if (!email) {
+          return
+        }
+
+        item.id = email.id
+        item.name = email.name
+      })
+    }
 
     res.json(settings)
   } catch (error) {
@@ -248,7 +263,7 @@ async function addAccountEmail (req: Request, res: Response, next: NextFunction)
     }
 
     if (alreadyExists) {
-      return res.status(400).json({
+      return res.status(409).json({
         message: 'accountEmail já existe'
       })
     }
@@ -282,18 +297,19 @@ async function getAccountEmails (req: Request, res: Response, next: NextFunction
     }
 
     let emails: string[] = []
-    const accountEmails = account.get('accountEmails', { plain: true }) as IAccountEmail[]
-
+    const { accountEmails } = account.get({ plain: true })
     if (accountEmails && accountEmails.length > 0) {
       emails = accountEmails.map(item => item.email)
+
+      const settings = await emailService.getEmailSettings(emails)
+      accountEmails.forEach(item => {
+        item.settings = settings.find(s => s.email === item.email)
+      })
+
+      res.status(200).json(accountEmails);
     }
 
-    const settings = await emailService.getEmailSettings(emails)
-    accountEmails.forEach(item => {
-      item.settings = settings.find(s => s.email === item.email)
-    })
-
-    res.status(200).json(accountEmails);
+    return res.status(200).json([])
   } catch (error) {
     console.log(`getAccountEmails: ${error}`)
     res.sendStatus(400)

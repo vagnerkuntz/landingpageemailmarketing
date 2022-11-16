@@ -10,7 +10,6 @@ function findAll(includeRemoved: boolean) {
   } else {
     return accountModel.findAll<IAccountModel>({ where: { status: [AccountStatus.ACTIVE, AccountStatus.CREATED, AccountStatus.SUSPENDED] }})
   }
-  
 }
 
 function findByEmail(emailFilter: string) {
@@ -20,7 +19,9 @@ function findByEmail(emailFilter: string) {
 }
 
 function findById(id: number) {
-  return accountModel.findByPk<IAccountModel>(id)
+  return accountModel.findOne<IAccountModel>({
+    where: { id }
+  })
 }
 
 function add(account: IAccount) {
@@ -28,7 +29,9 @@ function add(account: IAccount) {
 }
 
 async function set(id: number, account: IAccount) {
-  const originalAccount = await accountModel.findByPk<IAccountModel>(id)
+  const originalAccount = await accountModel.findOne<IAccountModel>({
+    where: { id }
+  })
   
   if (originalAccount !== null) {
     if (account.name) {
@@ -59,7 +62,10 @@ function removeByEmail(email: string) {
 }
 
 function findByIdWithEmails (id: number) {
-  return accountModel.findByPk<IAccountModel>(id, { include: AccountEmailModel })
+  return accountModel.findOne<IAccountModel>({
+    where: { id },
+    include: AccountEmailModel
+  })
 }
   
 export default {

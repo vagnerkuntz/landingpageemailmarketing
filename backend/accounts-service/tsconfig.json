@@ -15,6 +15,7 @@
     "forceConsistentCasingInFileNames": true
   },
   "exclude": [
+    "__tests__",
     "node_modules",
     "dist"
   ],
@@ -22,5 +23,8 @@
     "src/**/*",
     "src/__tests__",
     "jest.config"
-  ]
+  ],
+  "ts-node": {
+    "transpileOnly": true
+  }
 }

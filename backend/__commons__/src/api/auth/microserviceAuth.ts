@@ -3,7 +3,7 @@ import jwt from 'jsonwebtoken'
 const SECRET: string = `${process.env.MS_JWT_SECRET}`
 const EXPIRATION: number = parseInt(`${process.env.MS_JWT_EXPIRES}`)
 
-async function sign (token: any) {
+function sign (token: any) {
   try {
     return jwt.sign(token, SECRET, {
       expiresIn: EXPIRATION
@@ -14,7 +14,7 @@ async function sign (token: any) {
   }
 }
 
-async function verify (token: any) {
+function verify (token: any) {
   try {
     return jwt.verify(token, SECRET)
   } catch (e) {

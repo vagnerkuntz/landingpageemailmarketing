@@ -1,5 +1,6 @@
+import { IAccountEmail } from './accountEmail'
 import { AccountStatus } from './accountStatus'
-import {AccountSettings} from 'commons/clients/emailService'
+import { AccountSettings } from 'commons/clients/emailService'
 
 export interface IAccount {
   id?: number
@@ -9,5 +10,5 @@ export interface IAccount {
   status?: AccountStatus
   domain: string
   settings?: AccountSettings
-  get?: Function
+  accountEmails?: IAccountEmail[]
 }

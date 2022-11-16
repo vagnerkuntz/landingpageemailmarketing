@@ -37,6 +37,7 @@
     "aws-sdk-mock": "^5.8.0",
     "jest": "^29.0.3",
     "nodemon": "^2.0.19",
+    "sequelize-mock": "^0.10.2",
     "supertest": "^6.2.4",
     "ts-jest": "^29.0.1",
     "ts-node-dev": "^2.0.0",

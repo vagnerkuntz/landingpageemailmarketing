@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import middlewareCommons from 'commons/api/routes/midlewares'
+import middlewareCommons from 'commons/api/routes/authMiddleware'
 import controller from '../controllers/payments'
 
 const router = Router()

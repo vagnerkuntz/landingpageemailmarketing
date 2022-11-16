@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from 'express'
-import commonsMidleware from 'commons/api/routes/midlewares'
+import authMiddleware from 'commons/api/routes/authMiddleware'
+import validateMiddleware from 'commons/api/routes/validateMiddleware'
 import controllerCommons from 'commons/api/controllers/controller'
 import { TokenProps } from 'commons/api/auth/accountsAuth'
 import { accountEmailSchema, accountEmailUpdateSchema } from '../models/accountEmailSchemas'
@@ -7,44 +8,44 @@ import { accountEmailSchema, accountEmailUpdateSchema } from '../models/accountE
 import { accountSchema, accountUpdateSchema, loginSchema } from '../models/accountSchemas'
 
 function validateAccountEmailSchema (req: Request, res: Response, next: NextFunction) {
-  return commonsMidleware.validateSchema(accountEmailSchema, req, res, next)
+  return validateMiddleware.validateSchema(accountEmailSchema, req, res, next)
 }
 
 function validateAccountEmailUpdateSchema (req: Request, res: Response, next: NextFunction) {
-  return commonsMidleware.validateSchema(accountEmailUpdateSchema, req, res, next)
+  return validateMiddleware.validateSchema(accountEmailUpdateSchema, req, res, next)
 }
 
 function validateAccountSchema(req: Request, res: Response, next: NextFunction) {
-  return commonsMidleware.validateSchema(accountSchema, req, res, next)
+  return validateMiddleware.validateSchema(accountSchema, req, res, next)
 }
 
 function validateUpdateAccountSchema(req: Request, res: Response, next: NextFunction) {
-  return commonsMidleware.validateSchema(accountUpdateSchema, req, res, next)
+  return validateMiddleware.validateSchema(accountUpdateSchema, req, res, next)
 }
 
 function validateLoginSchema(req: Request, res: Response, next: NextFunction) {
-  return commonsMidleware.validateSchema(loginSchema, req, res, next)
+  return validateMiddleware.validateSchema(loginSchema, req, res, next)
 }
 
 async function validateAuthentication(req: Request, res: Response, next: NextFunction) {
-  return commonsMidleware.validateAccountAuth(req, res, next)
+  return authMiddleware.validateAccountAuth(req, res, next)
 }
 
 async function validateMSAuthentication (req: Request, res: Response, next: NextFunction) {
-  return commonsMidleware.validateMicroserviceAuth(req, res, next)
+  return authMiddleware.validateMicroserviceAuth(req, res, next)
 }
 
 function validateAuthorization(req: Request, res: Response, next: NextFunction) {
   const accountId = parseInt(req.params.id)
   if (!accountId) {
-    return res.status(400).end()
+    return res.sendStatus(400)
   }
 
   const token = controllerCommons.getToken(res) as TokenProps
 
   // autenticado, mas não tem permissão
   if (accountId !== token.accountId) {
-    return res.status(403).end()
+    return res.sendStatus(403)
   }
 
   next()

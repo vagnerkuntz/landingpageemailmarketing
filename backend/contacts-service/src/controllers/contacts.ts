@@ -7,10 +7,10 @@ import { ContactStatus } from '../models/contactStatus'
 
 async function getContacts(req: Request, res: Response, next: NextFunction) {
   try {
-    const includeRemoved = req.query.includeRemoved == 'true'
+    const includeRemoved = req.query.includeRemove == 'true'
     const token = controllerCommons.getToken(res) as TokenProps
     const contacts = await repository.findAll(token.accountId, includeRemoved)
-    res.json(contacts)
+    res.status(200).json(contacts)
   } catch (error) {
     console.log(`getContacts: ${error}`)
     res.sendStatus(400)
@@ -19,21 +19,21 @@ async function getContacts(req: Request, res: Response, next: NextFunction) {
 
 async function getContact(req: Request, res: Response, next: NextFunction) {
   try {
-    const id = parseInt(req.params.id)
-    if (!id) {
+    const contactId = parseInt(req.params.id) as number
+    if (!contactId) {
       return res.status(400).json({
         message: 'Contact ID is a required'
       })
     }
 
-    let accountId = parseInt(req.params.accountId)
+    let accountId = parseInt(req.params.accountId) as number
     if (!accountId) {
       const token = controllerCommons.getToken(res) as TokenProps
       accountId = token.accountId
     }
 
-    const contact = await repository.findById(id, accountId)
-    if (contact === null) {
+    const contact = await repository.findById(contactId, accountId)
+    if (!contact) {
       return res.sendStatus(404)
     } else {
       res.status(200).json(contact)
@@ -48,8 +48,18 @@ async function addContact(req: Request, res: Response, next: NextFunction) {
   try {
     const token = controllerCommons.getToken(res) as TokenProps
     const contact = req.body as IContact
+
+    const alreadyExists = await repository.findByEmail(contact.email, token.accountId)
+    if (alreadyExists) {
+      return res.sendStatus(409)
+    }
+
     const result = await repository.add(contact, token.accountId)
-    res.status(201).json(result)
+    if (!result) {
+      return res.sendStatus(400)
+    }
+
+    return res.status(201).json(result)
   } catch (error) {
     console.log(`addContact: ${error}`)
     res.sendStatus(400)

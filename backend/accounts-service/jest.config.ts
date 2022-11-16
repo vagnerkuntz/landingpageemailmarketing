@@ -1,11 +1,11 @@
 const { pathsToModuleNameMapper } = require('ts-jest')
 const { compilerOptions } = require('./tsconfig')
 
-/** @type {import('ts-jest').JestConfigWithTsJest} */
 module.exports = {
   clearMocks: true,
   collectCoverage: true,
   collectCoverageFrom: ['<rootDir>/src/**/*.ts'],
+  coveragePathIgnorePatterns: ['node_modules', 'server.ts', 'accountModel.ts'],
   coverageDirectory: 'coverage',
   coverageProvider: 'v8',
   coverageReporters: [
@@ -22,4 +22,4 @@ module.exports = {
   preset: 'ts-jest',
   testEnvironment: 'node',
   moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths, { prefix: '<rootDir>/'})
-};
+}

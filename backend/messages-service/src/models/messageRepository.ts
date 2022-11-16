@@ -51,8 +51,7 @@ async function set(messageId: number, message: IMessage, accountId: number) {
 
 async function findById(messageId: number, accountId: number) {
   try {
-    const message = await messageModel.findOne<IMessageModel>({ where: { id: messageId, accountId: accountId } })
-    return message
+    return await messageModel.findOne<IMessageModel>({ where: { id: messageId, accountId: accountId } })
   } catch (error) {
     console.log(`messageRepository.findById ${error}`)
     return null

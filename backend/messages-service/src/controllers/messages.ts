@@ -18,7 +18,7 @@ async function getMessages(req: Request, res: Response, next: NextFunction) {
     const token = controllerCommons.getToken(res) as TokenProps
     const includeRemoved = req.query.includeRemoved == 'true'
     const messages = await repository.findAll(token.accountId, includeRemoved)
-    res.status(200).json(messages)
+    return res.status(200).json(messages)
   } catch (error) {
     console.log(`getMessages: ${error}`)
     res.sendStatus(400)
@@ -29,19 +29,19 @@ async function getMessage(req: Request, res: Response, next: NextFunction) {
   try {
     const id = parseInt(req.params.id)
     if (!id) {
-      res.status(400).json({
+      return res.status(400).json({
         message: 'ID is a required'
       })
     }
 
     const token = controllerCommons.getToken(res) as TokenProps
     const message = await repository.findById(id, token.accountId)
-    if (message === null) {
+    if (message == null) {
       return res.status(404).json({
         message: 'message not found'
       })
     } else {
-      res.json(message)
+      return res.status(200).json(message)
     }
   } catch (error) {
     console.log(`getMessage: ${error}`)
@@ -54,7 +54,7 @@ async function addMessage(req: Request, res: Response, next: NextFunction) {
     const token = controllerCommons.getToken(res) as TokenProps
     const message = req.body as IMessage
     const result = await repository.add(message, token.accountId)
-    res.status(201).json(result)
+    return res.status(201).json(result)
   } catch (error) {
     console.log(`addMessage: ${error}`)
     res.sendStatus(400)
@@ -65,7 +65,7 @@ async function setMessage(req: Request, res: Response, next: NextFunction){
   try {
     const messageId = parseInt(req.params.id)
     if (!messageId) {
-      res.status(400).json({
+      return res.status(400).json({
         message: 'ID is a required'
       })
     }
@@ -80,7 +80,7 @@ async function setMessage(req: Request, res: Response, next: NextFunction){
       })
     }
 
-    res.json(result)
+    return res.status(200).json(result)
   } catch (error) {
     console.log(`setMessage: ${error}`)
     res.sendStatus(400)
@@ -256,7 +256,7 @@ async function sendMessage (req: Request, res: Response, next: NextFunction) {
       await repository.set(sending.messageId, message, sending.accountId)
     }
 
-    res.status(202).json(sending)
+    return res.status(202).json(sending)
   } catch (e) {
     console.log('sendMessage: ', e)
     return res.sendStatus(400)

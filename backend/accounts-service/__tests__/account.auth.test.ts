@@ -5,10 +5,10 @@ import app from '../src/app';
 import auth from '../src/auth'
 
 let testAccountId: number = 1
-const testEmail = 'jest@accounts.auth.com'
+const testEmail = 'jest@accounts.com'
 const testPassword = '123456';
 
-jest.mock('../src/models/accountRepository')
+jest.mock('../src/models/accountModel')
 
 describe('Testando rotas de autenticação', () => {
   it('POST /accounts/login - 200 OK', async () => {

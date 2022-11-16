@@ -6,6 +6,8 @@ AWS.config.update({
 export type EmailSetting = {
   email: string
   verified: boolean
+  id?: number
+  name?: string
 }
 
 async function getEmailSettings (emails: string[]) {
@@ -196,22 +198,7 @@ export type SendEmailResponse = {
 const EMAIL_ENCODING: string = 'UTF-8'
 
 async function sendEmail (fromName: string, fromAddress: string, toAddress: string, subject: string, body: string) {
-
-  // mock for tests
-  if (toAddress === 'jest2@jest.send.com') {
-    return {
-      success: false,
-      messageId: '-1'
-    } as SendEmailResponse
-  } else if (fromAddress === 'jest@jest.send.com') {
-    return {
-      success: true,
-      messageId: '1'
-    } as SendEmailResponse
-  }
-  // end mock
-
-  if (!await canSendEmail(fromAddress)) {
+  if (!canSendEmail(fromAddress)) {
     return {
       success: false
     } as SendEmailResponse
@@ -225,23 +212,21 @@ async function sendEmail (fromName: string, fromAddress: string, toAddress: stri
           Html: {
             Data: body,
             Charset: EMAIL_ENCODING
-          },
-          Subject: {
-            Data: subject,
-            Charset: EMAIL_ENCODING
           }
+        },
+        Subject: {
+          Data: subject,
+          Charset: EMAIL_ENCODING
         }
       }
     },
     Destination: {
-      toAddresses: [toAddress]
+      ToAddresses: [toAddress]
     },
     FeedbackForwardingEmailAddress: fromAddress,
     FromEmailAddress: `${fromName} <${fromAddress}>`,
     ReplyToAddresses: [fromAddress]
   }
-
-  // @ts-ignore
   const response = await ses.sendEmail(params).promise()
   return {
     success: !!response.MessageId,
