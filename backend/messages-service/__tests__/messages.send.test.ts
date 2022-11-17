@@ -14,14 +14,14 @@ import {
   sendMessageUnMock,
   sendMessageBatchMock,
   sendMessageBatchUnMock
-} from '../../__commons__/src/clients/__mocks__/queueService'
+} from '../../__commons__/src/services/__mocks__/queueService'
 
 import {
   sendEmailMock,
   sendEmailUnMock,
   getEmailIdentityMock,
   getEmailIdentityUnMock
-} from '../../__commons__/src/clients/__mocks__/emailService'
+} from '../../__commons__/src/services/__mocks__/emailService'
 
 let testAccountId: number = 1
 let testMessageId: number = 1

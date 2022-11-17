@@ -16,7 +16,7 @@ import {
   getIdentityVerificationAttributesUnMock,
   deleteEmailIdentityMock,
   deleteEmailIdentityUnMock
-} from '../../__commons__/src/clients/__mocks__/emailService'
+} from '../../__commons__/src/services/__mocks__/emailService'
 
 const testEmail = 'jest@accounts.com'
 const testId: number = 1

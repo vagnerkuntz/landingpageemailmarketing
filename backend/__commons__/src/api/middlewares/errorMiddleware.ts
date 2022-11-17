@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from 'express'
 import { HttpError } from '../errors/HttpError'
+import logService from '../../services/logService'
 
 export default function errorMiddleware(
   error: Error,
@@ -7,7 +8,7 @@ export default function errorMiddleware(
   res: Response,
   next: NextFunction
 ) {
-  console.log(error)
+  logService.error(error.message)
 
   if (error instanceof HttpError) {
     return error.configResponse(res)

@@ -1,6 +1,6 @@
 import { IAccountEmail } from './accountEmail'
 import { AccountStatus } from './accountStatus'
-import { AccountSettings } from 'commons/clients/emailService'
+import { AccountSettings } from 'commons/services/emailService'
 
 export interface IAccount {
   id?: number

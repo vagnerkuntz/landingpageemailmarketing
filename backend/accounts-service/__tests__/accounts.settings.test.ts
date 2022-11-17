@@ -16,7 +16,7 @@ import {
   putEmailIdentityMailFromAttributesUnMock,
   deleteEmailIdentityMock,
   deleteEmailIdentityUnMock
-} from '../../__commons__/src/clients/__mocks__/emailService'
+} from '../../__commons__/src/services/__mocks__/emailService'
 
 jest.mock('../src/models/accountModel')
 jest.mock('../src/models/accountEmailModel')

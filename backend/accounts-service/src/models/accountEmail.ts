@@ -1,4 +1,4 @@
-import {EmailSetting} from 'commons/clients/emailService'
+import {EmailSetting} from 'commons/services/emailService'
 
 export interface IAccountEmail {
     id?: number

@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express'
-import authMiddleware from 'commons/api/routes/authMiddleware'
-import validateMiddleware from 'commons/api/routes/validateMiddleware'
+import authMiddleware from 'commons/api/middlewares/authMiddleware'
+import validateMiddleware from 'commons/api/middlewares/validateMiddleware'
 import controllerCommons from 'commons/api/controllers/controller'
 import { TokenProps } from 'commons/api/auth/accountsAuth'
 import { accountEmailSchema, accountEmailUpdateSchema } from '../models/accountEmailSchemas'

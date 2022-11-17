@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express'
-import validateMiddleware from 'commons/api/routes/validateMiddleware'
+import validateMiddleware from 'commons/api/middlewares/validateMiddleware'
 import { contactSchema, contactUpdateSchema } from '../models/contactSchemas'
 
 function validateContactSchema(req: Request, res: Response, next: NextFunction) {

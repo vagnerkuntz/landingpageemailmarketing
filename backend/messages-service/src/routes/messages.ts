@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import authMiddleware from 'commons/api/routes/authMiddleware'
+import authMiddleware from 'commons/api/middlewares/authMiddleware'
 import {
   validateMessageSchema,
   validateUpdateMessageSchema,

@@ -3,7 +3,7 @@ import express, { Router } from 'express'
 import helmet from 'helmet'
 import cors from 'cors'
 import logger from 'morgan'
-import errorMiddleware from '../api/routes/errorMiddleware'
+import errorMiddleware from './middlewares/errorMiddleware'
 
 function getCorsOrigin() {
   const origin = process.env.CORS_ORIGIN

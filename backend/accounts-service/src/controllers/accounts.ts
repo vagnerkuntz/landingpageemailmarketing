@@ -6,7 +6,7 @@ import repository from '../models/accountRepository'
 import accountRepository from '../models/accountRepository'
 import auth from '../auth'
 import {AccountStatus} from '../models/accountStatus'
-import emailService, {AccountSettings} from 'commons/clients/emailService'
+import emailService, {AccountSettings} from 'commons/services/emailService'
 import {IAccountEmail} from '../models/accountEmail'
 import accountEmailRepository from "../models/accountEmailRepository";
 import { ReqParamNotFoundError } from 'commons/api/errors/ReqParamNotFoundError'

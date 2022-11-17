@@ -2,12 +2,16 @@
 # LPEM (Landing Page & E-mail Marketing)
 
 dbname = dblpem
+
 dbuser = lpem
+
 dbpassword = 12345678
 
 portas
 3000 = accounts
+
 3001 = contacts
+
 3002 = messages
 
 #### Projeto desenvolvido apenas para conclusão de curso.
@@ -42,6 +46,9 @@ portas
  ## Infraestrutura
  * MySQL
  * Amazon AWS
+ * Lambdas
+ * Amazon SES
+
 
  ## Protocolos
  * REST (api)

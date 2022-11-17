@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import validateMiddleware from 'commons/api/routes/validateMiddleware';
+import validateMiddleware from 'commons/api/middlewares/validateMiddleware';
 import { messageSchema, messageUpdateSchema } from '../models/messageSchema';
 import { sendingSchema } from '../models/sendingSchema'
 
