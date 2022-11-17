@@ -2,11 +2,25 @@ import messageModel, { IMessageModel } from "./messageModel"
 import { IMessage } from "./message"
 import { MessageStatus } from "./messageStatus"
 
-function findAll(accountId: number, includeRemoved: boolean) {
+function findAll (accountId: number, includeRemoved: boolean) {
   if (includeRemoved) {
-    return messageModel.findAll<IMessageModel>({ where: { accountId }})
+    return messageModel.findAll<IMessageModel>({
+      where: {
+        accountId
+      }
+    })
   }
-  return messageModel.findAll<IMessageModel>({ where: { accountId, status: [MessageStatus.SENT, MessageStatus.CREATED] } })
+
+  return messageModel.findAll<IMessageModel>({
+    where: {
+      accountId,
+      status: [
+        MessageStatus.SENT,
+        MessageStatus.CREATED,
+        MessageStatus.SCHEDULED
+      ]
+    }
+  })
 }
 
 async function add(message: IMessage, accountId: number) {

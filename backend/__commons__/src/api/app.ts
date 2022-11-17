@@ -1,7 +1,9 @@
+require('express-async-errors')
 import express, { Router } from 'express'
 import helmet from 'helmet'
 import cors from 'cors'
 import logger from 'morgan'
+import errorMiddleware from '../api/routes/errorMiddleware'
 
 function getCorsOrigin() {
   const origin = process.env.CORS_ORIGIN
@@ -31,11 +33,13 @@ export default (router: Router) => {
   app.use(express.json())
   app.use(router)
 
-  app.get('/health', (req, res) => {
+  app.get('/health', async (req, res) => {
     res.json({
       message: `${process.env.SERVICE_NAME} is up and running!`,
     })
   })
+
+  app.use(errorMiddleware)
 
   return app;
 }

@@ -1,45 +1,36 @@
 import { Request, Response, NextFunction } from 'express'
 import accountAuth from '../auth/accountsAuth'
 import microserviceAuth from '../auth/microserviceAuth'
+import { UnauthorizedError } from '../errors/UnauthorizedError'
 
 async function validateAccountAuth(req: Request, res: Response, next: NextFunction) {
-  try {
-    const token = req.headers['x-access-token'] as string
-    if (!token) {
-      return res.sendStatus(401)
-    }
-
-    const payload = await accountAuth.verifyToken(token)
-    if (!payload) {
-      return res.sendStatus(401)
-    }
-
-    res.locals.payload = payload
-    next()
-  } catch (error) {
-    console.log(`validateAccountAuth: ${error}`)
-    res.sendStatus(400)
+  const token = req.headers['x-access-token'] as string
+  if (!token) {
+    return next(new UnauthorizedError())
   }
+
+  const payload = await accountAuth.verifyToken(token)
+  if (!payload) {
+    return next(new UnauthorizedError())
+  }
+
+  res.locals.payload = payload
+  return next()
 }
 
 function validateMicroserviceAuth(req: Request, res: Response, next: NextFunction) {
-  try {
-    const token = req.headers['x-access-token'] as string
-    if (!token) {
-      return res.sendStatus(401)
-    }
-
-    const payload = microserviceAuth.verify(token)
-    if (!payload) {
-      return res.sendStatus(401)
-    }
-
-    res.locals.payload = payload
-    return next()
-  } catch (error) {
-    console.log(`validateMicroserviceAuth: ${error}`)
-    res.sendStatus(400)
+  const token = req.headers['x-access-token'] as string
+  if (!token) {
+    return next(new UnauthorizedError())
   }
+
+  const payload = microserviceAuth.verify(token)
+  if (!payload) {
+    return next(new UnauthorizedError())
+  }
+
+  res.locals.payload = payload
+  return next()
 }
 
 export default {

@@ -65,20 +65,13 @@ async function add (sending: ISending) {
   }
 }
 
-async function addAll (sendings: ISending[]) {
+async function addAll (sendings: ISending[]): Promise<ISendingModel[]> {
   if (!sendings || sendings.length === 0) {
-    return null
+    return Promise.resolve([])
   }
 
-  try {
-    sendings.forEach(item => item.id = uuid())
-
-    const result = await sendingModel.bulkCreate(sendings)
-    return result
-  } catch (e) {
-    console.log('add: ', e)
-    return null
-  }
+  sendings.forEach(item => item.id = uuid())
+  return await sendingModel.bulkCreate(sendings)
 }
 
 async function set(sendingId: string, sending: ISending, accountId: number) {

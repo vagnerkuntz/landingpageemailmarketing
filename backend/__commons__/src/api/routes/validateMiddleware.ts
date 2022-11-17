@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from 'express'
 import Joi, { ValidationError } from 'joi'
+import { SchemaValidationError } from '../errors/SchemaValidationError'
 
 function validateSchema (schema: Joi.ObjectSchema, req: Request, res: Response, next: NextFunction) {
   const { error } = schema.validate(req.body)
@@ -10,11 +11,10 @@ function validateSchema (schema: Joi.ObjectSchema, req: Request, res: Response, 
   const { details } = error as ValidationError
   const message = details.map((item) => item.message).join(',')
 
-  console.log(`validateSchema: ${message}`)
-  res.status(422).json({
-    entity: req.body,
+  return next(new SchemaValidationError(
+    JSON.stringify(req.body),
     message
-  })
+  ))
 }
 
 export default {

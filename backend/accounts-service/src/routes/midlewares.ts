@@ -4,8 +4,9 @@ import validateMiddleware from 'commons/api/routes/validateMiddleware'
 import controllerCommons from 'commons/api/controllers/controller'
 import { TokenProps } from 'commons/api/auth/accountsAuth'
 import { accountEmailSchema, accountEmailUpdateSchema } from '../models/accountEmailSchemas'
-
 import { accountSchema, accountUpdateSchema, loginSchema } from '../models/accountSchemas'
+import { ReqParamNotFoundError } from 'commons/api/errors/ReqParamNotFoundError'
+import { ForbiddenError } from 'commons/api/errors/ForbiddenError'
 
 function validateAccountEmailSchema (req: Request, res: Response, next: NextFunction) {
   return validateMiddleware.validateSchema(accountEmailSchema, req, res, next)
@@ -38,17 +39,23 @@ async function validateMSAuthentication (req: Request, res: Response, next: Next
 function validateAuthorization(req: Request, res: Response, next: NextFunction) {
   const accountId = parseInt(req.params.id)
   if (!accountId) {
-    return res.sendStatus(400)
+    return next(new ReqParamNotFoundError(
+      'id',
+      'id is required'
+    ))
   }
 
   const token = controllerCommons.getToken(res) as TokenProps
 
-  // autenticado, mas não tem permissão
+  // authenticated, but has no permissions
   if (accountId !== token.accountId) {
-    return res.sendStatus(403)
+    return next(new ForbiddenError(
+      token.accountId,
+      req.path
+    ))
   }
 
-  next()
+  return next()
 }
 
 export {
