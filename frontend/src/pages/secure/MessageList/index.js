@@ -18,6 +18,12 @@ export function MessageList () {
           css: 'primary'
         }
         break
+      case 150:
+        statusName = {
+          title: 'AGENDADA',
+          css: 'info'
+        }
+        break
       case 200:
         statusName = {
           title: 'ENVIADA',
@@ -39,7 +45,7 @@ export function MessageList () {
     }
 
     return (
-      <Badge variant={statusName.css}>
+      <Badge bg={statusName.css}>
         {statusName.title}
       </Badge>
     )

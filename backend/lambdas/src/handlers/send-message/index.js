@@ -18,30 +18,17 @@ async function main(event) {
       const msJWT = await sign.sign(payload)
       const url = `${process.env.MS_URL_MESSAGES}/messages/sending`
 
-      const checkStatus = (res) => {
-        if (res.ok) {
-          // qualquer status >= 200 e < 300
-          return res
-        } else {
-          throw Error(res.statusText)
-        }
-      }
-
-      fetch(url, {
-        method: 'POST',
+      const response = await fetch(url, {
+        method: 'post',
         body: JSON.stringify(payload),
         headers: {
           'Content-Type': 'application/json',
           'x-access-token': msJWT
         }
       })
-        .then(checkStatus)
-        .then((res) => {
-          return {
-            statusCode: 200,
-            body: JSON.stringify(res)
-          }
-        })
+      const data = await response
+      console.log('data', data)
+
     }
   } catch (error) {
     console.log(error)

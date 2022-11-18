@@ -15,13 +15,14 @@ export function SettingsDetailsPage () {
     return (
       <>
         {records.length === 0 ? <RenderEmptyRow message="Nenhum e-mail criado" /> : records.map((item, index) => (
-          <tr key={index}>
-            <td>
-              {item.email}
-              {(item.verified ? <Badge className="mx-2" bg="success">E-mail verificado</Badge> : <Badge className="mx-2" bg="warning">Aguardando verificação</Badge>)}
-            </td>
-          </tr>
-        ))}
+            <tr key={index}>
+              <td>
+                {item.email}
+                {(item.verified ? <Badge className="mx-2" bg="success">E-mail verificado</Badge> : <Badge className="mx-2" bg="warning">Aguardando verificação</Badge>)}
+              </td>
+            </tr>
+          )
+        )}
       </>
     )
   }

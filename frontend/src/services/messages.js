@@ -12,7 +12,7 @@ class MessagesService {
   }
 
   async getOne(messageId) {
-    const result = await this.api.get(`messages/${messageId}`)
+    const result = await this.api.get(`messages/${messageId}/`)
     return result.data
   }
 
@@ -22,12 +22,12 @@ class MessagesService {
   }
 
   async delete(messageId) {
-    const result = await this.api.delete(`messages/${messageId}`)
+    const result = await this.api.delete(`messages/${messageId}/`)
     return result
   }
 
   async send(messageId) {
-    const result = await this.api.post(`messages/${messageId}/send`)
+    const result = await this.api.post(`messages/${messageId}/send/`)
     return result
   }
 }

@@ -7,12 +7,12 @@ class ContactsService {
   }
 
   async getAll() {
-    const result = await this.api.get('contacts')
+    const result = await this.api.get('contacts/')
     return result.data
   }
 
   async getOne(contactId) {
-    const result = await this.api.get(`contacts/${contactId}`)
+    const result = await this.api.get(`contacts/${contactId}/`)
     return result.data
   }
 
@@ -22,7 +22,7 @@ class ContactsService {
   }
 
   async delete(contactId) {
-    const result = await this.api.delete(`contacts/${contactId}`)
+    const result = await this.api.delete(`contacts/${contactId}/`)
     return result
   }
 }

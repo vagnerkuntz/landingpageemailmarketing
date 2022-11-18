@@ -27,7 +27,7 @@ const baseApi = (baseURL) => {
     }
 
     if (error.response.status === 401) {
-      window.location.href = '/signin'
+      window.location.href = '/signin/'
     }
   })
 

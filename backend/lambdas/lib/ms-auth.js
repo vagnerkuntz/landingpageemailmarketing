@@ -5,7 +5,7 @@ const EXPIRATION = parseInt(`${process.env.MS_JWT_EXPIRES}`)
 
 async function sign (token) {
   try {
-    return jwt.sign(token, SECRET, {
+    return await jwt.sign(token, SECRET, {
       expiresIn: EXPIRATION
     })
   } catch (error) {

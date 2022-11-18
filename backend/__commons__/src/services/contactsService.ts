@@ -14,7 +14,7 @@ export async function getContacts(jwt: string) {
             }
         }
 
-        const response = await axios.get(`${process.env.CONTACTS_API}/contacts`, config)
+        const response = await axios.get(`${process.env.CONTACTS_API}/contacts/`, config)
         if (response.status !== 200) {
             return null
         }

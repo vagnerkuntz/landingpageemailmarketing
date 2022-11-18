@@ -16,6 +16,12 @@ function RenderMessageStatus ({ status }) {
         css: 'primary'
       }
       break
+    case 150:
+      statusName = {
+        title: 'AGENDADA',
+        css: 'info'
+      }
+      break
     case 200:
       statusName = {
         title: 'ENVIADA',
@@ -37,7 +43,7 @@ function RenderMessageStatus ({ status }) {
   }
 
   return (
-    <Badge pill variant={statusName.css}>
+    <Badge pill bg={statusName.css}>
       {statusName.title}
     </Badge>
   )
