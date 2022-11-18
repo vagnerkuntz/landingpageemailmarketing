@@ -27,8 +27,17 @@ async function main(event) {
         }
       })
       const data = await response
-      console.log('data', data)
 
+      if (data.status === 202) {
+        return {
+          statusCode: 200,
+          body: JSON.stringify(data)
+        }
+      }
+
+      return {
+        error: data.statusText
+      }
     }
   } catch (error) {
     console.log(error)
